@@ -1,0 +1,178 @@
+@import url("./index.css");
+
+.navbar{
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white);
+
+    &.off{
+
+        &:hover{
+            .logo{
+                .close-btn{
+                    display: none;
+                }
+            }
+        }
+
+        .logo{
+            cursor: pointer;
+
+            &:hover{
+                background-color: rgb(46, 139, 87,.1);
+            }
+
+            & span{
+                padding: 0;
+                max-width: 0;
+                overflow-x: hidden;
+            }
+
+            .close-btn{
+                display: none;
+            }
+        }
+
+        .links{
+            & a{
+
+                &.page{
+                    border-right: none;
+                }
+
+                & span{
+                    padding: 0;
+                    max-width: 0;
+                    overflow-x: hidden;
+                }
+            }
+        }
+    }
+
+    &:hover{
+        .logo{
+            .close-btn{
+                display: flex;
+            }
+        }
+    }
+
+    .logo{
+        display: flex;
+        align-items: center;
+        position: relative;
+        transition: gap .2s;
+
+        .show-navbar-btn{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        & span{
+            font-weight: 900;
+            color: var(--green);
+            white-space: nowrap;
+            transform-origin: left;
+            max-width: 999px;
+            transition: max-width .5s;
+            
+            & p{
+                padding-right: 1rem;
+            }
+        }
+
+        .close-btn{
+            position: absolute;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1;
+            left: 100%;
+            padding: .5rem;
+            padding-left: 0;
+            border-top-right-radius: .3rem;
+            border-bottom-right-radius: .3rem;
+            background-color: var(--white);
+        }
+    }
+
+    .links{
+        display: flex;
+        flex-direction: column;
+
+        & a{
+            display: flex;
+            align-items: center;
+            border-right: 2px solid #f3f4f6;
+            transition: gap .2s;
+
+            &:not(.page):hover{
+                background-color: rgb(46, 139, 87,.1);
+            }
+
+            .link-svg{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            & span{
+                transform-origin: left;
+                white-space: nowrap;
+                max-width: 999px;
+                transition: max-width .5s;
+                
+                & p{
+                    padding-right: 1rem;
+                }
+            }
+            
+            &.page{
+                background-color: rgb(46, 139, 87,.5);
+                border-right: 5px solid var(--green);
+                transition: border .2s;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .navbar{
+        top: auto;
+        right: 0;
+        flex-direction: row;
+
+        .logo {
+            display: none;
+        }
+    
+        .links{
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            
+            & a{
+                width: 100%;
+                justify-content: center;
+
+                &.page{
+                    border-right: 0;
+                    border-top: 5px solid var(--green);
+                }
+
+                & span{
+                    display: none;
+                }
+            }
+        }
+    }
+
+}

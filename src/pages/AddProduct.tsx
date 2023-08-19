@@ -1,5 +1,10 @@
-export default function AddProduct(){
+import { ReactElement } from "react";
+import Navbar from "../components/Navbar";
+
+export default function AddProduct(): ReactElement{
     return (
-        <h1>Add Product</h1>
+        <>
+        <Navbar page="Add product" />
+        </>
     )
 }

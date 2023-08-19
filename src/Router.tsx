@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import AddProduct from "./pages/AddProduct";
 import Account from "./pages/Account";
-import ReportBug from "./pages/ReportBug";
+import Contact from "./pages/Contact";
 
 export default function Router(){
 
@@ -12,7 +12,7 @@ export default function Router(){
                 <Route path="/" element={<Dashboard />}></Route>
                 <Route path="/add-product" element={<AddProduct />}></Route>
                 <Route path="/account" element={<Account />}></Route>
-                <Route path="/report-bug" element={<ReportBug />}></Route>
+                <Route path="/contact" element={<Contact />}></Route>
             </Routes>
         </BrowserRouter>
     )

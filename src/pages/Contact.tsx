@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 import Navbar from "../components/Navbar";
 
-export default function Dashboard(): ReactElement{
+export default function Contact(): ReactElement{
     return (
         <>
-        <Navbar page="Dashboard" />
+        <Navbar page="Contact us" />
         </>
     )
 }
