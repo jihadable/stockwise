@@ -1,0 +1,28 @@
+StockWise
+
+colors:
+black: #1a1a1a
+green: #2e8b57
+
+pages: dashboard, add product, account, report bug
+
+constant components:
+navbar
+
+dashboard:
+- inventory stats: (total products, total store value, all categories)
+- inventory header: (inventory items, search item)
+- inventory items
+
+add product:
+- add product header: (add new product)
+- add product content: (product name, product category, product price, product quantity, product description)
+- product description: react quill
+
+account:
+- account img
+- account info: (name, email, phone, bio), button(edit profile)
+
+report bug:
+- report bug form: (subject, message, send button)
+- report bug info: (contact info: (phone, email, location))
