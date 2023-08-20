@@ -107,7 +107,6 @@
         & a{
             display: flex;
             align-items: center;
-            border-right: 2px solid #f3f4f6;
             transition: gap .2s;
 
             &:not(.page):hover{
@@ -126,16 +125,30 @@
                 white-space: nowrap;
                 max-width: 999px;
                 transition: max-width .5s;
+                display: flex;
+                align-items: center;
+                height: 100%;
+                width: 100%;
                 
                 & p{
+                    display: flex;
+                    align-items: center;
                     padding-right: 1rem;
+                    height: 100%;
+                    width: 100%;
+                    border-right: 5px solid transparent
                 }
             }
             
             &.page{
                 background-color: rgb(46, 139, 87,.5);
-                border-right: 5px solid var(--green);
                 transition: border .2s;
+                
+                & span{
+                    & p{
+                        border-right: 5px solid var(--green);
+                    }
+                }
             }
         }
     }

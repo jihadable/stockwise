@@ -1,0 +1,185 @@
+@import url("./index.css");
+
+.inventory-items{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: hidden;
+
+    .header{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+
+        .title{
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .search{
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            gap: 1rem;
+            border-radius: 5rem;
+            background-color: rgb(255,255,255,.1);
+            
+            & label{
+                display: flex;
+            }
+            
+            & input{
+                font-size: 1rem;
+                padding-left: 0;
+                border: none;
+                outline: none;
+                color: var(--white);
+                background: transparent;
+            }
+        }
+    }
+
+    .table-header{
+        margin-top: 1rem;
+
+        & td{
+            font-weight: 700;
+            color: var(--white);
+            padding: 0.5rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
+    .items-table{
+        margin-top: 1rem;
+        display: flex;
+        padding-bottom: 1rem;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar{
+            display: none;
+        }
+        
+        & table{
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            table-layout: fixed;
+
+            & td{
+                padding: 0.5rem;
+                word-wrap: break-word;
+                border-right: 1px solid rgb(255,255,255,.3);
+                color: rgb(255,255,255,.9);
+            }
+            
+            & thead{
+                & tr{
+                    border: 1px solid rgb(255,255,255,.3);
+                    
+                    & td{
+                        font-weight: 700;
+                        color: var(--white);
+                    }
+                }
+            }
+            
+            & tbody{
+
+                & tr{
+                    border: 1px solid rgb(255,255,255,.3);
+
+                    & td{
+        
+                        &:nth-child(7){
+                            border-right: none;
+                        }
+                        
+                        &.actions{
+                            display: flex;
+                            gap: .5rem;
+        
+                            & div{
+                                cursor: pointer;
+                                padding: 0.2rem;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                width: fit-content;
+                                border-radius: .2rem;
+                                color: black;
+        
+                                &.detail{
+                                    background-color: #71c4ef;
+                                }
+        
+                                &.edit{
+                                    background-color: gold;
+                                }
+        
+                                &.delete{
+                                    background-color: #ff3d3d;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* & tr{
+                border: 1px solid rgb(255,255,255,.5);
+    
+                &.table-header{
+                    font-weight: 700;
+                    color: var(--white);
+                }
+                
+                & td{
+                    padding: 0.5rem;
+                    color: rgb(255,255,255,.9);
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    border-right: 1px solid rgb(255,255,255,.5);
+    
+                    &:nth-child(7){
+                        border-right: none;
+                    }
+                    
+                    &.actions{
+                        display: flex;
+                        gap: .5rem;
+    
+                        & div{
+                            cursor: pointer;
+                            padding: 0.2rem;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: fit-content;
+                            border-radius: .2rem;
+                            color: black;
+    
+                            &.detail{
+                                background-color: #71c4ef;
+                            }
+    
+                            &.edit{
+                                background-color: gold;
+                            }
+    
+                            &.delete{
+                                background-color: #ff3d3d;
+                            }
+                        }
+                    }
+                }
+            } */
+        }
+    }
+}
