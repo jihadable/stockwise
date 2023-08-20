@@ -1,6 +1,68 @@
+@import url("./index.css");
+@import url("../../node_modules/react-quill/dist/quill.snow.css");
+
 .add-product{
     width: 100%;
     height: 100vh;
     display: flex;
-    gap: 1rem;
+
+    .content{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0 1rem;
+        overflow-y: auto;
+
+        .add-new-product{
+            display: flex;
+            width: 50%;
+
+            & form{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                color: var(--white);
+
+                .form-header{
+                    font-size: 1.4rem;
+                    font-weight: 700;
+                }
+
+                & input, & textarea, & button{
+                    padding: 1rem;
+                    font-size: 1rem;
+                    border: none;
+                    outline: none;
+                    resize: none;
+                    border-radius: .5rem;
+                    color: var(--white);
+                    background-color: rgb(255,255,255,.1);
+                }
+
+                & button{
+                    width: fit-content;
+                    cursor: pointer;
+                    transition: all .2s;
+
+                    &:hover{
+                        background-color: rgb(255,255,255,.2);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .add-product{
+        .content{
+            height: 125%;
+
+            .add-new-product{
+                margin-top: 2rem;
+                width: 100%;
+            }
+        }
+    }
 }

@@ -1,35 +1,28 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import "../style/InventoryItems.css"
 
 export default function InventoryItems(): ReactElement {
 
-    const items = [
-        {
-            id: 1,
-            name: "1st item",
-            category: "1st category",
-            price: "$1",
-            quantity: 1,
-            value: "$1",
-        },
-        {
-            id: 2,
-            name: "2nd item",
-            category: "2nd category",
-            price: "$1",
-            quantity: 1,
-            value: "$1",
-        },
-        {
-            id: 3,
-            name: "3rd item",
-            category: "3rd categorykajsakjskasjkajskajskajskajskajskajsajskajskajsajskajskajsajskajskajsajskajskajsajskajskajsajskajskajs",
-            // kajsakjskasjkajskajskajskajskajskajsajskajskajsajskajskajsajskajskajsajskajskajsajskajskajsajskajskajs
-            price: "$1",
-            quantity: 1,
-            value: "$1",
+    type item = {
+        id: number,
+        name: string,
+        category: string,
+        price: number,
+        quantity: number,
+        desc: string
+    }
+
+    const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!).reverse())
+
+    useEffect(() => {
+        localStorage.setItem("items", JSON.stringify(items))
+    }, [items])
+
+    const handleDelete = (id: number):void => {
+        if (confirm("Are You sure to delete this item?")){
+            setItems((items: item[]) => items.filter((object: item) => object.id !== id))
         }
-    ]
+    }
 
     return (
         <section className="inventory-items">
@@ -61,15 +54,15 @@ export default function InventoryItems(): ReactElement {
                     </thead>
                     <tbody>
                         {
-                            items.map((item, index) => {
+                            items.map((item: item, index: number) => {
                                 return (
                                     <tr key={index}>
-                                        <td>{item.id}</td>
+                                        <td>{index + 1}</td>
                                         <td>{item.name}</td>
                                         <td>{item.category}</td>
-                                        <td>{item.price}</td>
+                                        <td>${item.price}</td>
                                         <td>{item.quantity}</td>
-                                        <td>{item.value}</td>
+                                        <td>${item.price * item.quantity}</td>
                                         <td className="actions">
                                             <div className="detail" title="Detail">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -86,7 +79,7 @@ export default function InventoryItems(): ReactElement {
                                                     <path d="M16 5l3 3"></path>
                                                 </svg>
                                             </div>
-                                            <div className="delete" title="Delete">
+                                            <div className="delete" title="Delete" onClick={() => handleDelete(item.id)}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M4 7l16 0"></path>

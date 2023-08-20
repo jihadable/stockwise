@@ -10,6 +10,10 @@ export default function Router(){
         localStorage.setItem("navbar", JSON.stringify(true))
     }
 
+    if (!localStorage.getItem("items")){
+        localStorage.setItem("items", JSON.stringify([]))
+    }
+
     return (
         <BrowserRouter>
             <Routes>

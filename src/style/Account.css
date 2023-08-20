@@ -10,6 +10,7 @@
         display: flex;
         flex-direction: column;
         padding: 0 1rem;
+        overflow-y: auto;
 
         .user-info{
             display: flex;
@@ -64,6 +65,11 @@
                     border-radius: .5rem;
                     background-color: rgb(255,255,255,.1);
                     color: var(--white);
+                    transition: all .2s;
+
+                    &:hover{
+                        background-color: rgb(255,255,255,.2);
+                    }
                 }
             }
         }
@@ -76,6 +82,7 @@
             height: 125%;
 
             .user-info{
+                margin-top: 2rem;
                 flex-direction: column;
 
                 .img{
