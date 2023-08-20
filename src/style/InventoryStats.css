@@ -1,0 +1,59 @@
+.inventory-stats{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    
+    .item{
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background-color: #71c4ef;
+
+        &:nth-child(2){
+            background-color: gold;
+        }
+        
+        &:nth-child(3){
+            background-color: #ff3d3d;
+        }
+
+        & svg{
+            width: 2.2rem;
+            height: 2.2rem;
+        }
+
+        .info{
+            display: flex;
+            flex-direction: column;
+
+            .value{
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .inventory-stats{
+        flex-direction: column;
+        align-items: flex-start;
+
+        .item{
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1023px) {
+    .inventory-stats{
+        .item{
+            & svg{
+                width: 2rem;
+                height: 2rem;
+            }
+        }
+    }
+}

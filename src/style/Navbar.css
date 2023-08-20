@@ -1,7 +1,7 @@
 @import url("./index.css");
 
 .navbar{
-    position: fixed;
+    position: sticky;
     left: 0;
     top: 0;
     bottom: 0;
@@ -26,14 +26,21 @@
                 background-color: rgb(46, 139, 87,.1);
             }
 
+            .show-close-navbar-btn{
+
+                & svg.show{
+                    display: flex;
+                }
+
+                & svg.close{
+                    display: none;
+                }
+            }
+
             & span{
                 padding: 0;
                 max-width: 0;
                 overflow-x: hidden;
-            }
-
-            .close-btn{
-                display: none;
             }
         }
 
@@ -67,11 +74,16 @@
         position: relative;
         transition: gap .2s;
 
-        .show-navbar-btn{
+        .show-close-navbar-btn{
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 1rem;
+            cursor: pointer;
+
+            & svg.show{
+                display: none;
+            }
         }
 
         & span{
@@ -85,21 +97,6 @@
             & p{
                 padding-right: 1rem;
             }
-        }
-
-        .close-btn{
-            position: absolute;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 1;
-            left: 100%;
-            padding: .5rem;
-            padding-left: 0;
-            border-top-right-radius: .3rem;
-            border-bottom-right-radius: .3rem;
-            background-color: var(--white);
         }
     }
 
@@ -146,7 +143,9 @@
 
 @media screen and (max-width: 480px) {
     .navbar{
+        position: fixed;
         top: auto;
+        left: 0;
         right: 0;
         flex-direction: row;
 

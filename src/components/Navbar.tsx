@@ -1,5 +1,4 @@
-import { ReactElement, useState } from "react";
-// import logo from "../assets/logo.png"
+import { ReactElement, useEffect, useState } from "react";
 import "../style/Navbar.css"
 
 export default function Navbar(props: {page: string}): ReactElement {
@@ -57,30 +56,31 @@ export default function Navbar(props: {page: string}): ReactElement {
         }
     ]
 
-    const [showNavbar, setShowNavbar] = useState(false)
+    const [showNavbar, setShowNavbar] = useState(JSON.parse(localStorage.getItem("navbar")!))
+
+    useEffect(() => {
+        localStorage.setItem("navbar", JSON.stringify(showNavbar))
+    }, [showNavbar])
 
     return (
         <nav className={`navbar ${showNavbar ? "" : "off"}`}>
             <div className="logo" onClick={() => {showNavbar ? "" : setShowNavbar(true)}}>
-                <div className="show-navbar-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-layout-sidebar" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <div className="show-close-navbar-btn" onClick={() => {setShowNavbar(!showNavbar)}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-layout-sidebar show" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
                         <path d="M9 4l0 16"></path>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-layout-sidebar-left-collapse close" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+                        <path d="M9 4v16"></path>
+                        <path d="M15 10l-2 2l2 2"></path>
                     </svg>
                 </div>
                 <span>
                     <p>StockWise</p>
                 </span>
-                <div className="close-btn" onClick={() => {setShowNavbar(false)}}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-bar-left" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M4 12l10 0"></path>
-                        <path d="M4 12l4 4"></path>
-                        <path d="M4 12l4 -4"></path>
-                        <path d="M20 4l0 16"></path>
-                    </svg>
-                </div>
             </div>
             <div className="links">
             {
