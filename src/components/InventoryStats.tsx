@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import "../style/InventoryStats.css"
 
 export default function InventoryStats(): ReactElement{
@@ -20,6 +20,10 @@ export default function InventoryStats(): ReactElement{
     items.forEach((item: item) => totalStoreValue += item.price * item.quantity)
 
     const totalCategory: number = [...new Set(items.map((item: item) => item.category))].length
+
+    // useEffect(() => {
+    //     console.log(items)   
+    // })
 
     const inventoryStats = [
         {
