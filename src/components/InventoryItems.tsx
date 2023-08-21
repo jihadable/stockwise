@@ -18,17 +18,85 @@ export default function InventoryItems(): ReactElement {
         localStorage.setItem("items", JSON.stringify(items))
     }, [items])
 
+    let showItems: item[] = [...items].reverse()
+
+    // delete
     const handleDelete = (id: number):void => {
         if (confirm("Are You sure to delete this item?")){
             setItems((items: item[]) => items.filter((object: item) => object.id !== id))
         }
     }
 
+    // search
+    const [keyword, setKeyword] = useState("")
+    
+    if (keyword !== ""){
+        showItems = searchItem([...items], keyword)
+    }
+
+    function searchItem(array: item[], keyword: string){
+        const filteredArray = array.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
+
+        return filteredArray;
+    }
+
+    // sorting
     const [sortingValue, setSortingValue] = useState("Sort by")
     const sortingItems = ["Alphabet", "Lowest price", "Lowest quantity", "Lowest value"]
     const [showSortingMenu, setShowSortingMenu] = useState(false)
     const [sortingBtn, sortingMenu] = [useRef<HTMLDivElement | null>(null), useRef<HTMLDivElement | null>(null)]
 
+    function sortAlphabet(array: item[]){
+        const sortedArray = [...array];
+
+        sortedArray.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
+
+        return sortedArray;
+    }
+
+    function sortPriceAndQuantity(array: item[], key: keyof item) {
+        return array.sort((a, b) => {
+            const valueA = a[key];
+            const valueB = b[key];
+        
+            if (valueA < valueB) return -1;
+            if (valueA > valueB) return 1;
+        
+            return 0;
+        });
+    }
+
+    function sortValue(array: item[]) {
+        return array.sort((a, b) => {
+            const valueA = a.price * a.quantity;
+            const valueB = b.price * b.quantity;
+        
+            if (valueA < valueB) return -1;
+            if (valueA > valueB) return 1;
+        
+            return 0;
+        });
+    }
+
+    if (sortingValue === "Alphabet"){
+        showItems = sortAlphabet(showItems)
+    }
+    
+    else if (sortingValue === "Lowest price"){
+        showItems = sortPriceAndQuantity(showItems, "price")
+    }
+
+    else if (sortingValue === "Lowest quantity"){
+        showItems = sortPriceAndQuantity(showItems, "quantity")
+    }
+
+    else if (sortingValue === "Lowest value"){
+        showItems = sortValue(showItems)
+    }
+
+    // show sorting menu
     useEffect(() => {
         const handleClick = (e: Event): void => {
             
@@ -60,7 +128,7 @@ export default function InventoryItems(): ReactElement {
                             <path d="M21 21l-6 -6"></path>
                         </svg>
                     </label>
-                    <input type="text" id="search" placeholder="Search item" />
+                    <input type="text" id="search" placeholder="Search item" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
                 </div>
             </div>
             <div className="sort-by">
@@ -78,7 +146,7 @@ export default function InventoryItems(): ReactElement {
                 <div className={`sort-menu ${showSortingMenu ? "active" : ""}`} ref={sortingMenu}>
                 {
                     sortingItems.map((item, index) => {
-                        return <div className="item" key={index} onClick={() => setSortingValue(item)}>{item}</div>
+                        return <div className="item" key={index} onClick={() => sortingValue === item ? setSortingValue("Sort by") : setSortingValue(item)}>{item}</div>
                     })
                 }
                 </div>
@@ -98,7 +166,7 @@ export default function InventoryItems(): ReactElement {
                     </thead>
                     <tbody>
                         {
-                            [...items].reverse().map((item: item, index: number) => {
+                            showItems.map((item: item, index: number) => {
                                 return (
                                     <tr key={index}>
                                         <td>{index + 1}</td>

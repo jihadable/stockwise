@@ -18,7 +18,6 @@ export default function AddProduct(): ReactElement{
 
     useEffect(() => {
         localStorage.setItem("items", JSON.stringify(items))
-        console.log(items)
     }, [items])
 
     const [
