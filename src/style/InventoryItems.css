@@ -131,7 +131,7 @@
                     background-color: rgb(255,255,255,.1);
                     
                     & td{
-                        font-weight: 700;
+                        font-weight: 500;
                         color: var(--white);
                     }
                 }

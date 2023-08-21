@@ -24,11 +24,29 @@ export default function InventoryItems(props: any): ReactElement {
         }
     }
 
+    // set product to show the detail
+    const setProductDetail = props.setProductDetail
+    const setShowProductDetail = props.setShowProductDetail
+
+    function handleDetail(item: item): void {
+        setProductDetail(item)
+        setShowProductDetail(true)
+    }
+
+    // set product to edit
+    const setProductEdit = props.setProductEdit
+    const setShowProductEdit = props.setShowProductEdit
+
+    function handleEdit(item: item): void {
+        setProductEdit(item)
+        setShowProductEdit(true)
+    }
+
     // search
     const [keyword, setKeyword] = useState("")
     
     if (keyword !== ""){
-        showItems = searchItem([...items], keyword)
+        showItems = searchItem([...items].reverse(), keyword)
     }
 
     function searchItem(array: item[], keyword: string){
@@ -173,14 +191,14 @@ export default function InventoryItems(props: any): ReactElement {
                                         <td>{item.quantity}</td>
                                         <td>${item.price * item.quantity}</td>
                                         <td className="actions">
-                                            <div className="detail" title="Detail">
+                                            <div className="detail" title="Detail" onClick={() => {handleDetail(item)}}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
                                                     <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
                                                 </svg>
                                             </div>
-                                            <div className="edit" title="Edit">
+                                            <div className="edit" title="Edit" onClick={() => {handleEdit(item)}}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>

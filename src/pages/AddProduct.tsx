@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
@@ -33,11 +33,12 @@ export default function AddProduct(): ReactElement{
         useState(""),
         useState("")
     ]
+    
     const handleSubmit = (e: any):void => {
         e.preventDefault()
 
         if (name === "" || category === "" || price === "" || quantity === "" || desc === ""){
-            alert("Please enter the empty field form")
+            setAlertMessage(["", "Please enter the empty field form", true, "warning"])
             return
         }
 
@@ -46,6 +47,8 @@ export default function AddProduct(): ReactElement{
         const newItem = {id: idNow ,name, category, price, quantity, desc}
 
         setItems((items: item[]) => [...items, newItem])
+
+        setAlertMessage([alertSvg[0], "Product added", true, "success"])
 
         setName("")
         setCategory("")
@@ -68,11 +71,22 @@ export default function AddProduct(): ReactElement{
             <path d="M9 9l6 6m0 -6l-6 6"></path>
         </svg>
     ]
-    const [alertMessage, setAlertMessage] = useState([alertSvg[0], "Product added"])
+
+    const [alertMessage, setAlertMessage] = useState([alertSvg[0], "Product added", false, "success"])
+
+    const submitBtn = useRef<HTMLButtonElement | null>(null)
+
+    useEffect(() => {
+        document.addEventListener("click", function(e: Event){
+            if (!submitBtn.current?.contains(e.target as Node)){
+                setAlertMessage([alertSvg[0], alertMessage[1], false, "success"])
+            }
+        })
+    }, [alertMessage])
 
     return (
         <div className="add-product">
-            <div className="alert">
+            <div className={`alert ${alertMessage[2] ? "active": ""} ${alertMessage[3]}`}>
                 {alertMessage[0]}
                 <span>{alertMessage[1]}</span>
             </div>
@@ -87,7 +101,7 @@ export default function AddProduct(): ReactElement{
                         <input type="number" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
                         <input type="number" min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                         <textarea rows={7} placeholder="Product description" value={desc} onChange={(e) => setDesc(e.target.value)}></textarea>
-                        <button type="submit">Save product</button>
+                        <button type="submit" ref={submitBtn}>Save product</button>
                     </form>
                 </div>
             </div>
