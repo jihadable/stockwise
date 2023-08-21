@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState, useRef } from "react";
 import "../style/InventoryItems.css"
 
-export default function InventoryItems(): ReactElement {
+export default function InventoryItems(props: any): ReactElement {
 
     type item = {
         id: number,
@@ -12,11 +12,8 @@ export default function InventoryItems(): ReactElement {
         desc: string
     }
 
-    const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!))
-
-    useEffect(() => {
-        localStorage.setItem("items", JSON.stringify(items))
-    }, [items])
+    const items = props.items
+    const setItems = props.setItems
 
     let showItems: item[] = [...items].reverse()
 

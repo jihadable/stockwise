@@ -1,7 +1,7 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import "../style/InventoryStats.css"
 
-export default function InventoryStats(): ReactElement{
+export default function InventoryStats(props: any): ReactElement{
 
     type item = {
         id: number,
@@ -12,7 +12,7 @@ export default function InventoryStats(): ReactElement{
         desc: string
     }
 
-    const items: item[] = JSON.parse(localStorage.getItem("items")!)
+    const items: item[] = props.items
 
     const totalProductValue = items.length
     
