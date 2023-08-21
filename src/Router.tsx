@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import AddProduct from "./pages/AddProduct";
 import Account from "./pages/Account";
 import Contact from "./pages/Contact";
+import { useState } from "react";
 
 export default function Router(){
 
@@ -10,8 +11,15 @@ export default function Router(){
         localStorage.setItem("navbar", JSON.stringify(true))
     }
 
+    const [items, setItems] = useState([])
     if (!localStorage.getItem("items")){
         localStorage.setItem("items", JSON.stringify([]))
+
+        setItems(JSON.parse(localStorage.getItem("items")!))
+    }
+    
+    if (!localStorage.getItem("idNow")){
+        localStorage.setItem("idNow", JSON.stringify(items.length + 1))
     }
 
     return (

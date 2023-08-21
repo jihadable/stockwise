@@ -42,14 +42,19 @@ export default function AddProduct(): ReactElement{
             return
         }
 
-        const newItem = {id: items.length+1 ,name, category, price, quantity, desc}
+        const idNow = JSON.parse(localStorage.getItem("idNow")!)
+
+        const newItem = {id: idNow ,name, category, price, quantity, desc}
 
         setItems((items: item[]) => [...items, newItem])
+
         setName("")
         setCategory("")
         setPrice("")
         setQuantity("")
         setDesc("")
+
+        localStorage.setItem("idNow", JSON.stringify(idNow + 1))
     }
 
     return (
@@ -60,11 +65,11 @@ export default function AddProduct(): ReactElement{
                 <div className="add-new-product">
                     <form onSubmit={handleSubmit}>
                         <div className="form-header">Add new product</div>
-                        <input type="text" placeholder="Product name" onChange={(e) => setName(e.target.value)} />
-                        <input type="text" placeholder="Product category" onChange={(e) => setCategory(e.target.value)} />
-                        <input type="number" min={0} placeholder="Product price" onChange={(e) => setPrice(e.target.value)} />
-                        <input type="number" min={1} placeholder="Product quantity" onChange={(e) => setQuantity(e.target.value)} />
-                        <textarea rows={7} placeholder="Product description" onChange={(e) => setDesc(e.target.value)}></textarea>
+                        <input type="text" placeholder="Product name" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" placeholder="Product category" value={category} onChange={(e) => setCategory(e.target.value)} />
+                        <input type="number" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                        <input type="number" min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                        <textarea rows={7} placeholder="Product description" value={desc} onChange={(e) => setDesc(e.target.value)}></textarea>
                         <button type="submit">Save product</button>
                     </form>
                 </div>

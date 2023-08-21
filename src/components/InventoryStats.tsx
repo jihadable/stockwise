@@ -3,10 +3,28 @@ import "../style/InventoryStats.css"
 
 export default function InventoryStats(): ReactElement{
 
+    type item = {
+        id: number,
+        name: string,
+        category: string,
+        price: number,
+        quantity: number,
+        desc: string
+    }
+
+    const items: item[] = JSON.parse(localStorage.getItem("items")!)
+
+    const totalProductValue = items.length
+    
+    let totalStoreValue = 0
+    items.forEach((item: item) => totalStoreValue += item.price * item.quantity)
+
+    const totalCategory: number = [...new Set(items.map((item: item) => item.category))].length
+
     const inventoryStats = [
         {
             title: "Total Product",
-            value: "0",
+            value: totalProductValue,
             svg: 
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -18,7 +36,7 @@ export default function InventoryStats(): ReactElement{
         },
         {
             title: "Total store value",
-            value: "$0",
+            value: `$${totalStoreValue}`,
             svg: 
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-coin" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -29,7 +47,7 @@ export default function InventoryStats(): ReactElement{
         },
         {
             title: "All categories",
-            value: "0",
+            value: totalCategory,
             svg: 
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-packages" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

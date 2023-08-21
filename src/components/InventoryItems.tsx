@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState, useRef } from "react";
 import "../style/InventoryItems.css"
 
 export default function InventoryItems(): ReactElement {
@@ -12,7 +12,7 @@ export default function InventoryItems(): ReactElement {
         desc: string
     }
 
-    const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!).reverse())
+    const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!))
 
     useEffect(() => {
         localStorage.setItem("items", JSON.stringify(items))
@@ -23,6 +23,30 @@ export default function InventoryItems(): ReactElement {
             setItems((items: item[]) => items.filter((object: item) => object.id !== id))
         }
     }
+
+    const [sortingValue, setSortingValue] = useState("Sort by")
+    const sortingItems = ["Alphabet", "Lowest price", "Lowest quantity", "Lowest value"]
+    const [showSortingMenu, setShowSortingMenu] = useState(false)
+    const [sortingBtn, sortingMenu] = [useRef<HTMLDivElement | null>(null), useRef<HTMLDivElement | null>(null)]
+
+    useEffect(() => {
+        const handleClick = (e: Event): void => {
+            
+            const target = e.target as Node
+
+            if (sortingBtn.current && sortingMenu.current){
+                if (!sortingBtn.current.contains(target)){
+                    setShowSortingMenu(false)
+                }
+            }
+        }
+
+        document.addEventListener("click", handleClick)
+
+        return () => {
+            document.removeEventListener("click", handleClick);
+        };
+    }, [sortingValue])
 
     return (
         <section className="inventory-items">
@@ -37,6 +61,26 @@ export default function InventoryItems(): ReactElement {
                         </svg>
                     </label>
                     <input type="text" id="search" placeholder="Search item" />
+                </div>
+            </div>
+            <div className="sort-by">
+                <div className="sort-btn" onClick={() => {setShowSortingMenu(!showSortingMenu)}} ref={sortingBtn}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-sort-descending" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M4 6l9 0"></path>
+                        <path d="M4 12l7 0"></path>
+                        <path d="M4 18l7 0"></path>
+                        <path d="M15 15l3 3l3 -3"></path>
+                        <path d="M18 6l0 12"></path>
+                    </svg>
+                    <span>{sortingValue}</span>
+                </div>
+                <div className={`sort-menu ${showSortingMenu ? "active" : ""}`} ref={sortingMenu}>
+                {
+                    sortingItems.map((item, index) => {
+                        return <div className="item" key={index} onClick={() => setSortingValue(item)}>{item}</div>
+                    })
+                }
                 </div>
             </div>
             <div className="items-table">
@@ -54,7 +98,7 @@ export default function InventoryItems(): ReactElement {
                     </thead>
                     <tbody>
                         {
-                            items.map((item: item, index: number) => {
+                            [...items].reverse().map((item: item, index: number) => {
                                 return (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
