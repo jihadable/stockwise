@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import "../style/ProductEdit.css"
 
 export default function ProductEdit(props: any): ReactElement {
@@ -11,6 +11,11 @@ export default function ProductEdit(props: any): ReactElement {
         quantity: number,
         desc: string
     }
+
+    const alertMessage = props.alertMessage
+    const setAlertMessage = props.setAlertMessage
+    const alertSvg = props.alertSvg
+    const submitBtn = props.submitBtn
 
     const items = props.items
     const setItems = props.setItems
@@ -36,7 +41,7 @@ export default function ProductEdit(props: any): ReactElement {
     function handleSave(): void {
 
         if (name === "" || category === "" || price === "" || quantity === "" || desc === ""){
-            // setAlertMessage(["", "Please enter the empty field form", true, "warning"])
+            setAlertMessage(["", "Please enter the empty field form", true, "warning"])
             return
         }
 
@@ -57,8 +62,45 @@ export default function ProductEdit(props: any): ReactElement {
 
         setItems(modifiedArray)
 
-        setShowProductEdit(false)
+        setAlertMessage([alertSvg[0], "Product edited", true, "success"])
+
+        setTimeout(() => {
+            setShowProductEdit(false)
+        }, 400);
     }
+
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+            e.returnValue = 'Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin meninggalkan halaman ini?';
+        };
+      
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [])
+
+    const handleLeaveSite = () => {
+        return 'Anda akan meninggalkan situs ini. Apakah Anda yakin?';
+    };
+
+    useEffect(() => {
+        window.onbeforeunload = handleLeaveSite;
+    
+        return () => {
+            window.onbeforeunload = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener("click", function(e: Event){
+            if (!submitBtn.current?.contains(e.target as Node)){
+                setAlertMessage([alertSvg[0], alertMessage[1], false, "success"])
+            }
+        })
+    }, [alertMessage])
 
     return (
         <div className="product-edit">
@@ -101,11 +143,11 @@ export default function ProductEdit(props: any): ReactElement {
                         <div className="circle"></div>
                         <span>Description</span>
                     </div>
-                    <div className="value" contentEditable={true} onInput={(e) => {setDesc(e.currentTarget.textContent)}}>{desc}</div>
+                    <textarea className="value" rows={7} onChange={(e) => {setDesc(e.target.value)}}>{desc}</textarea>
                 </div>
                 <div className="btns">
                     <div className="cancel" onClick={() => {setShowProductEdit(false)}}>Cancel</div>
-                    <div className="save" onClick={() => {handleSave()}}>Save changes</div>
+                    <div className="save" onClick={() => {handleSave()}} ref={submitBtn}>Save changes</div>
                 </div>
             </div>
         </div>

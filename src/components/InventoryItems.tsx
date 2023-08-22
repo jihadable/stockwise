@@ -133,8 +133,28 @@ export default function InventoryItems(props: any): ReactElement {
 
     return (
         <section className="inventory-items">
-            <div className="header">
-                <div className="title">Inventory Items</div>
+            <div className="header">Inventory Items</div>
+            <div className="tools">
+                <div className="sort-by">
+                    <div className="sort-btn" onClick={() => {setShowSortingMenu(!showSortingMenu)}} ref={sortingBtn}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-sort-descending" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M4 6l9 0"></path>
+                            <path d="M4 12l7 0"></path>
+                            <path d="M4 18l7 0"></path>
+                            <path d="M15 15l3 3l3 -3"></path>
+                            <path d="M18 6l0 12"></path>
+                        </svg>
+                        <span>{sortingValue}</span>
+                    </div>
+                    <div className={`sort-menu ${showSortingMenu ? "active" : ""}`} ref={sortingMenu}>
+                    {
+                        sortingItems.map((item, index) => {
+                            return <div className="item" key={index} onClick={() => sortingValue === item ? setSortingValue("Sort by") : setSortingValue(item)}>{item}</div>
+                        })
+                    }
+                    </div>
+                </div>
                 <div className="search">
                     <label htmlFor="search">
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -144,26 +164,6 @@ export default function InventoryItems(props: any): ReactElement {
                         </svg>
                     </label>
                     <input type="text" id="search" placeholder="Search item" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-                </div>
-            </div>
-            <div className="sort-by">
-                <div className="sort-btn" onClick={() => {setShowSortingMenu(!showSortingMenu)}} ref={sortingBtn}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-sort-descending" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M4 6l9 0"></path>
-                        <path d="M4 12l7 0"></path>
-                        <path d="M4 18l7 0"></path>
-                        <path d="M15 15l3 3l3 -3"></path>
-                        <path d="M18 6l0 12"></path>
-                    </svg>
-                    <span>{sortingValue}</span>
-                </div>
-                <div className={`sort-menu ${showSortingMenu ? "active" : ""}`} ref={sortingMenu}>
-                {
-                    sortingItems.map((item, index) => {
-                        return <div className="item" key={index} onClick={() => sortingValue === item ? setSortingValue("Sort by") : setSortingValue(item)}>{item}</div>
-                    })
-                }
                 </div>
             </div>
             <div className="items-table">
