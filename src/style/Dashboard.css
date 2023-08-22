@@ -14,7 +14,7 @@
 
         .alert{
             color: black;
-            position: absolute;
+            position: fixed;
             left: 50%;
             background-color: var(--white);
             top: -100%;

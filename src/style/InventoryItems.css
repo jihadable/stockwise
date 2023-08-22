@@ -81,12 +81,14 @@
             gap: .5rem;
             border-radius: 5rem;
             background-color: rgb(255,255,255,.1);
+            max-width: 50%;
             
             & label{
                 display: flex;
             }
             
             & input{
+                width: 100%;
                 font-size: 1rem;
                 padding-left: 0;
                 border: none;
