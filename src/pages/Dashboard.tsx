@@ -6,23 +6,12 @@ import InventoryStats from "../components/InventoryStats";
 import InventoryItems from "../components/InventoryItems";
 import ProductDetail from "../components/ProductDetail";
 import ProductEdit from "../components/ProductEdit";
+import { item } from "../components/itemType";
 
-type item = {
-    id: number,
-    name: string,
-    category: string,
-    price: number,
-    quantity: number,
-    desc: string
-}
+export default function Dashboard(props: any): JSX.Element{
 
-export default function Dashboard(): JSX.Element{
-
-    const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!))
-
-    useEffect(() => {
-        localStorage.setItem("items", JSON.stringify(items))
-    }, [items])
+    const items = props.items
+    const setItems = props.setItems
 
     const [productDetail, setProductDetail] = useState<item>({} as item)
     const [showProductDetail, setShowProductDetail] = useState(false)

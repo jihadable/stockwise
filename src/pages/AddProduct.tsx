@@ -2,23 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
+import { item } from "../components/itemType"
 
-export default function AddProduct(): JSX.Element{
-
-    type item = {
-        id: number,
-        name: string,
-        category: string,
-        price: number,
-        quantity: number,
-        desc: string
-    }
-
-    const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!))
-
-    useEffect(() => {
-        localStorage.setItem("items", JSON.stringify(items))
-    }, [items])
+export default function AddProduct(props: any): JSX.Element{
+    
+    const setItems = props.setItems
 
     const [
         [name, setName],
@@ -102,11 +90,11 @@ export default function AddProduct(): JSX.Element{
                 <div className="add-new-product">
                     <form onSubmit={handleSubmit}>
                         <div className="form-header">Add new product</div>
-                        <input type="text" placeholder="Product name" value={name} onChange={(e) => setName(e.target.value)} />
-                        <input type="text" placeholder="Product category" value={category} onChange={(e) => setCategory(e.target.value)} />
-                        <input type="number" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
-                        <input type="number" min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                        <textarea rows={7} placeholder="Product description" value={desc} onChange={(e) => setDesc(e.target.value)}></textarea>
+                        <input type="text" id="name" autoComplete="off" name="name" placeholder="Product name" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" id="category" autoComplete="off" name="category" placeholder="Product category" value={category} onChange={(e) => setCategory(e.target.value)} />
+                        <input type="number" id="price" name="price" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                        <input type="number" id="quantity" name="quantity" min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                        <textarea id="desc" name="desc" rows={7} placeholder="Product description" value={desc} onChange={(e) => setDesc(e.target.value)}></textarea>
                         <button type="submit" ref={submitBtn}>Save product</button>
                     </form>
                 </div>

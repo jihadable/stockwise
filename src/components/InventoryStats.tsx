@@ -20,10 +20,6 @@ export default function InventoryStats(props: {items: item[]}){
 
     const totalCategory: number = [...new Set(items.map((item: item) => item.category))].length
 
-    // useEffect(() => {
-    //     console.log(items)   
-    // })
-
     const inventoryStats = [
         {
             title: "Total Product",
