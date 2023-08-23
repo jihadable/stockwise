@@ -52,7 +52,7 @@
                 top: 110%;
                 max-height: 0;
                 overflow: hidden;
-                transition: max-height .2s;
+                transition: all .1s;
                 background-color: var(--white);
                 backdrop-filter: blur(5px);
                 border-radius: .5rem;

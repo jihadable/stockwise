@@ -38,7 +38,7 @@ export default function AddProduct(): JSX.Element{
         e.preventDefault()
 
         if (name === "" || category === "" || price === "" || quantity === "" || desc === ""){
-            setAlertMessage(["", "Please enter the empty field form", true, "warning"])
+            setAlertMessage([alertSvg[1], "Please fill the empty field", true, "warning"])
             return
         }
 
@@ -65,6 +65,12 @@ export default function AddProduct(): JSX.Element{
             <path d="M7 12l5 5l10 -10"></path>
             <path d="M2 12l5 5m5 -5l5 -5"></path>
         </svg>,
+        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-alert-circle" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+            <path d="M12 8v4"></path>
+            <path d="M12 16h.01"></path>
+        </svg>,
         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-square-x" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"></path>
@@ -74,12 +80,12 @@ export default function AddProduct(): JSX.Element{
 
     const [alertMessage, setAlertMessage] = useState([alertSvg[0], "Product added", false, "success"])
 
-    const submitBtn = useRef<HTMLButtonElement | null>(null)
+    const submitBtn = useRef<HTMLButtonElement>(null)
 
     useEffect(() => {
         document.addEventListener("click", function(e: Event){
             if (!submitBtn.current?.contains(e.target as Node)){
-                setAlertMessage([alertSvg[0], alertMessage[1], false, "success"])
+                setAlertMessage([alertMessage[0], alertMessage[1], false, "success"])
             }
         })
     }, [alertMessage])

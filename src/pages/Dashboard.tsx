@@ -7,14 +7,14 @@ import InventoryItems from "../components/InventoryItems";
 import ProductDetail from "../components/ProductDetail";
 import ProductEdit from "../components/ProductEdit";
 
-// type item = {
-//     id: number,
-//     name: string,
-//     category: string,
-//     price: number,
-//     quantity: number,
-//     desc: string
-// }
+type item = {
+    id: number,
+    name: string,
+    category: string,
+    price: number,
+    quantity: number,
+    desc: string
+}
 
 export default function Dashboard(): JSX.Element{
 
@@ -24,10 +24,10 @@ export default function Dashboard(): JSX.Element{
         localStorage.setItem("items", JSON.stringify(items))
     }, [items])
 
-    const [productDetail, setProductDetail] = useState(undefined)
+    const [productDetail, setProductDetail] = useState<item>({} as item)
     const [showProductDetail, setShowProductDetail] = useState(false)
 
-    const [productEdit, setProductEdit] = useState(undefined)
+    const [productEdit, setProductEdit] = useState<item>({} as item)
     const [showProductEdit, setShowProductEdit] = useState(false)
 
     const alertSvg = [
@@ -51,7 +51,7 @@ export default function Dashboard(): JSX.Element{
 
     const [alertMessage, setAlertMessage] = useState([alertSvg[0], "Product added", false, "success"])
 
-    const submitBtn = useRef<HTMLDivElement | null>(null)
+    const submitBtn = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         document.addEventListener("click", function(e: Event){

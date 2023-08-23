@@ -68,7 +68,7 @@ export default function InventoryItems(props: InventoryItemsProps): JSX.Element 
     const [sortingValue, setSortingValue] = useState("Sort by")
     const sortingItems = ["Alphabet", "Lowest price", "Lowest quantity", "Lowest value"]
     const [showSortingMenu, setShowSortingMenu] = useState(false)
-    const [sortingBtn, sortingMenu] = [useRef<HTMLDivElement | null>(null), useRef<HTMLDivElement | null>(null)]
+    const sortingBtn = useRef<HTMLDivElement>(null)
 
     function sortAlphabet(array: item[]){
         const sortedArray = [...array];
@@ -126,19 +126,13 @@ export default function InventoryItems(props: InventoryItemsProps): JSX.Element 
             
             const target = e.target as Node
 
-            if (sortingBtn.current && sortingMenu.current){
-                if (!sortingBtn.current.contains(target)){
-                    setShowSortingMenu(false)
-                }
+            if (!(sortingBtn.current?.contains(target))){
+                setShowSortingMenu(false)
             }
         }
 
         document.addEventListener("click", handleClick)
-
-        return () => {
-            document.removeEventListener("click", handleClick);
-        };
-    }, [sortingValue])
+    }, [])
 
     return (
         <section className="inventory-items">
@@ -156,7 +150,7 @@ export default function InventoryItems(props: InventoryItemsProps): JSX.Element 
                         </svg>
                         <span>{sortingValue}</span>
                     </div>
-                    <div className={`sort-menu ${showSortingMenu ? "active" : ""}`} ref={sortingMenu}>
+                    <div className={`sort-menu ${showSortingMenu ? "active" : ""}`}>
                     {
                         sortingItems.map((item, index) => {
                             return <div className="item" key={index} onClick={() => sortingValue === item ? setSortingValue("Sort by") : setSortingValue(item)}>{item}</div>

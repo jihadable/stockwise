@@ -5,8 +5,8 @@ type item = {
     id: number,
     name: string,
     category: string,
-    price: number | string,
-    quantity: number | string,
+    price: number,
+    quantity: number,
     desc: string
 }
 
@@ -14,10 +14,10 @@ type ProductEditProps = {
     alertMessage: (string | boolean | JSX.Element)[],
     setAlertMessage: React.Dispatch<React.SetStateAction<(string | boolean | JSX.Element)[]>>,
     alertSvg: JSX.Element[],
-    submitBtn: React.MutableRefObject<HTMLDivElement | null>,
+    submitBtn: React.RefObject<HTMLDivElement>,
     items: item[],
     setItems: React.Dispatch<React.SetStateAction<item[]>>,
-    productEdit: any,
+    productEdit: item,
     setShowProductEdit: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -41,22 +41,22 @@ export default function ProductEdit(props: ProductEditProps): JSX.Element {
         [quantity, setQuantity],
         [desc, setDesc]
     ] = [
-        product.id,
-        useState(product.name),
-        useState(product.category),
-        useState(product.price),
-        useState(product.quantity),
-        useState(product.desc)
+        product?.id,
+        useState(product?.name),
+        useState(product?.category),
+        useState(product?.price),
+        useState(product?.quantity),
+        useState(product?.desc)
     ]
 
     function handleSave(): void {
 
         if (name === "" || category === "" || isNaN(price) || isNaN(quantity) || desc === ""){
-            setAlertMessage([alertSvg[1], "Please enter the empty field form", true, "warning"])
+            setAlertMessage([alertSvg[1], "Please fill the empty field", true, "warning"])
             return
         }
 
-        const modifiedArray = items.map((obj: item) => {
+        const modifiedArray: item[] = items.map((obj: item) => {
             if (obj.id === id) {
                 return {
                     ...obj,
@@ -77,7 +77,7 @@ export default function ProductEdit(props: ProductEditProps): JSX.Element {
 
         setTimeout(() => {
             setShowProductEdit(false)
-        }, 400);
+        }, 100);
     }
 
     useEffect(() => {
