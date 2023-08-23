@@ -1,16 +1,27 @@
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../style/ProductEdit.css"
 
-export default function ProductEdit(props: any): ReactElement {
+type item = {
+    id: number,
+    name: string,
+    category: string,
+    price: number | string,
+    quantity: number | string,
+    desc: string
+}
 
-    type item = {
-        id: number,
-        name: string,
-        category: string,
-        price: number,
-        quantity: number,
-        desc: string
-    }
+type ProductEditProps = {
+    alertMessage: (string | boolean | JSX.Element)[],
+    setAlertMessage: React.Dispatch<React.SetStateAction<(string | boolean | JSX.Element)[]>>,
+    alertSvg: JSX.Element[],
+    submitBtn: React.MutableRefObject<HTMLDivElement | null>,
+    items: item[],
+    setItems: React.Dispatch<React.SetStateAction<item[]>>,
+    productEdit: any,
+    setShowProductEdit: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function ProductEdit(props: ProductEditProps): JSX.Element {
 
     const alertMessage = props.alertMessage
     const setAlertMessage = props.setAlertMessage
@@ -40,8 +51,8 @@ export default function ProductEdit(props: any): ReactElement {
 
     function handleSave(): void {
 
-        if (name === "" || category === "" || price === "" || quantity === "" || desc === ""){
-            setAlertMessage(["", "Please enter the empty field form", true, "warning"])
+        if (name === "" || category === "" || isNaN(price) || isNaN(quantity) || desc === ""){
+            setAlertMessage([alertSvg[1], "Please enter the empty field form", true, "warning"])
             return
         }
 
@@ -112,14 +123,14 @@ export default function ProductEdit(props: any): ReactElement {
                             <div className="circle"></div>
                             <span>Name</span>
                         </div>
-                        <input type="text" className="value" value={name} onChange={(e) => {setName(e.target.value)}} />
+                        <input type="text" required={true} className="value" value={name} onChange={(e) => {setName(e.target.value)}} />
                     </div>
                     <div className="item">
                         <div className="label">
                             <div className="circle"></div>
                             <span>Category</span>
                         </div>
-                        <input type="text" className="value" value={category} onChange={(e) => {setCategory(e.target.value)}} />
+                        <input type="text" required={true} className="value" value={category} onChange={(e) => {setCategory(e.target.value)}} />
                     </div>
                 </div>
                 <div className="price-quantity">
@@ -128,14 +139,14 @@ export default function ProductEdit(props: any): ReactElement {
                             <div className="circle"></div>
                             <span>Price</span>
                         </div>
-                        <input type="number" min={0} className="value" value={price} onChange={(e) => {setPrice(e.target.value)}} />
+                        <input type="number" required={true} min={0} className="value" value={isNaN(price) ? "" : price} onChange={(e) => {setPrice(parseInt(e.target.value))}} />
                     </div>
                     <div className="item">
                         <div className="label">
                             <div className="circle"></div>
                             <span>Quantity</span>
                         </div>
-                        <input type="number" className="value" value={quantity} onChange={(e) => {setQuantity(e.target.value)}} />
+                        <input type="number" required={true} className="value" value={isNaN(quantity) ? "" : quantity} onChange={(e) => {setQuantity(parseInt(e.target.value))}} />
                     </div>
                 </div>
                 <div className="item">
@@ -143,7 +154,7 @@ export default function ProductEdit(props: any): ReactElement {
                         <div className="circle"></div>
                         <span>Description</span>
                     </div>
-                    <textarea className="value" rows={7} onChange={(e) => {setDesc(e.target.value)}}>{desc}</textarea>
+                    <textarea className="value" required={true} value={desc} rows={7} onChange={(e) => {setDesc(e.target.value)}}></textarea>
                 </div>
                 <div className="btns">
                     <div className="cancel" onClick={() => {setShowProductEdit(false)}}>Cancel</div>

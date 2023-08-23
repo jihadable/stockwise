@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/Dashboard.css"
@@ -7,7 +7,16 @@ import InventoryItems from "../components/InventoryItems";
 import ProductDetail from "../components/ProductDetail";
 import ProductEdit from "../components/ProductEdit";
 
-export default function Dashboard(): ReactElement{
+// type item = {
+//     id: number,
+//     name: string,
+//     category: string,
+//     price: number,
+//     quantity: number,
+//     desc: string
+// }
+
+export default function Dashboard(): JSX.Element{
 
     const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!))
 
@@ -22,12 +31,18 @@ export default function Dashboard(): ReactElement{
     const [showProductEdit, setShowProductEdit] = useState(false)
 
     const alertSvg = [
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-checks" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-checks" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M7 12l5 5l10 -10"></path>
             <path d="M2 12l5 5m5 -5l5 -5"></path>
         </svg>,
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-square-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-alert-circle" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+            <path d="M12 8v4"></path>
+            <path d="M12 16h.01"></path>
+        </svg>,
+        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-square-x" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"></path>
             <path d="M9 9l6 6m0 -6l-6 6"></path>
@@ -41,7 +56,7 @@ export default function Dashboard(): ReactElement{
     useEffect(() => {
         document.addEventListener("click", function(e: Event){
             if (!submitBtn.current?.contains(e.target as Node)){
-                setAlertMessage([alertSvg[0], alertMessage[1], false, "success"])
+                setAlertMessage([alertMessage[0], alertMessage[1], false, "success"])
             }
         })
     }, [alertMessage])

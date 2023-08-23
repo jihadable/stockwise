@@ -1,16 +1,15 @@
-import { ReactElement } from "react";
 import "../style/InventoryStats.css"
 
-export default function InventoryStats(props: any): ReactElement{
+type item = {
+    id: number,
+    name: string,
+    category: string,
+    price: number,
+    quantity: number,
+    desc: string
+}
 
-    type item = {
-        id: number,
-        name: string,
-        category: string,
-        price: number,
-        quantity: number,
-        desc: string
-    }
+export default function InventoryStats(props: {items: item[]}){
 
     const items: item[] = props.items
 

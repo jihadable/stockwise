@@ -1,7 +1,6 @@
-import { ReactElement } from "react";
 import "../style/Header.css"
 
-export default function Header(): ReactElement {
+export default function Header(): JSX.Element {
     return (
         <header className="header">
             <div className="user">User</div>

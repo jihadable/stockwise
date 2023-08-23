@@ -1,10 +1,9 @@
-import { ReactElement } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import user from "../assets/user.png"
 import "../style/Account.css"
 
-export default function Account(): ReactElement{
+export default function Account(): JSX.Element{
 
     const info = [
         {

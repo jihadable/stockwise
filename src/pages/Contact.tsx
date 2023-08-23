@@ -1,9 +1,8 @@
-import { ReactElement } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/Contact.css"
 
-export default function Contact(): ReactElement{
+export default function Contact(): JSX.Element{
 
     const info = [
         {

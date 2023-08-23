@@ -42,10 +42,6 @@
             &.active{
                 top: 1rem;
             }
-    
-            & svg{
-                color: var(--white);
-            }
         }
     }
 }
