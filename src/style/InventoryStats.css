@@ -1,3 +1,5 @@
+@import url("./index.css");
+
 .inventory-stats{
     display: flex;
     align-items: center;

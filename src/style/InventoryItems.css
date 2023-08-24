@@ -50,16 +50,16 @@
             .sort-menu{
                 position: absolute;
                 top: 110%;
-                max-height: 0;
-                overflow: hidden;
-                transition: all .1s;
+                transform: scale(0);
+                transform-origin: top left;
+                transition: all .05s;
                 background-color: var(--white);
                 backdrop-filter: blur(5px);
                 border-radius: .5rem;
                 color: black;
     
                 &.active{
-                    max-height: 999px;
+                    transform: scale(1);
                 }
     
                 .item{
