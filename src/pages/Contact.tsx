@@ -6,7 +6,7 @@ export default function Contact(): JSX.Element{
 
     const info = [
         {
-            value: "+62 823 5239 5596",
+            value: "+62 812 3456 7890",
             svg:
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-phone" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

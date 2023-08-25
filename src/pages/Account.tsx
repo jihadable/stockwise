@@ -16,7 +16,7 @@ export default function Account(): JSX.Element{
         },
         {
             title: "Phone",
-            value: "+62 823 5239 5596"
+            value: "+62 812 3456 7890"
         },
         {
             title: "Bio",
