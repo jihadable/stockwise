@@ -120,6 +120,9 @@ export default function InventoryItems(props: InventoryItemsProps): JSX.Element 
         showItems = sortValue(showItems)
     }
 
+    // focusing search input
+    const searchInput = useRef<HTMLInputElement>(null!)
+
     // show sorting menu
     useEffect(() => {
         const handleClick = (e: Event): void => {
@@ -131,8 +134,13 @@ export default function InventoryItems(props: InventoryItemsProps): JSX.Element 
             }
         }
 
+        document.addEventListener("keyup", function(){
+            searchInput.current.focus()
+        })
+
         document.addEventListener("click", handleClick)
     }, [])
+
 
     return (
         <section className="inventory-items">
@@ -166,7 +174,7 @@ export default function InventoryItems(props: InventoryItemsProps): JSX.Element 
                             <path d="M21 21l-6 -6"></path>
                         </svg>
                     </label>
-                    <input type="text" id="search" placeholder="Search item" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+                    <input type="text" id="search" placeholder="Search item" value={keyword} onChange={(e) => setKeyword(e.target.value)} ref={searchInput} />
                 </div>
             </div>
             <div className="items-table">
