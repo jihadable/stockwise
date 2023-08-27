@@ -48,17 +48,11 @@ export default function InventoryStats(props: {items: item[]}){
             title: "All categories",
             value: totalCategory,
             svg: 
-            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-packages" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-triangle-square-circle" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M7 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
-                <path d="M2 13.5v5.5l5 3"></path>
-                <path d="M7 16.545l5 -3.03"></path>
-                <path d="M17 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
-                <path d="M12 19l5 3"></path>
-                <path d="M17 16.5l5 -3"></path>
-                <path d="M12 13.5v-5.5l-5 -3l5 -3l5 3v5.5"></path>
-                <path d="M7 5.03v5.455"></path>
-                <path d="M12 8l5 -3"></path>
+                <path d="M12 3l-4 7h8z"></path>
+                <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                <path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path>
             </svg>
         }
     ]
