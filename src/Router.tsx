@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 
 export default function Router(){
 
+    if (!localStorage.getItem("navbar")){
+        localStorage.setItem("navbar", JSON.stringify(false))
+    }
+
     if (!localStorage.getItem("items")){
         localStorage.setItem("items", JSON.stringify([]))
     }

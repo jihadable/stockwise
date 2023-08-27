@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../style/Navbar.css"
 
 export default function Navbar(props: {page: string}): JSX.Element {
@@ -56,7 +56,11 @@ export default function Navbar(props: {page: string}): JSX.Element {
         }
     ]
 
-    const [showNavbar, setShowNavbar] = useState(false)
+    const [showNavbar, setShowNavbar] = useState(JSON.parse(localStorage.getItem("navbar")!))
+
+    useEffect(() => {
+        localStorage.setItem("navbar", JSON.stringify(showNavbar))
+    }, [showNavbar])
 
     return (
         <nav className={`navbar ${showNavbar ? "" : "off"}`}>
