@@ -4,6 +4,7 @@ import AddProduct from "./pages/AddProduct";
 import Account from "./pages/Account";
 import Contact from "./pages/Contact";
 import { useEffect, useState } from "react";
+import { item } from "./components/itemType";
 
 export default function Router(){
 
@@ -17,8 +18,11 @@ export default function Router(){
     
     const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!))
 
+    let idNow: any = items.map((item: item) => item.id)
+    idNow = idNow.length >= 1 ? idNow[idNow.length - 1] + 1 : 1
+
     if (!localStorage.getItem("idNow")){
-        localStorage.setItem("idNow", JSON.stringify(items.length + 1))
+        localStorage.setItem("idNow", JSON.stringify(idNow))
     }
 
     useEffect(() => {
