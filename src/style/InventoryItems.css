@@ -50,16 +50,17 @@
             .sort-menu{
                 position: absolute;
                 top: 110%;
-                transform: scale(0);
-                transform-origin: top left;
-                transition: all .05s;
+                max-height: 0;
+                overflow: hidden;
+                transition: all .2s;
                 background-color: var(--white);
                 backdrop-filter: blur(5px);
                 border-radius: .5rem;
                 color: black;
-    
+                
                 &.active{
-                    transform: scale(1);
+                    /* transition: .2s cubic-bezier(0,1,0,1); */
+                    max-height: 999px;
                 }
     
                 .item{

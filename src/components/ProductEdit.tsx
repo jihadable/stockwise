@@ -98,8 +98,8 @@ export default function ProductEdit(props: ProductEditProps){
     }, []);
 
     useEffect(() => {
-        document.addEventListener("click", function(e: Event){
-            if (!submitBtn.current?.contains(e.target as Node)){
+        document.addEventListener("click", function(e: MouseEvent){
+            if (submitBtn.current && !submitBtn.current.contains(e.target as Node)){
                 setAlertMessage([alertSvg[0], alertMessage[1], false, "success"])
             }
         })

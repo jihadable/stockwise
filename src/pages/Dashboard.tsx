@@ -40,11 +40,11 @@ export default function Dashboard(props: any){
 
     const [alertMessage, setAlertMessage] = useState([alertSvg[0], "Product added", false, "success"])
 
-    const submitBtn = useRef<HTMLDivElement>(null)
+    const submitBtn = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        document.addEventListener("click", function(e: Event){
-            if (!submitBtn.current?.contains(e.target as Node)){
+        document.addEventListener("click", function(e: MouseEvent){
+            if (submitBtn.current && !submitBtn.current.contains(e.target as Node)){
                 setAlertMessage([alertMessage[0], alertMessage[1], false, "success"])
             }
         })

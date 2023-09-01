@@ -60,7 +60,7 @@ export default function InventoryItems(props: InventoryItemsProps){
     const [sortingValue, setSortingValue] = useState("Sort by")
     const sortingItems = ["Alphabet", "Lowest price", "Lowest quantity", "Lowest value"]
     const [showSortingMenu, setShowSortingMenu] = useState(false)
-    const sortingBtn = useRef<HTMLDivElement>(null)
+    const sortingBtn = useRef<HTMLDivElement | null>(null)
 
     function sortAlphabet(array: item[]){
         const sortedArray = [...array];
@@ -113,21 +113,21 @@ export default function InventoryItems(props: InventoryItemsProps){
     }
 
     // focusing search input
-    const searchInput = useRef<HTMLInputElement>(null!)
+    const searchInput = useRef<HTMLInputElement | null>(null!)
 
     // show sorting menu
     useEffect(() => {
-        const handleClick = (e: Event): void => {
-            
-            const target = e.target as Node
+        const handleClick = (e: MouseEvent) => {
 
-            if (!(sortingBtn.current?.contains(target))){
+            if (sortingBtn.current && !sortingBtn.current.contains(e.target as Node)){
                 setShowSortingMenu(false)
             }
         }
 
         document.addEventListener("keyup", function(){
-            searchInput.current.focus()
+            if (searchInput.current){
+                searchInput.current.focus()
+            }
         })
 
         document.addEventListener("click", handleClick)
