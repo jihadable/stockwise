@@ -8,7 +8,7 @@ import ProductDetail from "../components/ProductDetail";
 import ProductEdit from "../components/ProductEdit";
 import { item } from "../components/itemType";
 
-export default function Dashboard(props: any): JSX.Element{
+export default function Dashboard(props: any){
 
     const items = props.items
     const setItems = props.setItems

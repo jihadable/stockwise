@@ -1,6 +1,6 @@
 import "../style/Header.css"
 
-export default function Header(): JSX.Element {
+export default function Header(){
     return (
         <header className="header">
             <div className="user">User</div>

@@ -5,7 +5,7 @@ type ProductDetailProps = {
     setShowProductDetail: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function ProductDetail(props: ProductDetailProps): JSX.Element {
+export default function ProductDetail(props: ProductDetailProps){
 
     const product = props.productDetail
     const setShowProductDetail = props.setShowProductDetail

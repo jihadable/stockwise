@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/Contact.css"
 
-export default function Contact(): JSX.Element{
+export default function Contact(){
 
     const info = [
         {

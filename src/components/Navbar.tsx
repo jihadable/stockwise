@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../style/Navbar.css"
 
-export default function Navbar(props: {page: string}): JSX.Element {
+export default function Navbar(props: {page: string}){
 
     const page = props.page
 

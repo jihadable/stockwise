@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import "../style/AddProduct.css"
 import { item } from "../components/itemType"
 
-export default function AddProduct(props: any): JSX.Element{
+export default function AddProduct(props: any){
     
     const setItems = props.setItems
 

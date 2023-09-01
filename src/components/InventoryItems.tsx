@@ -1,14 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import "../style/InventoryItems.css"
-
-type item = {
-    id: number,
-    name: string,
-    category: string,
-    price: number,
-    quantity: number,
-    desc: string
-}
+import { item } from "./itemType";
 
 type InventoryItemsProps = {
     items: item[],
@@ -19,7 +11,7 @@ type InventoryItemsProps = {
     setShowProductEdit: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function InventoryItems(props: InventoryItemsProps): JSX.Element {
+export default function InventoryItems(props: InventoryItemsProps){
 
     const items = props.items
     const setItems = props.setItems

@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import user from "../assets/user.png"
 import "../style/Account.css"
 
-export default function Account(): JSX.Element{
+export default function Account(){
 
     const info = [
         {

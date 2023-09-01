@@ -1,13 +1,5 @@
 import "../style/InventoryStats.css"
-
-type item = {
-    id: number,
-    name: string,
-    category: string,
-    price: number,
-    quantity: number,
-    desc: string
-}
+import { item } from "./itemType"
 
 export default function InventoryStats(props: {items: item[]}){
 

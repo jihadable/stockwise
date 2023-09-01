@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
 import "../style/ProductEdit.css"
-
-type item = {
-    id: number,
-    name: string,
-    category: string,
-    price: number,
-    quantity: number,
-    desc: string
-}
+import { item } from "./itemType";
 
 type ProductEditProps = {
     alertMessage: (string | boolean | JSX.Element)[],
@@ -21,7 +13,7 @@ type ProductEditProps = {
     setShowProductEdit: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function ProductEdit(props: ProductEditProps): JSX.Element {
+export default function ProductEdit(props: ProductEditProps){
 
     const alertMessage = props.alertMessage
     const setAlertMessage = props.setAlertMessage
