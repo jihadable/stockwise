@@ -44,11 +44,11 @@ export default function Dashboard(props: any){
 
     useEffect(() => {
         document.addEventListener("click", function(e: MouseEvent){
-            if (submitBtn.current && !submitBtn.current.contains(e.target as Node)){
+            if (!submitBtn.current?.contains(e.target as Node)){
                 setAlertMessage([alertMessage[0], alertMessage[1], false, "success"])
             }
         })
-    }, [alertMessage])
+    }, [])
 
     return (
         <>

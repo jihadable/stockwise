@@ -84,3 +84,15 @@
         }
     }
 }
+
+@media screen and (max-width: 480px) {
+    .product-edit{
+        margin-bottom: 10rem;
+
+        .edit-content{
+            .name-category,.price-quantity{
+                flex-direction: column;
+            }
+        }
+    }
+}

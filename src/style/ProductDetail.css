@@ -30,13 +30,17 @@
         }
 
         .item{
-            width: 100%;
+            width: calc((100% - 1rem)/2);
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             padding: 0.5rem;
             border-radius: .5rem;
             background-color: rgb(255,255,255,.1);
+
+            &.desc{
+                width: 100%;
+            }
 
             .label{
                 font-weight: 500;
@@ -50,6 +54,26 @@
                     height: 0.5rem;
                     background-color: var(--green);
                     border-radius: 10rem;
+                }
+            }
+
+            .value{
+                word-wrap: break-word;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .product-detail{
+        margin-bottom: 10rem;
+
+        .detail-content{
+            .name-category,.price-quantity{
+                flex-direction: column;
+
+                .item{
+                    width: 100%;
                 }
             }
         }

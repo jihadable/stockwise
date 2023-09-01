@@ -103,7 +103,7 @@ export default function ProductEdit(props: ProductEditProps){
                 setAlertMessage([alertSvg[0], alertMessage[1], false, "success"])
             }
         })
-    }, [alertMessage])
+    }, [])
 
     return (
         <div className="product-edit">

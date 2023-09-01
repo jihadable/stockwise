@@ -55,7 +55,7 @@ export default function ProductDetail(props: ProductDetailProps){
                         <div className="value">{product.quantity}</div>
                     </div>
                 </div>
-                <div className="item">
+                <div className="item desc">
                     <div className="label">
                         <div className="circle"></div>
                         <span>Description</span>

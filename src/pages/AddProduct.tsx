@@ -76,7 +76,7 @@ export default function AddProduct(props: any){
                 setAlertMessage([alertMessage[0], alertMessage[1], false, "success"])
             }
         })
-    }, [alertMessage])
+    }, [])
 
     return (
         <div className="add-product">
