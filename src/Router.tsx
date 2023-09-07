@@ -29,12 +29,27 @@ export default function Router(){
         localStorage.setItem("items", JSON.stringify(items))
     }, [items])
 
+    if (!localStorage.getItem("user")){
+        localStorage.setItem("user", JSON.stringify({
+            name: "User",
+            email: "user@mail.com",
+            phone: "081234567890",
+            bio: "Lorem ipsum dolor sit amet."
+        }))
+    }
+
+    const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("user")!))
+
+    useEffect(() => {
+        localStorage.setItem("user", JSON.stringify(userData))
+    }, [userData])
+
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Dashboard items={items} setItems={setItems} />}></Route>
                 <Route path="/add-product" element={<AddProduct setItems={setItems} />}></Route>
-                <Route path="/account" element={<Account />}></Route>
+                <Route path="/account" element={<Account userData={userData} setUserData={setUserData} />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
             </Routes>
         </BrowserRouter>

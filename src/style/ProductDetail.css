@@ -66,7 +66,6 @@
 
 @media screen and (max-width: 480px) {
     .product-detail{
-        margin-bottom: 10rem;
 
         .detail-content{
             .name-category,.price-quantity{

@@ -2,53 +2,143 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import user from "../assets/user.png"
 import "../style/Account.css"
+import { useEffect, useState } from "react";
 
-export default function Account(){
+type User = {
+    name: string,
+    email: string,
+    phone: string,
+    bio: string
+}
+
+export default function Account(props: any){
+
+    const userData: User = props.userData
+    const setUserData = props.setUserData
 
     const info = [
         {
             title: "Name",
-            value: "User"
+            value: userData.name
         },
         {
             title: "Email",
-            value: "user@mail.com"
+            value: userData.email
         },
         {
             title: "Phone",
-            value: "+62 812 3456 7890"
+            value: userData.phone
         },
         {
             title: "Bio",
-            value: `Lorem ipsum dolor sit amet.`
+            value: userData.bio
         }
     ]
+
+    const [edit, setEdit] = useState(false)
 
     return (
         <div className="account">
             <Navbar page="Account" />
             <div className="content">
                 <Header />
-                <div className="user-info">
+                <div className={`user-info ${edit ? "edit-active" : ""}`}>
                     <div className="img">
-                        <img src={user} alt="Use" />
+                        <img src={user} alt="User" />
                     </div>
-                    <div className="side">
-                        <div className="info">
+                    {
+                        !edit &&
+                        <div className="side">
+                            <div className="info">
+                            {
+                                info.map((item, index) => {
+                                    return (
+                                        <div className="item" key={index}>
+                                            <div className="label">{item.title}</div>
+                                            <div className="value">{item.value}</div>
+                                        </div>
+                                    )
+                                })
+                            }
+                            </div>
+                            <div className="edit-btn" onClick={() => setEdit(true)}>Edit profile</div>
+                        </div>
+                    }
+                    {
+                        edit &&
+                        <EditUser info={info} setEdit={setEdit} userData={userData} setUserData={setUserData} />
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function EditUser(props: any){
+
+    const info = props.info
+    const setEdit = props.setEdit
+    const userData: User = props.userData
+    const [temporaryUserData, setTemporaryUserData] = useState({...userData})
+    const setUserData = props.setUserData
+
+    const handleChange = (value: string, label: string) => {
+        setTemporaryUserData((userData: any) => {
+            return {...userData, [label]: value}
+        })
+    }
+
+    const handelSave = () => {
+        setUserData({...temporaryUserData})
+        setEdit(false)
+    }
+
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+            e.returnValue = 'Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin meninggalkan halaman ini?';
+        };
+      
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [])
+
+    const handleLeaveSite = () => {
+        return 'Anda akan meninggalkan situs ini. Apakah Anda yakin?';
+    };
+
+    useEffect(() => {
+        window.onbeforeunload = handleLeaveSite;
+    
+        return () => {
+            window.onbeforeunload = null;
+        };
+    }, []);
+
+    return (
+        <div className="edit">
+            <div className="info">
+            {
+                info.map((item: {title: string, value: string}, index: number) => {
+                    return (
+                        <div className="item" key={index}>
+                            <div className="label">{item.title}</div>
                         {
-                            info.map((item, index) => {
-                                return (
-                                    <div className="item" key={index}>
-                                        <div className="label">{item.title}</div>
-                                        <div className="value">{item.value}</div>
-                                    </div>
-                                )
-                            })
+                            item.title === "Bio" ? 
+                            <textarea rows={7} className="value" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, "bio")}></textarea> :
+                            <input type="text" className="value" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, item.title.toLowerCase())} />
                         }
                         </div>
-                        <button type="button">Edit profile</button>
-                    </div>
-                </div>
+                    )
+                })
+            }
+            </div>
+            <div className="btns">
+                <div className="cancel" onClick={() => setEdit(false)}>Cancel</div>
+                <div className="save" onClick={() => {handelSave()}}>Save changes</div>
             </div>
         </div>
     )
