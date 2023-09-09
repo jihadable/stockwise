@@ -131,8 +131,8 @@ export default function InventoryItems(props: InventoryItemsProps){
             }
         }
 
-        document.addEventListener("keyup", function(){
-            if (searchInput.current){
+        document.addEventListener("keyup", function(e: KeyboardEvent){
+            if (e.key === '/' && searchInput.current){
                 searchInput.current.focus()
             }
         })
