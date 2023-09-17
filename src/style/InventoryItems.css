@@ -178,13 +178,14 @@
                             display: flex;
                             gap: .5rem;
         
-                            & div{
+                            & div, & a{
                                 cursor: pointer;
                                 padding: 0.2rem;
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
                                 width: fit-content;
+                                height: fit-content;
                                 border-radius: .2rem;
                                 color: black;
         

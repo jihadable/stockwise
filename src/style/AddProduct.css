@@ -5,37 +5,6 @@
     height: 100vh;
     display: flex;
 
-    .alert{
-        position: fixed;
-        left: 50%;
-        background-color: var(--white);
-        top: -100%;
-        transform: translate(-50%);
-        display: flex;
-        align-items: center;
-        padding: 0.5rem;
-        gap: 0.5rem;
-        border-radius: .5rem;
-        box-shadow: 0 0 20px rgb(0,0,0);
-        transition: all .2s;
-
-        &.success{
-            background-color: var(--green);
-        }
-
-        &.warning{
-            background-color: gold;
-        }
-
-        &.fail{
-            background-color: #ff3d3d;
-        }
-
-        &.active{
-            top: 1rem;
-        }
-    }
-
     .content{
         width: 100%;
         display: flex;
@@ -88,7 +57,7 @@
 @media screen and (max-width: 480px) {
     .add-product{
         .content{
-            height: 125%;
+            height: 150%;
 
             .add-new-product{
                 margin-top: 2rem;

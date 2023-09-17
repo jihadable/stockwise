@@ -5,6 +5,8 @@ import Account from "./pages/Account";
 import Contact from "./pages/Contact";
 import { useEffect, useState } from "react";
 import { item } from "./components/itemType";
+import Detail from "./pages/Detail";
+import Edit from "./pages/Edit";
 
 export default function Router(){
 
@@ -51,6 +53,16 @@ export default function Router(){
                 <Route path="/add-product" element={<AddProduct setItems={setItems} />}></Route>
                 <Route path="/account" element={<Account userData={userData} setUserData={setUserData} />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
+            {
+                items.map((item: item, index: number) => {
+                    return <Route path={`/detail/${item.id}`} element={<Detail items={items} detailItem={item} />} key={index}></Route>
+                })
+            }
+            {
+                items.map((item: item, index: number) => {
+                    return <Route path={`/edit/${item.id}`} element={<Edit items={items} editItem={item} setItems={setItems} />} key={index}></Route>
+                })
+            }
             </Routes>
         </BrowserRouter>
     )

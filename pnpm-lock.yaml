@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@tabler/icons-react':
+    specifier: ^2.34.0
+    version: 2.34.0(react@18.2.0)
   localforage:
     specifier: ^1.10.0
     version: 1.10.0
@@ -603,6 +606,20 @@ packages:
   /@remix-run/router@1.8.0:
     resolution: {integrity: sha512-mrfKqIHnSZRyIzBcanNJmVQELTnX+qagEDlcKO90RgRBVOZGSGvZKeDihTRfWcqoDn5N/NkUcwWTccnpN18Tfg==}
     engines: {node: '>=14.0.0'}
+    dev: false
+
+  /@tabler/icons-react@2.34.0(react@18.2.0):
+    resolution: {integrity: sha512-HNNTdwwAW8IwUxLPY2HWFw+d7nPVByieamIx90qM1+Rq8UfvLjwsBFNcUKaJcfRFIAa80o4g6ZGy/NMD/Zw73A==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@tabler/icons': 2.34.0
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /@tabler/icons@2.34.0:
+    resolution: {integrity: sha512-65GsJsT4ZBETWcdrNxbsjsbRoZvbVk3CcU2SafaElrzP1wpOeuAn9aELVEbxhdyZyP9dg2SCfgH6iAArJgp7lw==}
     dev: false
 
   /@types/json-schema@7.0.12:
@@ -1468,6 +1485,11 @@ packages:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: true
 
+  /object-assign@4.1.1:
+    resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /object-path@0.6.0:
     resolution: {integrity: sha512-fxrwsCFi3/p+LeLOAwo/wyRMODZxdGBtUlWRzsEpsUVrisZbEfZ21arxLGfaWfcnqb8oHPNihIb4XPE8CQPN5A==}
     engines: {node: '>=0.8.0'}
@@ -1555,6 +1577,14 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
+  /prop-types@15.8.1:
+    resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      react-is: 16.13.1
+    dev: false
+
   /punycode@2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
@@ -1572,6 +1602,10 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-is@16.13.1:
+    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
     dev: false
 
   /react-refresh@0.14.0:

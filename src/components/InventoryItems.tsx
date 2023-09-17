@@ -1,14 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import "../style/InventoryItems.css"
 import { item } from "./itemType";
+import { Link } from "react-router-dom";
+import { IconDatabaseX, IconEdit, IconEye, IconSearch, IconSortDescending, IconTrash } from "@tabler/icons-react";
 
 type InventoryItemsProps = {
     items: item[],
-    setItems: React.Dispatch<any>,
-    setProductDetail: React.Dispatch<React.SetStateAction<any>>,
-    setShowProductDetail: React.Dispatch<React.SetStateAction<boolean>>,
-    setProductEdit: React.Dispatch<React.SetStateAction<any>>,
-    setShowProductEdit: React.Dispatch<React.SetStateAction<boolean>>
+    setItems: React.Dispatch<any>
 }
 
 export default function InventoryItems(props: InventoryItemsProps){
@@ -30,24 +28,6 @@ export default function InventoryItems(props: InventoryItemsProps){
         if (confirm("Are You sure to delete all items?")){
             setItems([])
         }
-    }
-
-    // set product to show the detail
-    const setProductDetail = props.setProductDetail
-    const setShowProductDetail = props.setShowProductDetail
-
-    function handleDetail(item: item): void {
-        setProductDetail(item)
-        setShowProductDetail(true)
-    }
-
-    // set product to edit
-    const setProductEdit = props.setProductEdit
-    const setShowProductEdit = props.setShowProductEdit
-
-    function handleEdit(item: item): void {
-        setProductEdit(item)
-        setShowProductEdit(true)
     }
 
     // search
@@ -148,14 +128,7 @@ export default function InventoryItems(props: InventoryItemsProps){
                 <div className="left">
                     <div className="sort-by">
                         <div className="sort-btn" onClick={() => {setShowSortingMenu(!showSortingMenu)}} ref={sortingBtn}>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-sort-descending" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M4 6l9 0"></path>
-                                <path d="M4 12l7 0"></path>
-                                <path d="M4 18l7 0"></path>
-                                <path d="M15 15l3 3l3 -3"></path>
-                                <path d="M18 6l0 12"></path>
-                            </svg>
+                            <IconSortDescending stroke={1.5} />
                             <span>{sortingValue}</span>
                         </div>
                         <div className={`sort-menu ${showSortingMenu ? "active" : ""}`}>
@@ -167,25 +140,13 @@ export default function InventoryItems(props: InventoryItemsProps){
                         </div>
                     </div>
                     <div className="delete-all" onClick={() => {handleDeleteAll()}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-database-x" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
-                            <path d="M4 6v6c0 1.657 3.582 3 8 3c.537 0 1.062 -.02 1.57 -.058"></path>
-                            <path d="M20 13.5v-7.5"></path>
-                            <path d="M4 12v6c0 1.657 3.582 3 8 3c.384 0 .762 -.01 1.132 -.03"></path>
-                            <path d="M22 22l-5 -5"></path>
-                            <path d="M17 22l5 -5"></path>
-                        </svg>
+                        <IconDatabaseX stroke={1.5} />
                         <span>Delete all</span>
                     </div>
                 </div>
                 <div className="search">
                     <label htmlFor="search">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                            <path d="M21 21l-6 -6"></path>
-                        </svg>
+                        <IconSearch stroke={1.5} />
                     </label>
                     <input type="text" id="search" placeholder="Search item" value={keyword} onChange={(e) => setKeyword(e.target.value)} ref={searchInput} />
                 </div>
@@ -215,30 +176,14 @@ export default function InventoryItems(props: InventoryItemsProps){
                                         <td>{item.quantity}</td>
                                         <td>${item.price * item.quantity}</td>
                                         <td className="actions">
-                                            <div className="detail" title="Detail" onClick={() => {handleDetail(item)}}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
-                                                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
-                                                </svg>
-                                            </div>
-                                            <div className="edit" title="Edit" onClick={() => {handleEdit(item)}}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                                                    <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                                                    <path d="M16 5l3 3"></path>
-                                                </svg>
-                                            </div>
+                                            <Link to={`/detail/${item.id}`} className="detail" title="Detail">
+                                                <IconEye stroke={1.5} />
+                                            </Link>
+                                            <Link to={`/edit/${item.id}`} className="edit" title="Edit">
+                                                <IconEdit stroke={1.5} />
+                                            </Link>
                                             <div className="delete" title="Delete" onClick={() => handleDelete(item.id)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M4 7l16 0"></path>
-                                                    <path d="M10 11l0 6"></path>
-                                                    <path d="M14 11l0 6"></path>
-                                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-                                                </svg>
+                                                <IconTrash stroke={1.5} />
                                             </div>
                                         </td>
                                     </tr>

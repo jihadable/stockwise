@@ -36,6 +36,7 @@
 
             .side,.edit{
                 width: 50%;
+                height: fit-content;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -124,7 +125,7 @@
 @media screen and (max-width: 480px) {
     .account{
         .content{
-            height: 200%;
+            height: 150%;
 
             .user-info{
                 margin-top: 2rem;

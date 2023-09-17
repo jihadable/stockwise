@@ -91,6 +91,7 @@ function EditUser(props: any){
     const handelSave = () => {
         setUserData({...temporaryUserData})
         setEdit(false)
+        alert("User edited")
     }
 
     useEffect(() => {
