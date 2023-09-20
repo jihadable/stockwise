@@ -9,6 +9,6 @@ Stockwise is a web-based inventory management system. This website displays the 
 <br/>
 » Typescript
 <br/>
-» ReactJS 
+» ReactJS
 
 <img src="https://umarjihad.netlify.app/pic/stockwise.png" />

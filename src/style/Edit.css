@@ -132,9 +132,12 @@
 @media screen and (max-width: 480px) {
     .edit{
         .content{
-            height: 150%;
+            /* min-height: 200%; */
+            /* height: fit-content; */
+            padding-bottom: 10rem;
 
             .edit-container{
+
                 .edit-content{
                     flex-direction: column;
                 }

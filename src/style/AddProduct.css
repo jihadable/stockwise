@@ -11,12 +11,12 @@
         flex-direction: column;
         padding: 0 1rem;
         overflow-y: auto;
-
+        
         .add-new-product{
             display: flex;
             width: 50%;
             padding-bottom: 1rem;
-
+            
             & form{
                 width: 100%;
                 display: flex;
@@ -78,8 +78,8 @@
 @media screen and (max-width: 480px) {
     .add-product{
         .content{
-            height: 150%;
-
+            padding-bottom: 10rem;
+            
             .add-new-product{
                 margin-top: 2rem;
                 width: 100%;
