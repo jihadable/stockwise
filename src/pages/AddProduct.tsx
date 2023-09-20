@@ -3,6 +3,9 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
 import { item } from "../components/itemType"
+import { IconPhotoPlus } from "@tabler/icons-react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddProduct(props: any){
     
@@ -10,6 +13,7 @@ export default function AddProduct(props: any){
 
     const [
         [name, setName],
+        [img, setImg],
         [category, setCategory],
         [price, setPrice],
         [quantity, setQuantity],
@@ -19,26 +23,51 @@ export default function AddProduct(props: any){
         useState(""),
         useState(""),
         useState(""),
+        useState(""),
         useState("")
     ]
+
+    function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
+        const file = event.target.files?.[0]
+
+        if (file) {
+            const allowedExtensions = ['jpg', 'jpeg', 'png']
+            const extension = file.name.split('.').pop()?.toLowerCase()
+      
+            if (extension && allowedExtensions.includes(extension)) {
+                const reader = new FileReader();
+      
+                reader.onload = () => {
+                    const base64String = reader.result as string;
+                    setImg(base64String)
+                }
+      
+                reader.readAsDataURL(file);
+            } 
+            else {
+                toast.warn("File's extension is not allowed")
+            }
+        }
+    }
     
     const handleSubmit = (e: any):void => {
         e.preventDefault()
 
-        if (name === "" || category === "" || price === "" || quantity === "" || desc === ""){
-            alert("Please fill the empty field")
+        if (name === "" || img === "" || category === "" || price === "" || quantity === "" || desc === ""){
+            toast.warn("Please fill the empty field")
             return
         }
 
         const idNow = JSON.parse(localStorage.getItem("idNow")!)
 
-        const newItem = {id: idNow ,name, category, price, quantity, desc}
+        const newItem = {id: idNow ,name, img, category, price, quantity, desc}
 
         setItems((items: item[]) => [...items, newItem])
 
-        alert("Item added")
+        toast.success("Item added")
 
         setName("")
+        setImg("")
         setCategory("")
         setPrice("")
         setQuantity("")
@@ -52,9 +81,30 @@ export default function AddProduct(props: any){
             <Navbar page="Add product" />
             <div className="content">
                 <Header />
+                <ToastContainer
+                position="top-center"
+                autoClose={750}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                draggable
+                theme="colored"
+                />
                 <div className="add-new-product">
                     <form onSubmit={handleSubmit}>
                         <div className="form-header">Add new product</div>
+                        {
+                            img !== "" &&
+                            <div className="img-preview">
+                                <img src={img} alt="Image preview" />
+                            </div>
+                        }
+                        <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
+                        <label htmlFor="img">
+                            <IconPhotoPlus stroke={1.5} />
+                            <span>Choose an image file</span>
+                        </label>
                         <input type="text" id="name" autoComplete="off" name="name" placeholder="Product name" value={name} onChange={(e) => setName(e.target.value)} />
                         <input type="text" id="category" autoComplete="off" name="category" placeholder="Product category" value={category} onChange={(e) => setCategory(e.target.value)} />
                         <input type="number" id="price" name="price" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />

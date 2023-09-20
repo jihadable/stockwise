@@ -5,6 +5,9 @@ import { item } from "../components/itemType"
 import "../style/Edit.css"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { IconPhotoEdit } from "@tabler/icons-react"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Edit(props: any){
 
@@ -18,6 +21,7 @@ export default function Edit(props: any){
     const [
         id,
         [name, setName],
+        [img, setImg],
         [category, setCategory],
         [price, setPrice],
         [quantity, setQuantity],
@@ -25,16 +29,40 @@ export default function Edit(props: any){
     ] = [
         editItem?.id,
         useState(editItem?.name),
+        useState(editItem?.img),
         useState(editItem?.category),
         useState(editItem?.price),
         useState(editItem?.quantity),
         useState(editItem?.desc)
     ]
 
+    function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
+        const file = event.target.files?.[0]
+
+        if (file) {
+            const allowedExtensions = ['jpg', 'jpeg', 'png']
+            const extension = file.name.split('.').pop()?.toLowerCase()
+      
+            if (extension && allowedExtensions.includes(extension)) {
+                const reader = new FileReader();
+      
+                reader.onload = () => {
+                    const base64String = reader.result as string;
+                    setImg(base64String)
+                }
+      
+                reader.readAsDataURL(file);
+            } 
+            else {
+                alert("File's extension is not allowed");
+            }
+        }
+    }
+
     function handleSave(): void {
 
-        if (name === "" || category === "" || isNaN(price) || isNaN(quantity) || desc === ""){
-            alert("Please fill the empty field")
+        if (name === "" || img === "" || category === "" || isNaN(price) || isNaN(quantity) || desc === ""){
+            toast.warn("Please fill the empty field")
             
             return
         }
@@ -44,6 +72,7 @@ export default function Edit(props: any){
                 return {
                     ...obj,
                     name: name,
+                    img: img,
                     category: category,
                     price: price,
                     quantity: quantity,
@@ -56,9 +85,11 @@ export default function Edit(props: any){
 
         setItems(modifiedArray)
 
-        navigate("/")
+        toast.success("Item edited")
 
-        alert("Item edited")
+        setTimeout(() => {
+            navigate("/")
+        }, 1500);
     }
 
     useEffect(() => {
@@ -91,10 +122,28 @@ export default function Edit(props: any){
             <Navbar page="Dashboard" />
             <div className="content">
                 <Header />
+                <ToastContainer
+                position="top-center"
+                autoClose={750}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                draggable
+                theme="colored"
+                />
                 <div className="edit-container">
                     <div className="edit-header">Edit product</div>
                     <div className="edit-content">
-                        <div className="name-category">
+                        <div className="img">
+                            <img src={img} alt="Image Preview" />
+                            <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
+                            <label htmlFor="img">
+                                <IconPhotoEdit stroke={1.5} />
+                                <span>Edit image</span>
+                            </label>
+                        </div>
+                        <div className="info">
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
@@ -109,8 +158,6 @@ export default function Edit(props: any){
                                 </div>
                                 <input type="text" id="category" name="category" className="value" value={category} onChange={(e) => {setCategory(e.target.value)}} />
                             </div>
-                        </div>
-                        <div className="price-quantity">
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
@@ -125,17 +172,17 @@ export default function Edit(props: any){
                                 </div>
                                 <input type="number" id="quantity" name="quantity" className="value" value={isNaN(quantity) ? "" : quantity} onChange={(e) => {setQuantity(parseInt(e.target.value))}} />
                             </div>
-                        </div>
-                        <div className="item">
-                            <div className="label">
-                                <div className="circle"></div>
-                                <span>Description</span>
+                            <div className="item">
+                                <div className="label">
+                                    <div className="circle"></div>
+                                    <span>Description</span>
+                                </div>
+                                <textarea id="desc" name="desc" className="value" value={desc} rows={7} onChange={(e) => {setDesc(e.target.value)}}></textarea>
                             </div>
-                            <textarea id="desc" name="desc" className="value" value={desc} rows={7} onChange={(e) => {setDesc(e.target.value)}}></textarea>
-                        </div>
-                        <div className="btns">
-                            <Link to={"/"} className="cancel">Cancel</Link>
-                            <div className="save" onClick={() => {handleSave()}}>Save changes</div>
+                            <div className="btns">
+                                <Link to={"/"} className="cancel">Cancel</Link>
+                                <div className="save" onClick={() => {handleSave()}}>Save changes</div>
+                            </div>
                         </div>
                     </div>
                 </div>

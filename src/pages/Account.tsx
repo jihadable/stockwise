@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import user from "../assets/user.png"
 import "../style/Account.css"
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 type User = {
     name: string,
@@ -42,6 +43,16 @@ export default function Account(props: any){
             <Navbar page="Account" />
             <div className="content">
                 <Header />
+                <ToastContainer
+                position="top-center"
+                autoClose={750}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                draggable
+                theme="colored"
+                />
                 <div className={`user-info ${edit ? "edit-active" : ""}`}>
                     <div className="img">
                         <img src={user} alt="User" />
@@ -89,9 +100,18 @@ function EditUser(props: any){
     }
 
     const handelSave = () => {
+        if (temporaryUserData.name === "" || temporaryUserData.email === "" || temporaryUserData.phone === "" || temporaryUserData.bio === ""){
+            toast.warn("Please fill the empty field")
+
+            return
+        }
+        
         setUserData({...temporaryUserData})
-        setEdit(false)
-        alert("User edited")
+        toast.success("User edited")
+
+        setTimeout(() => {
+            setEdit(false)
+        }, 200);
     }
 
     useEffect(() => {

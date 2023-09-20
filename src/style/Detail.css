@@ -21,6 +21,7 @@
             gap: 1rem;
             margin-top: 1rem;
             color: var(--white);
+            padding-bottom: 1rem;
 
             .back{
                 display: flex;
@@ -36,44 +37,51 @@
         
             .detail-content{
                 display: flex;
-                flex-direction: column;
                 gap: 1rem;
-        
-                .name-category,.price-quantity{
+
+                .img{
                     display: flex;
-                    gap: 1rem;
+                    width: 100%;
+                    height: fit-content;
+
+                    & img{
+                        width: 100%;
+                        border-radius: .5rem;
+                    }
                 }
-        
-                .item{
-                    width: calc((100% - 1rem)/2);
+
+                .info{
+                    width: 100%;
                     display: flex;
                     flex-direction: column;
-                    gap: 0.5rem;
-                    padding: 0.5rem;
-                    border-radius: .5rem;
-                    background-color: rgb(255,255,255,.1);
-        
-                    &.desc{
-                        width: 100%;
-                    }
-        
-                    .label{
-                        font-weight: 500;
+                    gap: 1rem;
+
+                    .item{
                         display: flex;
-                        align-items: center;
+                        flex-direction: column;
                         gap: 0.5rem;
-                        font-size: 1.05rem;
-        
-                        .circle{
-                            width: 0.5rem;
-                            height: 0.5rem;
-                            background-color: var(--green);
-                            border-radius: 10rem;
+                        padding: 0.5rem;
+                        border-radius: .5rem;
+                        background-color: rgb(255,255,255,.1);
+
+                        .label{
+                            font-weight: 500;
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            font-size: 1.05rem;
+            
+                            .circle{
+                                width: 0.5rem;
+                                height: 0.5rem;
+                                background-color: var(--green);
+                                border-radius: 10rem;
+                            }
                         }
-                    }
-        
-                    .value{
-                        word-wrap: break-word;
+            
+                        .value{
+                            word-wrap: break-word;
+                        }
                     }
                 }
             }
@@ -88,13 +96,7 @@
             
             .detail-container{
                 .detail-content{
-                    .name-category,.price-quantity{
-                        flex-direction: column;
-            
-                        .item{
-                            width: 100%;
-                        }
-                    }
+                    flex-direction: column;
                 }
             }
         }

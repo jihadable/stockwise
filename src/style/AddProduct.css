@@ -15,6 +15,7 @@
         .add-new-product{
             display: flex;
             width: 50%;
+            padding-bottom: 1rem;
 
             & form{
                 width: 100%;
@@ -28,7 +29,16 @@
                     font-weight: 700;
                 }
 
-                & input, & textarea, & button{
+                .img-preview{
+                    display: flex;
+
+                    & img{
+                        width: 100%;
+                        border-radius: .5rem;
+                    }
+                }
+
+                & input, & textarea, & button, & label{
                     padding: 1rem;
                     font-size: 1rem;
                     border: none;
@@ -37,6 +47,17 @@
                     border-radius: .5rem;
                     color: var(--white);
                     background-color: rgb(255,255,255,.1);
+
+                    &#img{
+                        display: none;
+                    }
+                }
+
+                & label{
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    cursor: pointer;
                 }
 
                 & button{

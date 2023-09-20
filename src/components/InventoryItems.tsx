@@ -27,6 +27,7 @@ export default function InventoryItems(props: InventoryItemsProps){
     const handleDeleteAll = () => {
         if (confirm("Are You sure to delete all items?")){
             setItems([])
+            localStorage.setItem("idNow", JSON.stringify(0))
         }
     }
 

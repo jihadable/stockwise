@@ -24,7 +24,10 @@ export default function Detail(props: any){
                     </Link>
                     <div className="detail-header">Item detail</div>
                     <div className="detail-content">
-                        <div className="name-category">
+                        <div className="img">
+                            <img src={detailItem.img} alt="Image Preview" />
+                        </div>
+                        <div className="info">
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
@@ -39,8 +42,6 @@ export default function Detail(props: any){
                                 </div>
                                 <div className="value">{detailItem.category}</div>
                             </div>
-                        </div>
-                        <div className="price-quantity">
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
@@ -55,13 +56,13 @@ export default function Detail(props: any){
                                 </div>
                                 <div className="value">{detailItem.quantity}</div>
                             </div>
-                        </div>
-                        <div className="item desc">
-                            <div className="label">
-                                <div className="circle"></div>
-                                <span>Description</span>
+                            <div className="item">
+                                <div className="label">
+                                    <div className="circle"></div>
+                                    <span>Description</span>
+                                </div>
+                                <div className="value">{detailItem.desc}</div>
                             </div>
-                            <div className="value">{detailItem.desc}</div>
                         </div>
                     </div>
                 </div>
