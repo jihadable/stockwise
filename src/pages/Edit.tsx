@@ -137,13 +137,15 @@ export default function Edit(props: any){
                     <div className="edit-content">
                         <div className="img">
                             <img src={img} alt="Image Preview" />
-                            <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
-                            <label htmlFor="img">
-                                <IconPhotoEdit stroke={1.5} />
-                                <span>Edit image</span>
-                            </label>
                         </div>
                         <div className="info">
+                            <div className="item img-input">
+                                <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
+                                <label htmlFor="img">
+                                    <IconPhotoEdit stroke={1.5} />
+                                    <span>Edit image</span>
+                                </label>
+                            </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>

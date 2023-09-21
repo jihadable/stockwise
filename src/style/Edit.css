@@ -42,20 +42,6 @@
                         width: 100%;
                         border-radius: .5rem;
                     }
-
-                    & input{
-                        display: none;
-                    }
-
-                    & label{
-                        display: flex;
-                        align-items: center;
-                        gap: .5rem;
-                        padding: .5rem;
-                        cursor: pointer;
-                        border-radius: .5rem;
-                        background-color: rgb(255,255,255,.1);
-                    }
                 }
 
                 .info{
@@ -96,6 +82,20 @@
                             color: var(--white);
                             resize: none;
                         }
+
+                        &.img-input{
+
+                            & input{
+                                display: none;
+                            }
+
+                            & label{
+                                display: flex;
+                                align-items: center;
+                                gap: .5rem;
+                                cursor: pointer;
+                            }
+                        }
                     }
 
                     .btns{
@@ -132,8 +132,6 @@
 @media screen and (max-width: 480px) {
     .edit{
         .content{
-            /* min-height: 200%; */
-            /* height: fit-content; */
             padding-bottom: 10rem;
 
             .edit-container{
