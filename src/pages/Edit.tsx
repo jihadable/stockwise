@@ -149,35 +149,35 @@ export default function Edit(props: any){
                                     <div className="circle"></div>
                                     <span>Name</span>
                                 </div>
-                                <input type="text" id="name" name="name" autoComplete="off" className="value" value={name} onChange={(e) => {setName(e.target.value)}} />
+                                <input type="text" className="value" spellCheck="false" value={name} onChange={(e) => {setName(e.target.value)}} />
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Category</span>
                                 </div>
-                                <input type="text" id="category" name="category" className="value" value={category} onChange={(e) => {setCategory(e.target.value)}} />
+                                <input type="text" className="value" spellCheck="false" value={category} onChange={(e) => {setCategory(e.target.value)}} />
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Price</span>
                                 </div>
-                                <input type="number" id="price" name="price" min={0} className="value" value={isNaN(price) ? "" : price} onChange={(e) => {setPrice(parseInt(e.target.value))}} />
+                                <input type="number" min={0} className="value" spellCheck="false" value={isNaN(price) ? "" : price} onChange={(e) => {setPrice(parseInt(e.target.value))}} />
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Quantity</span>
                                 </div>
-                                <input type="number" id="quantity" name="quantity" className="value" value={isNaN(quantity) ? "" : quantity} onChange={(e) => {setQuantity(parseInt(e.target.value))}} />
+                                <input type="number" className="value" spellCheck="false" value={isNaN(quantity) ? "" : quantity} onChange={(e) => {setQuantity(parseInt(e.target.value))}} />
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Description</span>
                                 </div>
-                                <textarea id="desc" name="desc" className="value" value={desc} rows={7} onChange={(e) => {setDesc(e.target.value)}}></textarea>
+                                <textarea className="value" spellCheck="false" value={desc} rows={7} onChange={(e) => {setDesc(e.target.value)}}></textarea>
                             </div>
                             <div className="btns">
                                 <Link to={"/"} className="cancel">Cancel</Link>

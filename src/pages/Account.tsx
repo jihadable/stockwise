@@ -149,8 +149,8 @@ function EditUser(props: any){
                             <div className="label">{item.title}</div>
                         {
                             item.title === "Bio" ? 
-                            <textarea rows={7} className="value" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, "bio")}></textarea> :
-                            <input type="text" className="value" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, item.title.toLowerCase())} />
+                            <textarea rows={7} className="value" spellCheck="false" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, "bio")}></textarea> :
+                            <input type="text" className="value" spellCheck="false" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, item.title.toLowerCase())} />
                         }
                         </div>
                     )

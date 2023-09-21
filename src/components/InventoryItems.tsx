@@ -149,7 +149,7 @@ export default function InventoryItems(props: InventoryItemsProps){
                     <label htmlFor="search">
                         <IconSearch stroke={1.5} />
                     </label>
-                    <input type="text" id="search" placeholder="Search item" value={keyword} onChange={(e) => setKeyword(e.target.value)} ref={searchInput} />
+                    <input type="text" id="search" placeholder="Search item" spellCheck="false" value={keyword} onChange={(e) => setKeyword(e.target.value)} ref={searchInput} />
                 </div>
             </div>
             <div className="items-table">

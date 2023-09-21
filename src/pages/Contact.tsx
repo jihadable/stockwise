@@ -32,8 +32,8 @@ export default function Contact(){
                     </div>
                     <div className="form-info">
                         <form action="">
-                            <input type="text" placeholder="Subject" />
-                            <textarea rows={10} placeholder="Message"></textarea>
+                            <input type="text" placeholder="Subject" spellCheck="false" />
+                            <textarea rows={10} placeholder="Message" spellCheck="false"></textarea>
                             <button type="button">
                                 <span>Send</span>
                                 <IconMailForward stroke={1.5} />
