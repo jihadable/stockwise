@@ -2,7 +2,15 @@ import { IconCoin, IconShoppingCart, IconTriangleSquareCircle } from "@tabler/ic
 import "../style/InventoryStats.css"
 import { item } from "./itemType"
 
-export default function InventoryStats(props: {items: item[]}){
+type InventoryStatsProps = {
+    items: item[], 
+    selectedCurrency: {code: string, name: string}
+}
+
+export default function InventoryStats(props: InventoryStatsProps){
+
+    // currency
+    const selectedCurrency = props.selectedCurrency
 
     const items: item[] = props.items
 
@@ -21,7 +29,7 @@ export default function InventoryStats(props: {items: item[]}){
         },
         {
             title: "Total store value",
-            value: `$${totalStoreValue}`,
+            value: `${selectedCurrency.code} ${totalStoreValue}`,
             svg: <IconCoin stroke={1.5} />
         },
         {

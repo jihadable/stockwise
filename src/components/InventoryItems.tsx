@@ -2,11 +2,14 @@ import { useEffect, useState, useRef } from "react";
 import "../style/InventoryItems.css"
 import { item } from "./itemType";
 import { Link } from "react-router-dom";
-import { IconDatabaseX, IconEdit, IconEye, IconSearch, IconSortDescending, IconTrash } from "@tabler/icons-react";
+import { IconCash, IconDatabaseX, IconEdit, IconEye, IconSearch, IconSortDescending, IconTrash } from "@tabler/icons-react";
 
 type InventoryItemsProps = {
     items: item[],
-    setItems: React.Dispatch<any>
+    setItems: React.Dispatch<any>,
+    currencyItems: {code: string, name: string}[],
+    selectedCurrency: {code: string, name: string},
+    setSelectedCurrency: React.Dispatch<any>
 }
 
 export default function InventoryItems(props: InventoryItemsProps){
@@ -44,9 +47,16 @@ export default function InventoryItems(props: InventoryItemsProps){
         return filteredArray;
     }
 
+    // currency
+    const currencyItems = props.currencyItems
+    const selectedCurrency = props.selectedCurrency
+    const setSelectedCurrency = props.setSelectedCurrency
+    const [showCurrencyItems, setShowCurrencyItems] = useState(false)
+    const currencyItemsBtn = useRef<HTMLDivElement | null>(null)
+
     // sorting
     const [sortingValue, setSortingValue] = useState("Default")
-    const sortingItems = ["Default","Alphabet", "Lowest price", "Lowest quantity", "Lowest value"]
+    const sortingItems = ["Default", "Alphabet", "Lowest price", "Lowest quantity", "Lowest value"]
     const [showSortingMenu, setShowSortingMenu] = useState(false)
     const sortingBtn = useRef<HTMLDivElement | null>(null)
 
@@ -110,6 +120,10 @@ export default function InventoryItems(props: InventoryItemsProps){
             if (sortingBtn.current && !sortingBtn.current.contains(e.target as Node)){
                 setShowSortingMenu(false)
             }
+
+            if (currencyItemsBtn.current && !currencyItemsBtn.current.contains(e.target as Node)){
+                setShowCurrencyItems(false)
+            }
         }
 
         document.addEventListener("keyup", function(e: KeyboardEvent){
@@ -127,17 +141,26 @@ export default function InventoryItems(props: InventoryItemsProps){
             <div className="header">Inventory Items</div>
             <div className="tools">
                 <div className="left">
+                    <div className="currency">
+                        <div className="currency-btn" onClick={() => setShowCurrencyItems(!showCurrencyItems)} ref={currencyItemsBtn}>
+                            <IconCash stroke={1.5} />
+                            <span>{selectedCurrency.code} • {selectedCurrency.name}</span>
+                        </div>
+                        <div className={`currency-menu ${showCurrencyItems ? "active" : ""}`}>
+                        {currencyItems.map((item, index) => (
+                            <div className="item" key={index} onClick={() => setSelectedCurrency(item)}>{item.code} • {item.name}</div>
+                        ))}
+                        </div>
+                    </div>
                     <div className="sort-by">
-                        <div className="sort-btn" onClick={() => {setShowSortingMenu(!showSortingMenu)}} ref={sortingBtn}>
+                        <div className="sort-btn" onClick={() => setShowSortingMenu(!showSortingMenu)} ref={sortingBtn}>
                             <IconSortDescending stroke={1.5} />
                             <span>{sortingValue}</span>
                         </div>
                         <div className={`sort-menu ${showSortingMenu ? "active" : ""}`}>
-                        {
-                            sortingItems.map((item, index) => {
+                        {sortingItems.map((item, index) => {
                                 return <div className="item" key={index} onClick={() => setSortingValue(item)}>{item}</div>
-                            })
-                        }
+                        })}
                         </div>
                     </div>
                     <div className="delete-all" onClick={() => {handleDeleteAll()}}>
@@ -173,9 +196,9 @@ export default function InventoryItems(props: InventoryItemsProps){
                                         <td>{index + 1}</td>
                                         <td>{item.name}</td>
                                         <td>{item.category}</td>
-                                        <td>${item.price}</td>
+                                        <td>{selectedCurrency.code} {item.price}</td>
                                         <td>{item.quantity}</td>
-                                        <td>${item.price * item.quantity}</td>
+                                        <td>{selectedCurrency.code} {item.price * item.quantity}</td>
                                         <td className="actions">
                                             <Link to={`/detail/${item.id}`} className="detail" title="Detail">
                                                 <IconEye stroke={1.5} />

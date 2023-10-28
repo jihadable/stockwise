@@ -14,6 +14,7 @@ export default function Router(){
         localStorage.setItem("navbar", JSON.stringify(false))
     }
 
+    // items
     if (!localStorage.getItem("items")){
         localStorage.setItem("items", JSON.stringify([]))
     }
@@ -27,10 +28,50 @@ export default function Router(){
         localStorage.setItem("idNow", JSON.stringify(idNow))
     }
 
-    useEffect(() => {
-        localStorage.setItem("items", JSON.stringify(items))
-    }, [items])
+    // currency
+    if (!localStorage.getItem("currency")){
+        localStorage.setItem("currency", JSON.stringify({
+            code: "IDR",
+            name: "Rupiah"
+        }))
+    }
+    const currencyItems = [
+        {
+            code: "IDR",
+            name: "Rupiah"
+        },
+        {
+            code: "USD",
+            name: "Dollar"
+        },
+        {
+            code: "EUR",
+            name: "Euro"
+        },
+        {
+            code: "GBP",
+            name: "Pound"
+        },
+        {
+            code: "JPY",
+            name: "Yen"
+        },
+        {
+            code: "KRW",
+            name: "Won"
+        },
+        {
+            code: "RUB",
+            name: "Ruble"
+        },
+        {
+            code: "INR",
+            name: "Rupee"
+        }
+    ]
+    const [selectedCurrency, setSelectedCurrency] = useState(JSON.parse(localStorage.getItem("currency")!))
 
+    // user data
     if (!localStorage.getItem("user")){
         localStorage.setItem("user", JSON.stringify({
             name: "User",
@@ -39,23 +80,25 @@ export default function Router(){
             bio: "Lorem ipsum dolor sit amet."
         }))
     }
-
+    
     const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("user")!))
-
+    
     useEffect(() => {
+        localStorage.setItem("items", JSON.stringify(items))
+        localStorage.setItem("currency", JSON.stringify(selectedCurrency))
         localStorage.setItem("user", JSON.stringify(userData))
-    }, [userData])
+    }, [items, currencyItems, userData])
 
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Dashboard items={items} setItems={setItems} />}></Route>
+                <Route path="/" element={<Dashboard items={items} setItems={setItems} currencyItems={currencyItems} selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />}></Route>
                 <Route path="/add-product" element={<AddProduct setItems={setItems} />}></Route>
                 <Route path="/account" element={<Account userData={userData} setUserData={setUserData} />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
             {
                 items.map((item: item, index: number) => {
-                    return <Route path={`/detail/${item.id}`} element={<Detail items={items} detailItem={item} />} key={index}></Route>
+                    return <Route path={`/detail/${item.id}`} element={<Detail items={items} detailItem={item} selectedCurrency={selectedCurrency} />} key={index}></Route>
                 })
             }
             {

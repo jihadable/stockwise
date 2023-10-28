@@ -5,10 +5,22 @@ import InventoryStats from "../components/InventoryStats";
 import InventoryItems from "../components/InventoryItems";
 import { item } from "../components/itemType";
 
-export default function Dashboard(props: any){
+type DashboardType = {
+    items: item[],
+    setItems: React.Dispatch<any>,
+    currencyItems: {code: string, name: string}[],
+    selectedCurrency: {code: string, name: string},
+    setSelectedCurrency: React.Dispatch<any>
+}
+
+export default function Dashboard(props: DashboardType){
 
     const items: item[] = props.items
     const setItems = props.setItems
+
+    const currencyItems = props.currencyItems
+    const selectedCurrency = props.selectedCurrency
+    const setSelectedCurrency = props.setSelectedCurrency
 
     return (
         <>
@@ -16,8 +28,8 @@ export default function Dashboard(props: any){
             <Navbar page="Dashboard" />
             <div className="content">
                 <Header />
-                <InventoryStats items={items} />
-                <InventoryItems items={items} setItems={setItems} />
+                <InventoryStats items={items} selectedCurrency={selectedCurrency} />
+                <InventoryItems items={items} setItems={setItems} currencyItems={currencyItems} selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />
             </div>
         </div>
         </>

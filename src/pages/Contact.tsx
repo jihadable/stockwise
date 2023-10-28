@@ -31,8 +31,7 @@ export default function Contact(){
                         <div>Feel free to drop us a message</div>
                     </div>
                     <div className="form-info">
-                        <form action="">
-                            <input type="text" placeholder="Subject" spellCheck="false" />
+                        <form>
                             <textarea rows={10} placeholder="Message" spellCheck="false"></textarea>
                             <button type="button">
                                 <span>Send</span>

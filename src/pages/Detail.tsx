@@ -6,17 +6,24 @@ import { item } from "../components/itemType";
 import "../style/Detail.css"
 import { IconArrowLeft } from "@tabler/icons-react";
 
-export default function Detail(props: any){
+type DetailType = {
+    detailItem: item,
+    items: item[],
+    selectedCurrency: {code: string, name: string}
+}
+
+export default function Detail(props: DetailType){
 
     const detailItem: item = props.detailItem
     const items: item[] = props.items
+    const selectedCurrency = props.selectedCurrency
 
     return (
         <div className="detail">
             <Navbar page="Dashboard" />
             <div className="content">
                 <Header />
-                <InventoryStats items={items} />
+                <InventoryStats items={items} selectedCurrency={selectedCurrency} />
                 <div className="detail-container">
                     <Link to="/" className="back">
                         <IconArrowLeft stroke={1.5} />
@@ -47,7 +54,7 @@ export default function Detail(props: any){
                                     <div className="circle"></div>
                                     <span>Price</span>
                                 </div>
-                                <div className="value">${detailItem.price}</div>
+                                <div className="value">{selectedCurrency.code} {detailItem.price}</div>
                             </div>
                             <div className="item">
                                 <div className="label">
