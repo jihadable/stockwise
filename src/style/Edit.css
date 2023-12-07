@@ -111,7 +111,7 @@
                             transition: all .2s;
             
                             &.cancel{
-                                color: #ff3d3d;
+                                color: var(--red);
                             }
             
                             &.save{

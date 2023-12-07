@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { item } from "./components/itemType";
 import Detail from "./pages/Detail";
 import Edit from "./pages/Edit";
+import Login from "./pages/Login";
 
 export default function Router(){
 
@@ -93,6 +94,7 @@ export default function Router(){
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Dashboard items={items} setItems={setItems} currencyItems={currencyItems} selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />}></Route>
+                <Route path="/login" element={<Login />}></Route>
                 <Route path="/add-product" element={<AddProduct setItems={setItems} />}></Route>
                 <Route path="/account" element={<Account userData={userData} setUserData={setUserData} />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
