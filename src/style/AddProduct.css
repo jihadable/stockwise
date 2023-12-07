@@ -38,7 +38,7 @@
                     }
                 }
 
-                & input, & textarea, & button, & label{
+                & input, & textarea, .save, & label{
                     padding: 1rem;
                     font-size: 1rem;
                     border: none;
@@ -60,7 +60,11 @@
                     cursor: pointer;
                 }
 
-                & button{
+                .react-quill{
+                    min-height: 200px;
+                }
+
+                .save{
                     width: fit-content;
                     cursor: pointer;
                     transition: all .2s;

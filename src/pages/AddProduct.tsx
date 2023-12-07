@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
@@ -6,8 +6,10 @@ import { item } from "../components/itemType"
 import { IconPhotoPlus } from "@tabler/icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import ReactQuill from 'react-quill';
+import "../style/quill.snow.css"
 
-export default function AddProduct(props: any){
+export default function AddProduct(props: {setItems: React.Dispatch<React.SetStateAction<item[]>>}){
     
     const setItems = props.setItems
 
@@ -50,7 +52,7 @@ export default function AddProduct(props: any){
         }
     }
     
-    const handleSubmit = (e: any):void => {
+    const handleSubmit = (e: FormEvent):void => {
         e.preventDefault()
 
         if (name === "" || img === "" || category === "" || price === "" || quantity === "" || desc === ""){
@@ -58,9 +60,9 @@ export default function AddProduct(props: any){
             return
         }
 
-        const idNow = JSON.parse(localStorage.getItem("idNow")!)
+        const idNow: number = JSON.parse(localStorage.getItem("idNow")!)
 
-        const newItem = {id: idNow ,name, img, category, price, quantity, desc}
+        const newItem: item = {id: idNow ,name, img, category, price: parseInt(price), quantity: parseInt(quantity), desc}
 
         setItems((items: item[]) => [...items, newItem])
 
@@ -109,8 +111,10 @@ export default function AddProduct(props: any){
                         <input type="text" id="category" name="category" placeholder="Product category" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
                         <input type="number" id="price" name="price" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
                         <input type="number" id="quantity" name="quantity" min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                        <textarea id="desc" name="desc" rows={7} placeholder="Product description" spellCheck="false" value={desc} onChange={(e) => setDesc(e.target.value)}></textarea>
-                        <button type="submit">Save product</button>
+                        <div className="react-quill">
+                            <ReactQuill theme="snow" value={desc} onChange={setDesc} placeholder="Product description" />
+                        </div>
+                        <button type="submit" className="save">Save product</button>
                     </form>
                 </div>
             </div>

@@ -28,6 +28,7 @@
                 align-items: center;
                 gap: 0.5rem;
                 cursor: pointer;
+                width: fit-content;
             }
         
             .detail-header{
@@ -81,6 +82,10 @@
             
                         .value{
                             word-wrap: break-word;
+                            
+                            & ol, & ul{
+                                margin-left: 2rem;
+                            }
                         }
                     }
                 }

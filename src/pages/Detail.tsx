@@ -23,7 +23,7 @@ export default function Detail(props: DetailType){
                 <Header />
                 <InventoryStats items={items} />
                 <div className="detail-container">
-                    <Link to="/" className="back">
+                    <Link to="/dashboard" className="back">
                         <IconArrowLeft stroke={1.5} />
                         <span>Back to dashboard</span>
                     </Link>
@@ -66,7 +66,7 @@ export default function Detail(props: DetailType){
                                     <div className="circle"></div>
                                     <span>Description</span>
                                 </div>
-                                <div className="value">{detailItem.desc}</div>
+                                <div className="value" dangerouslySetInnerHTML={{__html: detailItem.desc}} />
                             </div>
                         </div>
                     </div>
