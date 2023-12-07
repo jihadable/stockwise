@@ -43,7 +43,7 @@
                         outline: none;
                         resize: none;
                         border-radius: .5rem;
-                        background-color: rgb(255,255,255,.1);
+                        background-color: var(--btn_color);
                         color: var(--white);
                     }
 

@@ -8,6 +8,8 @@ import { item } from "./components/itemType";
 import Detail from "./pages/Detail";
 import Edit from "./pages/Edit";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Register from "./pages/Register";
 
 export default function Router(){
 
@@ -20,57 +22,14 @@ export default function Router(){
         localStorage.setItem("items", JSON.stringify([]))
     }
     
-    const [items, setItems] = useState(JSON.parse(localStorage.getItem("items")!))
+    const [items, setItems] = useState<item[]>(JSON.parse(localStorage.getItem("items")!))
 
-    let idNow: any = items.map((item: item) => item.id)
-    idNow = idNow.length >= 1 ? idNow[idNow.length - 1] + 1 : 1
+    const ids: number[] = items.map((item: item) => item.id)
+    const idNow: number = ids.length >= 1 ? ids[ids.length - 1] + 1 : 1
 
     if (!localStorage.getItem("idNow")){
         localStorage.setItem("idNow", JSON.stringify(idNow))
     }
-
-    // currency
-    if (!localStorage.getItem("currency")){
-        localStorage.setItem("currency", JSON.stringify({
-            code: "IDR",
-            name: "Rupiah"
-        }))
-    }
-    const currencyItems = [
-        {
-            code: "IDR",
-            name: "Rupiah"
-        },
-        {
-            code: "USD",
-            name: "Dollar"
-        },
-        {
-            code: "EUR",
-            name: "Euro"
-        },
-        {
-            code: "GBP",
-            name: "Pound"
-        },
-        {
-            code: "JPY",
-            name: "Yen"
-        },
-        {
-            code: "KRW",
-            name: "Won"
-        },
-        {
-            code: "RUB",
-            name: "Ruble"
-        },
-        {
-            code: "INR",
-            name: "Rupee"
-        }
-    ]
-    const [selectedCurrency, setSelectedCurrency] = useState(JSON.parse(localStorage.getItem("currency")!))
 
     // user data
     if (!localStorage.getItem("user")){
@@ -86,21 +45,22 @@ export default function Router(){
     
     useEffect(() => {
         localStorage.setItem("items", JSON.stringify(items))
-        localStorage.setItem("currency", JSON.stringify(selectedCurrency))
         localStorage.setItem("user", JSON.stringify(userData))
-    }, [items, currencyItems, userData])
+    }, [items, userData])
 
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Dashboard items={items} setItems={setItems} currencyItems={currencyItems} selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />}></Route>
+                <Route path="/" element={<Home />}></Route>
                 <Route path="/login" element={<Login />}></Route>
+                <Route path="/register" element={<Register />}></Route>
+                <Route path="/dashboard" element={<Dashboard items={items} setItems={setItems} />}></Route>
                 <Route path="/add-product" element={<AddProduct setItems={setItems} />}></Route>
                 <Route path="/account" element={<Account userData={userData} setUserData={setUserData} />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
             {
                 items.map((item: item, index: number) => {
-                    return <Route path={`/detail/${item.id}`} element={<Detail items={items} detailItem={item} selectedCurrency={selectedCurrency} />} key={index}></Route>
+                    return <Route path={`/detail/${item.id}`} element={<Detail items={items} detailItem={item} />} key={index}></Route>
                 })
             }
             {

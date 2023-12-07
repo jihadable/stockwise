@@ -56,7 +56,7 @@
                         gap: 0.5rem;
                         padding: 0.5rem;
                         border-radius: .5rem;
-                        background-color: rgb(255,255,255,.1);
+                        background-color: var(--btn_color);
 
                         .label{
                             font-weight: 500;
@@ -106,7 +106,7 @@
                         & div, & a{
                             padding: 0.5rem 1rem;
                             border-radius: .5rem;
-                            background-color: rgb(255,255,255,.1);
+                            background-color: var(--btn_color);
                             cursor: pointer;
                             transition: all .2s;
             

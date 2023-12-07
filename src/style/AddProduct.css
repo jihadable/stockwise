@@ -46,7 +46,7 @@
                     resize: none;
                     border-radius: .5rem;
                     color: var(--white);
-                    background-color: rgb(255,255,255,.1);
+                    background-color: var(--btn_color);
 
                     &#img{
                         display: none;

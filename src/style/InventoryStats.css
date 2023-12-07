@@ -18,7 +18,7 @@
         }
         
         &:nth-child(3){
-            background-color: #ff3d3d;
+            background-color: var(--red);
         }
 
         & svg{

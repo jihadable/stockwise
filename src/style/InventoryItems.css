@@ -37,7 +37,7 @@
                     align-items: center;
                     gap: 0.2rem;
                     padding: 0.5rem;
-                    background-color: rgb(255,255,255,.1);
+                    background-color: var(--btn_color);
                     border-radius: .5rem;
                     cursor: pointer;
                     transition: all .2s;
@@ -91,7 +91,7 @@
                     align-items: center;
                     gap: 0.2rem;
                     padding: 0.5rem;
-                    background-color: rgb(255,255,255,.1);
+                    background-color: var(--btn_color);
                     border-radius: .5rem;
                     cursor: pointer;
                     transition: all .2s;
@@ -139,7 +139,7 @@
                 gap: 0.2rem;
                 padding: 0.5rem;
                 border-radius: .5rem;
-                background-color: rgb(255,255,255,.1);
+                background-color: var(--btn_color);
                 cursor: pointer;
                 font-size: .9rem;
                 transition: all .2s;
@@ -161,7 +161,7 @@
             padding: .5rem;
             gap: .5rem;
             border-radius: 5rem;
-            background-color: rgb(255,255,255,.1);
+            background-color: var(--btn_color);
             max-width: 50%;
             
             & label{
@@ -208,7 +208,7 @@
             & thead{
                 & tr{
                     border: 1px solid rgb(255,255,255,.3);
-                    background-color: rgb(255,255,255,.1);
+                    background-color: var(--btn_color);
                     
                     & td{
                         font-weight: 700;
@@ -252,7 +252,7 @@
                                 }
         
                                 &.delete{
-                                    background-color: #ff3d3d;
+                                    background-color: var(--red);
                                 }
                             }
                         }

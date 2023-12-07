@@ -7,9 +7,15 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { IconPhotoEdit } from "@tabler/icons-react"
 import { ToastContainer, toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 
-export default function Edit(props: any){
+type EditType = {
+    items: item[],
+    editItem: item,
+    setItems: React.Dispatch<React.SetStateAction<item[]>>
+}
+
+export default function Edit(props: EditType){
 
     const navigate = useNavigate()
 
@@ -88,7 +94,7 @@ export default function Edit(props: any){
         toast.success("Item edited")
 
         setTimeout(() => {
-            navigate("/")
+            navigate("/dashboard")
         }, 1500);
     }
 

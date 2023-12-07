@@ -11,7 +11,7 @@ export default function Navbar(props: {page: string}){
     const links = [
         {
             title: "Dashboard",
-            path: "/",
+            path: "/dashboard",
             svg: <IconLayoutDashboard stroke={1.5} />
         },
         {

@@ -26,7 +26,7 @@
                 height: fit-content;
                 display: flex;
                 padding: 1rem;
-                background-color: rgb(255,255,255,.1);
+                background-color: var(--btn_color);
                 border-radius: .5rem;
 
                 & img{
@@ -69,7 +69,7 @@
                             resize: none;
                             border-radius: .5rem;
                             color: var(--white);
-                            background-color: rgb(255,255,255,.1);
+                            background-color: var(--btn_color);
                         }
                     }
                 }
@@ -84,7 +84,7 @@
                         text-align: center;
                         cursor: pointer;
                         border-radius: .5rem;
-                        background-color: rgb(255,255,255,.1);
+                        background-color: var(--btn_color);
                         color: var(--white);
                         transition: all .2s;
                         white-space: nowrap;
@@ -109,7 +109,7 @@
                     text-align: center;
                     cursor: pointer;
                     border-radius: .5rem;
-                    background-color: rgb(255,255,255,.1);
+                    background-color: var(--btn_color);
                     color: var(--white);
                     transition: all .2s;
 

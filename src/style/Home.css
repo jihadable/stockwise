@@ -1,0 +1,59 @@
+@import url("./index.css");
+
+.home{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--white);
+
+    .home-content{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        & > h1, div{
+            text-align: center;
+        }
+
+        .btns{
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            & a{
+                padding: 0.5rem 1rem;
+                background-color: var(--btn_color);
+                border-radius: .5rem;
+            }
+        }
+    }
+
+    .footer{
+        font-size: .8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .home{
+        padding: 1rem;
+
+        .home-content{
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1023px) {
+    .home{
+        .home-content{
+            width: 80%;
+        }
+    }
+}

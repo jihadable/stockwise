@@ -3,14 +3,10 @@ import "../style/InventoryStats.css"
 import { item } from "./itemType"
 
 type InventoryStatsProps = {
-    items: item[], 
-    selectedCurrency: {code: string, name: string}
+    items: item[]
 }
 
 export default function InventoryStats(props: InventoryStatsProps){
-
-    // currency
-    const selectedCurrency = props.selectedCurrency
 
     const items: item[] = props.items
 
@@ -29,7 +25,7 @@ export default function InventoryStats(props: InventoryStatsProps){
         },
         {
             title: "Total store value",
-            value: `${selectedCurrency.code} ${totalStoreValue}`,
+            value: `$${totalStoreValue}`,
             svg: <IconCoin stroke={1.5} />
         },
         {
