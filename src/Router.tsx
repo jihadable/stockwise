@@ -11,6 +11,13 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 
+export type User = {
+    name: string,
+    email: string,
+    phone: string,
+    bio: string
+}
+
 export default function Router(){
 
     if (!localStorage.getItem("navbar")){
@@ -41,7 +48,7 @@ export default function Router(){
         }))
     }
     
-    const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("user")!))
+    const [userData, setUserData] = useState<User>(JSON.parse(localStorage.getItem("user")!))
     
     useEffect(() => {
         localStorage.setItem("items", JSON.stringify(items))

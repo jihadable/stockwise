@@ -4,22 +4,21 @@ import user from "../assets/user.png"
 import "../style/Account.css"
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { User } from "../Router";
 
-type User = {
-    name: string,
-    email: string,
-    phone: string,
-    bio: string
+type AccoutType = {
+    userData: User,
+    setUserData: React.Dispatch<React.SetStateAction<User>>
 }
 
-export default function Account(props: any){
+export default function Account(props: AccoutType){
 
-    const userData: User = props.userData
+    const userData = props.userData
     const setUserData = props.setUserData
 
     const info = [
         {
-            title: "Name",
+            title: "Usename",
             value: userData.name
         },
         {
@@ -36,7 +35,7 @@ export default function Account(props: any){
         }
     ]
 
-    const [edit, setEdit] = useState(false)
+    const [edit, setEdit] = useState<boolean>(false)
 
     return (
         <div className="account">
@@ -85,16 +84,23 @@ export default function Account(props: any){
     )
 }
 
-function EditUser(props: any){
+type EditUserType = {
+    info: {title: string, value: string}[],
+    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
+    userData: User,
+    setUserData: React.Dispatch<React.SetStateAction<User>>
+}
+
+function EditUser(props: EditUserType){
 
     const info = props.info
     const setEdit = props.setEdit
-    const userData: User = props.userData
-    const [temporaryUserData, setTemporaryUserData] = useState({...userData})
+    const userData = props.userData
+    const [temporaryUserData, setTemporaryUserData] = useState<User>({...userData})
     const setUserData = props.setUserData
 
     const handleChange = (value: string, label: string) => {
-        setTemporaryUserData((userData: any) => {
+        setTemporaryUserData((userData: User) => {
             return {...userData, [label]: value}
         })
     }
