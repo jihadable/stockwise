@@ -31,6 +31,11 @@
                 padding: 0.5rem 1rem;
                 background-color: var(--btn_color);
                 border-radius: .5rem;
+                transition: all .2s;
+
+                &:hover{
+                    background-color: rgb(255,255,255,.2);
+                }
             }
         }
     }

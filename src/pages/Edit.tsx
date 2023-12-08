@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom"
 import { IconPhotoEdit } from "@tabler/icons-react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
+import ReactQuill from 'react-quill';
+import "../style/quill.snow.css"
 
 type EditType = {
     items: item[],
@@ -186,6 +188,9 @@ export default function Edit(props: EditType){
                                     <span>Description</span>
                                 </div>
                                 <textarea className="value" spellCheck="false" value={desc} rows={7} onChange={(e) => {setDesc(e.target.value)}}></textarea>
+                                {/* <div className="react-quill">
+                                    <ReactQuill theme="snow" value={desc} onChange={setDesc} placeholder="Product description" />
+                                </div> */}
                             </div>
                             <div className="btns">
                                 <Link to={"/"} className="cancel">Cancel</Link>

@@ -86,6 +86,10 @@
                             & ol, & ul{
                                 margin-left: 2rem;
                             }
+
+                            & a{
+                                text-decoration: underline;
+                            }
                         }
                     }
                 }
