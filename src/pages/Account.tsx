@@ -18,7 +18,7 @@ export default function Account(props: AccoutType){
 
     const info = [
         {
-            title: "Usename",
+            title: "Username",
             value: userData.name
         },
         {

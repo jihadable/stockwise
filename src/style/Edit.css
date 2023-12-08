@@ -81,6 +81,10 @@
                             background: transparent;
                             color: var(--white);
                             resize: none;
+
+                            &.react-quill{
+                                min-height: 200px;
+                            }
                         }
 
                         &.img-input{

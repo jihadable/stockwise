@@ -187,13 +187,12 @@ export default function Edit(props: EditType){
                                     <div className="circle"></div>
                                     <span>Description</span>
                                 </div>
-                                <textarea className="value" spellCheck="false" value={desc} rows={7} onChange={(e) => {setDesc(e.target.value)}}></textarea>
-                                {/* <div className="react-quill">
-                                    <ReactQuill theme="snow" value={desc} onChange={setDesc} placeholder="Product description" />
-                                </div> */}
+                                <div className="react-quill value">
+                                    <ReactQuill theme="snow" value={desc} onChange={setDesc} className="quill-edit" />
+                                </div>
                             </div>
                             <div className="btns">
-                                <Link to={"/"} className="cancel">Cancel</Link>
+                                <Link to={"/dashboard"} className="cancel">Cancel</Link>
                                 <div className="save" onClick={() => {handleSave()}}>Save changes</div>
                             </div>
                         </div>

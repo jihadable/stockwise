@@ -13,6 +13,11 @@
   border-radius: .5rem;
   display: flex;
   flex-direction: column;
+
+  &.quill-edit{
+    border-radius: 0;
+    background-color: transparent;
+  }
 }
 .ql-container {
   box-sizing: border-box;
