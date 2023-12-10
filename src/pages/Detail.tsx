@@ -13,6 +13,8 @@ type DetailType = {
 
 export default function Detail(props: DetailType){
 
+    document.title = "StockWise | Item detail"
+
     const detailItem: item = props.detailItem
     const items: item[] = props.items
 
@@ -33,6 +35,16 @@ export default function Detail(props: DetailType){
                             <img src={detailItem.img} alt="Image Preview" />
                         </div>
                         <div className="info">
+                            <div className="item">
+                                <div className="label">
+                                    <div className="circle"></div>
+                                    <span>Time Stamp</span>
+                                </div>
+                                <div className="value">
+                                    <div className="created">Created at: </div>
+                                    <div className="updated">Last updated at: </div>
+                                </div>
+                            </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>

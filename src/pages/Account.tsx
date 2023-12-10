@@ -13,6 +13,8 @@ type AccoutType = {
 
 export default function Account(props: AccoutType){
 
+    document.title = "StockWise | Account"
+
     const userData = props.userData
     const setUserData = props.setUserData
 

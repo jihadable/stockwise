@@ -5,6 +5,8 @@ import { Link } from "react-router-dom"
 
 export default function Login(){
 
+    document.title = "StockWise | Login"
+
     const [isLogin, setIsLogin] = useState<boolean | null>(null)
 
     // const onLogin = async() => {

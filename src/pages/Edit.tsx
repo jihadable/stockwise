@@ -19,6 +19,8 @@ type EditType = {
 
 export default function Edit(props: EditType){
 
+    document.title = "StockWise | Edit item"
+
     const navigate = useNavigate()
 
     const items: item[] = props.items

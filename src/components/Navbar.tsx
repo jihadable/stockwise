@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../style/Navbar.css"
 import { Link } from "react-router-dom";
 import goTop from "./goTop";
-import { IconHistory, IconLayoutDashboard, IconLayoutSidebar, IconLayoutSidebarLeftCollapse, IconMessage, IconTextPlus, IconUserCircle } from "@tabler/icons-react";
+import { IconLayoutDashboard, IconLayoutSidebar, IconLayoutSidebarLeftCollapse, IconMessage, IconTextPlus, IconUserCircle } from "@tabler/icons-react";
 
 export default function Navbar(props: {page: string}){
 
@@ -18,11 +18,6 @@ export default function Navbar(props: {page: string}){
             title: "Add product",
             path: "/add-product",
             svg: <IconTextPlus stroke={1.5} />
-        },
-        {
-            title: "History",
-            path: "/history",
-            svg: <IconHistory stroke={1.5} />
         },
         {
             title: "Account",

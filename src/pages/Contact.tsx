@@ -5,6 +5,8 @@ import { IconMail, IconMailForward, IconMapPinFilled, IconPhone } from "@tabler/
 
 export default function Contact(){
 
+    document.title = "StockWise | Contact"
+
     const info = [
         {
             value: "+62 812 3456 7890",

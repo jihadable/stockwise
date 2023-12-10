@@ -12,6 +12,8 @@ type DashboardType = {
 
 export default function Dashboard(props: DashboardType){
 
+    document.title = "StockWise | Dashboard"
+
     const items: item[] = props.items
     const setItems = props.setItems
 

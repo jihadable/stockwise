@@ -3,6 +3,9 @@ import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
 export default function Register(){
+
+    document.title = "StockWise | Register"
+
     return (
         <div className="register">
             <form>

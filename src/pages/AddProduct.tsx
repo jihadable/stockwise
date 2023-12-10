@@ -10,6 +10,8 @@ import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
 
 export default function AddProduct(props: {setItems: React.Dispatch<React.SetStateAction<item[]>>}){
+
+    document.title = "StockWise | Add product"
     
     const setItems = props.setItems
 

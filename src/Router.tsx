@@ -10,6 +10,7 @@ import Edit from "./pages/Edit";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
+import NotFound from "./pages/NotFound";
 
 export type User = {
     name: string,
@@ -58,6 +59,7 @@ export default function Router(){
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="*" element={<NotFound />}></Route>
                 <Route path="/" element={<Home />}></Route>
                 <Route path="/login" element={<Login />}></Route>
                 <Route path="/register" element={<Register />}></Route>
