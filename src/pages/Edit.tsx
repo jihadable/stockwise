@@ -64,7 +64,7 @@ export default function Edit(props: EditType){
                 reader.readAsDataURL(file);
             } 
             else {
-                alert("File's extension is not allowed");
+                toast.warn("File's extension is not allowed")
             }
         }
     }

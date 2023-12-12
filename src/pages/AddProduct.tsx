@@ -5,7 +5,6 @@ import "../style/AddProduct.css"
 import { item } from "../components/itemType"
 import { IconPhotoPlus } from "@tabler/icons-react";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
 
