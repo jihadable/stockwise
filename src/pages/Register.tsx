@@ -1,16 +1,21 @@
 import "../style/Register.css"
 import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function Register(){
+type RegisterPropsType = {
+    isLogin: boolean | null,
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+}
 
+export default function Register({ isLogin, setIsLogin }: RegisterPropsType){
+    
     document.title = "StockWise | Register"
-
+    
     const navigate = useNavigate()
-
-    const [isRegister, setIsRegister] = useState<boolean | null>(null)
+    
+    if (isLogin) navigate("/dashboard")
 
     const emailElement = useRef<HTMLInputElement | null>(null)
     const usernameElement = useRef<HTMLInputElement | null>(null)
@@ -55,12 +60,12 @@ export default function Register(){
         const data = await response.json()
 
         if (data.status === "success"){
-            setIsRegister(true)
+            setIsLogin(true)
 
             navigate("/dashboard")
         }
         else {
-            setIsRegister(false)
+            setIsLogin(false)
         }
     }
 
@@ -96,7 +101,7 @@ export default function Register(){
                 </div>
                 <button type="submit">Register</button>
             </form>
-            {isRegister === false && <p className="login-fail">Username or email is already in use</p>}
+            {isLogin === false && <p className="login-fail">Username or email is already in use</p>}
             <p>Already have an account? <Link to={"/login"}>Login</Link></p>
         </div>
     )

@@ -1,15 +1,20 @@
 import { IconLock, IconUserCircle } from "@tabler/icons-react"
 import "../style/Login.css"
-import { FormEvent, useRef, useState } from "react"
+import { FormEvent, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
-export default function Login(){
+type LoginPropsType = {
+    isLogin: boolean | null,
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+}
+
+export default function Login({ isLogin, setIsLogin }: LoginPropsType){
 
     document.title = "StockWise | Login"
 
     const navigate = useNavigate()
 
-    const [isLogin, setIsLogin] = useState<boolean | null>(null)
+    if (isLogin) navigate("/dashboard")
 
     const usernameOrEmailElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)

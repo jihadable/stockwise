@@ -5,18 +5,24 @@ import "../style/Account.css"
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { User } from "../Router";
+import { useNavigate } from "react-router-dom";
 
-type AccoutType = {
+type AccountPropsType = {
     userData: User,
-    setUserData: React.Dispatch<React.SetStateAction<User>>
+    setUserData: React.Dispatch<React.SetStateAction<User>>,
+    isLogin: boolean | null,
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
 }
 
-export default function Account(props: AccoutType){
+export default function Account({ userData, setUserData, isLogin, setIsLogin }: AccountPropsType){
 
     document.title = "StockWise | Account"
 
-    const userData = props.userData
-    const setUserData = props.setUserData
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!isLogin) navigate("/")
+    }, [isLogin, navigate])
 
     const info = [
         {
@@ -43,7 +49,7 @@ export default function Account(props: AccoutType){
         <div className="account">
             <Navbar page="Account" />
             <div className="content">
-                <Header />
+                <Header setIsLogin={setIsLogin} />
                 <ToastContainer
                 position="top-center"
                 autoClose={750}

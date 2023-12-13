@@ -56,26 +56,80 @@ export default function Router(){
         localStorage.setItem("user", JSON.stringify(userData))
     }, [items, userData])
 
+    const [isLogin, setIsLogin] = useState<boolean | null>(null)
+
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="*" element={<NotFound />}></Route>
                 <Route path="/" element={<Home />}></Route>
-                <Route path="/login" element={<Login />}></Route>
-                <Route path="/register" element={<Register />}></Route>
-                <Route path="/dashboard" element={<Dashboard items={items} setItems={setItems} />}></Route>
-                <Route path="/add-product" element={<AddProduct setItems={setItems} />}></Route>
-                <Route path="/account" element={<Account userData={userData} setUserData={setUserData} />}></Route>
-                <Route path="/contact" element={<Contact />}></Route>
+
+                <Route path="/login" 
+                element={
+                <Login 
+                isLogin={isLogin} 
+                setIsLogin={setIsLogin} />
+                }></Route>
+                
+                <Route path="/register" 
+                element={
+                <Register 
+                isLogin={isLogin} 
+                setIsLogin={setIsLogin} />
+                }></Route>
+                
+                <Route path="/dashboard" 
+                element={
+                <Dashboard 
+                items={items} 
+                setItems={setItems} 
+                isLogin={isLogin} 
+                setIsLogin={setIsLogin} />
+                }></Route>
+                
+                <Route path="/add-product" 
+                element={
+                <AddProduct 
+                setItems={setItems}
+                isLogin={isLogin}
+                setIsLogin={setIsLogin} />
+                }></Route>
+                
+                <Route path="/account" 
+                element={
+                <Account 
+                userData={userData} 
+                setUserData={setUserData}
+                isLogin={isLogin}
+                setIsLogin={setIsLogin} />
+                }></Route>
+                
+                <Route path="/contact" 
+                element={
+                <Contact
+                isLogin={isLogin}
+                setIsLogin={setIsLogin} />
+                }></Route>
             {
-                items.map((item: item, index: number) => {
-                    return <Route path={`/detail/${item.id}`} element={<Detail items={items} detailItem={item} />} key={index}></Route>
-                })
+                items.map((item: item, index: number) => (
+                    <Route path={`/detail/${item.id}`} 
+                    element={
+                    <Detail 
+                    items={items} 
+                    detailItem={item} />} 
+                    key={index}></Route>
+                ))
             }
             {
-                items.map((item: item, index: number) => {
-                    return <Route path={`/edit/${item.id}`} element={<Edit items={items} editItem={item} setItems={setItems} />} key={index}></Route>
-                })
+                items.map((item: item, index: number) => (
+                    <Route path={`/edit/${item.id}`} 
+                    element={
+                    <Edit 
+                    items={items} 
+                    editItem={item} 
+                    setItems={setItems} />} 
+                    key={index}></Route>
+                ))
             }
             </Routes>
         </BrowserRouter>

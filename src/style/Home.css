@@ -10,6 +10,12 @@
     gap: 1rem;
     color: var(--white);
 
+    .logo{
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
     .home-content{
         width: 50%;
         display: flex;

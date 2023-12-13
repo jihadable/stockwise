@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
@@ -7,12 +7,23 @@ import { IconPhotoPlus } from "@tabler/icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
+import { useNavigate } from "react-router-dom";
 
-export default function AddProduct(props: {setItems: React.Dispatch<React.SetStateAction<item[]>>}){
+type AddProductType = {
+    setItems: React.Dispatch<React.SetStateAction<item[]>>,
+    isLogin: boolean | null,
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+}
+
+export default function AddProduct({ setItems, isLogin, setIsLogin }: AddProductType){
 
     document.title = "StockWise | Add product"
-    
-    const setItems = props.setItems
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!isLogin) navigate("/")
+    }, [isLogin, navigate])
 
     const [
         [name, setName],
@@ -83,7 +94,7 @@ export default function AddProduct(props: {setItems: React.Dispatch<React.SetSta
         <div className="add-product">
             <Navbar page="Add product" />
             <div className="content">
-                <Header />
+                <Header setIsLogin={setIsLogin} />
                 <ToastContainer
                 position="top-center"
                 autoClose={750}
