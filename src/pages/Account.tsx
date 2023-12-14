@@ -11,10 +11,12 @@ type AccountPropsType = {
     userData: User,
     setUserData: React.Dispatch<React.SetStateAction<User>>,
     isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
+    token: string | null,
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export default function Account({ userData, setUserData, isLogin, setIsLogin }: AccountPropsType){
+export default function Account({ userData, setUserData, isLogin, setIsLogin, token, setToken }: AccountPropsType){
 
     document.title = "StockWise | Account"
 
@@ -49,7 +51,7 @@ export default function Account({ userData, setUserData, isLogin, setIsLogin }: 
         <div className="account">
             <Navbar page="Account" />
             <div className="content">
-                <Header setIsLogin={setIsLogin} />
+                <Header setIsLogin={setIsLogin} token={token} setToken={setToken} />
                 <ToastContainer
                 position="top-center"
                 autoClose={750}

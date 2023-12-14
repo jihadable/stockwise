@@ -57,6 +57,7 @@ export default function Router(){
     }, [items, userData])
 
     const [isLogin, setIsLogin] = useState<boolean | null>(null)
+    const [token, setToken] = useState<string | null>(null)
 
     return (
         <BrowserRouter>
@@ -68,31 +69,40 @@ export default function Router(){
                 element={
                 <Login 
                 isLogin={isLogin} 
-                setIsLogin={setIsLogin} />
+                setIsLogin={setIsLogin}
+                setToken={setToken} />
                 }></Route>
                 
                 <Route path="/register" 
                 element={
                 <Register 
                 isLogin={isLogin} 
-                setIsLogin={setIsLogin} />
+                setIsLogin={setIsLogin}
+                setToken={setToken} />
                 }></Route>
                 
+            {
+                isLogin &&
+                <>
                 <Route path="/dashboard" 
                 element={
                 <Dashboard 
                 items={items} 
                 setItems={setItems} 
                 isLogin={isLogin} 
-                setIsLogin={setIsLogin} />
+                setIsLogin={setIsLogin}
+                token={token}
+                setToken={setToken} />
                 }></Route>
-                
+
                 <Route path="/add-product" 
                 element={
                 <AddProduct 
                 setItems={setItems}
                 isLogin={isLogin}
-                setIsLogin={setIsLogin} />
+                setIsLogin={setIsLogin}
+                token={token}
+                setToken={setToken} />
                 }></Route>
                 
                 <Route path="/account" 
@@ -101,15 +111,22 @@ export default function Router(){
                 userData={userData} 
                 setUserData={setUserData}
                 isLogin={isLogin}
-                setIsLogin={setIsLogin} />
+                setIsLogin={setIsLogin}
+                token={token}
+                setToken={setToken} />
                 }></Route>
                 
                 <Route path="/contact" 
                 element={
                 <Contact
                 isLogin={isLogin}
-                setIsLogin={setIsLogin} />
+                setIsLogin={setIsLogin}
+                token={token}
+                setToken={setToken} />
                 }></Route>
+                </>
+            }
+            
             {
                 items.map((item: item, index: number) => (
                     <Route path={`/detail/${item.id}`} 

@@ -7,10 +7,12 @@ import { useEffect } from "react";
 
 type ContactPropsType = {
     isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
+    token: string | null,
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export default function Contact({ isLogin, setIsLogin }: ContactPropsType){
+export default function Contact({ isLogin, setIsLogin, token, setToken }: ContactPropsType){
 
     document.title = "StockWise | Contact"
 
@@ -39,7 +41,7 @@ export default function Contact({ isLogin, setIsLogin }: ContactPropsType){
         <div className="contact">
             <Navbar page="Contact us" />
             <div className="content">
-                <Header setIsLogin={setIsLogin} />
+                <Header setIsLogin={setIsLogin} token={token} setToken={setToken} />
                 <div className="contact-container">
                     <div className="header">
                         <div>Your thoughts are important to us</div>

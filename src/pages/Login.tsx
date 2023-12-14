@@ -5,10 +5,11 @@ import { Link, useNavigate } from "react-router-dom"
 
 type LoginPropsType = {
     isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export default function Login({ isLogin, setIsLogin }: LoginPropsType){
+export default function Login({ isLogin, setIsLogin, setToken }: LoginPropsType){
 
     document.title = "StockWise | Login"
 
@@ -45,8 +46,9 @@ export default function Login({ isLogin, setIsLogin }: LoginPropsType){
 
         const data = await response.json()
 
-        if (data.status === "success"){
+        if (data.status){
             setIsLogin(true)
+            setToken(data.token)
 
             navigate("/dashboard")
         }

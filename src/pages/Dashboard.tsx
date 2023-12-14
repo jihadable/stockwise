@@ -11,10 +11,12 @@ type DashboardType = {
     items: item[],
     setItems: React.Dispatch<React.SetStateAction<item[]>>,
     isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
+    token: string | null,
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export default function Dashboard({ items, setItems, isLogin, setIsLogin }: DashboardType){
+export default function Dashboard({ items, setItems, isLogin, setIsLogin, token, setToken }: DashboardType){
 
     document.title = "StockWise | Dashboard"
 
@@ -28,7 +30,7 @@ export default function Dashboard({ items, setItems, isLogin, setIsLogin }: Dash
         <div className="dashboard">
             <Navbar page="Dashboard" />
             <div className="content">
-                <Header setIsLogin={setIsLogin} />
+                <Header setIsLogin={setIsLogin} token={token} setToken={setToken} />
                 <InventoryStats items={items} />
                 <InventoryItems items={items} setItems={setItems} />
             </div>

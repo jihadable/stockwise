@@ -6,10 +6,11 @@ import { ToastContainer, toast } from "react-toastify";
 
 type RegisterPropsType = {
     isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export default function Register({ isLogin, setIsLogin }: RegisterPropsType){
+export default function Register({ isLogin, setIsLogin, setToken }: RegisterPropsType){
     
     document.title = "StockWise | Register"
     
@@ -59,8 +60,9 @@ export default function Register({ isLogin, setIsLogin }: RegisterPropsType){
 
         const data = await response.json()
 
-        if (data.status === "success"){
+        if (data.status){
             setIsLogin(true)
+            setToken(data.token)
 
             navigate("/dashboard")
         }
