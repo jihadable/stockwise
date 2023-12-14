@@ -12,13 +12,6 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
-export type User = {
-    name: string,
-    email: string,
-    phone: string,
-    bio: string
-}
-
 export default function Router(){
 
     if (!localStorage.getItem("navbar")){
@@ -38,26 +31,49 @@ export default function Router(){
     if (!localStorage.getItem("idNow")){
         localStorage.setItem("idNow", JSON.stringify(idNow))
     }
+    
+    const [isLogin, setIsLogin] = useState<boolean | null>(null)
+    const [token, setToken] = useState<string | null>((localStorage.getItem("token")) ? localStorage.getItem("token") : null)
 
-    // user data
-    if (!localStorage.getItem("user")){
-        localStorage.setItem("user", JSON.stringify({
-            name: "User",
-            email: "user@mail.com",
-            phone: "081234567890",
-            bio: "Lorem ipsum dolor sit amet."
-        }))
-    }
-    
-    const [userData, setUserData] = useState<User>(JSON.parse(localStorage.getItem("user")!))
-    
     useEffect(() => {
         localStorage.setItem("items", JSON.stringify(items))
-        localStorage.setItem("user", JSON.stringify(userData))
-    }, [items, userData])
+    }, [items])
+    
+    useEffect(() => {
+        const checkTokenValidation = async() => {
+            if (token) {
+                const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
 
-    const [isLogin, setIsLogin] = useState<boolean | null>(null)
-    const [token, setToken] = useState<string | null>(null)
+                const response = await fetch(`${apiEndpoint}/items`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+
+                const data = await response.json()
+
+                if (data.message){
+                    setIsLogin(null)
+                    setToken(null)
+
+                    return
+                }
+
+                setIsLogin(true)
+
+                localStorage.setItem("token", token)
+            }
+            else {
+                setIsLogin(null)
+                setToken(null)
+                localStorage.removeItem("token")
+            }
+        }
+
+        checkTokenValidation()
+    }, [token])
 
     return (
         <BrowserRouter>
@@ -108,8 +124,6 @@ export default function Router(){
                 <Route path="/account" 
                 element={
                 <Account 
-                userData={userData} 
-                setUserData={setUserData}
                 isLogin={isLogin}
                 setIsLogin={setIsLogin}
                 token={token}

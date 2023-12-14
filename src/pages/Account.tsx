@@ -4,19 +4,23 @@ import user from "../assets/user.png"
 import "../style/Account.css"
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { User } from "../Router";
 import { useNavigate } from "react-router-dom";
 
 type AccountPropsType = {
-    userData: User,
-    setUserData: React.Dispatch<React.SetStateAction<User>>,
     isLogin: boolean | null,
     setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
     token: string | null,
     setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export default function Account({ userData, setUserData, isLogin, setIsLogin, token, setToken }: AccountPropsType){
+type UserDatatype = {
+    username: string,
+    email: string,
+    phone: string,
+    bio: string
+}
+
+export default function Account({ isLogin, setIsLogin, token, setToken }: AccountPropsType){
 
     document.title = "StockWise | Account"
 
@@ -26,24 +30,12 @@ export default function Account({ userData, setUserData, isLogin, setIsLogin, to
         if (!isLogin) navigate("/")
     }, [isLogin, navigate])
 
-    const info = [
-        {
-            title: "Username",
-            value: userData.name
-        },
-        {
-            title: "Email",
-            value: userData.email
-        },
-        {
-            title: "Phone",
-            value: userData.phone
-        },
-        {
-            title: "Bio",
-            value: userData.bio
-        }
-    ]
+    const [userData, setUserData] = useState<UserDatatype>({
+        username: "User",
+        email: "user@mail.com",
+        phone: "081234567890",
+        bio: "Lorem ipsum dolor sit amet."
+    })
 
     const [edit, setEdit] = useState<boolean>(false)
 
@@ -70,23 +62,29 @@ export default function Account({ userData, setUserData, isLogin, setIsLogin, to
                         !edit &&
                         <div className="side">
                             <div className="info">
-                            {
-                                info.map((item, index) => {
-                                    return (
-                                        <div className="item" key={index}>
-                                            <div className="label">{item.title}</div>
-                                            <div className="value">{item.value}</div>
-                                        </div>
-                                    )
-                                })
-                            }
+                            <div className="item">
+                                <div className="label">Username</div>
+                                <div className="value">{userData.username}</div>
+                            </div>
+                            <div className="item">
+                                <div className="label">Email</div>
+                                <div className="value">{userData.email}</div>
+                            </div>
+                            <div className="item">
+                                <div className="label">Phone</div>
+                                <div className="value">{userData.phone}</div>
+                            </div>
+                            <div className="item">
+                                <div className="label">Bio</div>
+                                <div className="value">{userData.bio}</div>
+                            </div>
                             </div>
                             <div className="edit-btn" onClick={() => setEdit(true)}>Edit profile</div>
                         </div>
                     }
                     {
                         edit &&
-                        <EditUser info={info} setEdit={setEdit} userData={userData} setUserData={setUserData} />
+                        <EditUser setEdit={setEdit} userData={userData} setUserData={setUserData} />
                     }
                 </div>
             </div>
@@ -95,28 +93,26 @@ export default function Account({ userData, setUserData, isLogin, setIsLogin, to
 }
 
 type EditUserType = {
-    info: {title: string, value: string}[],
     setEdit: React.Dispatch<React.SetStateAction<boolean>>,
-    userData: User,
-    setUserData: React.Dispatch<React.SetStateAction<User>>
+    userData: UserDatatype,
+    setUserData: React.Dispatch<React.SetStateAction<UserDatatype>>
 }
 
-function EditUser(props: EditUserType){
+function EditUser({ setEdit, userData, setUserData }: EditUserType){
 
-    const info = props.info
-    const setEdit = props.setEdit
-    const userData = props.userData
-    const [temporaryUserData, setTemporaryUserData] = useState<User>({...userData})
-    const setUserData = props.setUserData
+    const [temporaryUserData, setTemporaryUserData] = useState<UserDatatype>({...userData})
 
-    const handleChange = (value: string, label: string) => {
-        setTemporaryUserData((userData: User) => {
-            return {...userData, [label]: value}
+    const handleChange = (value: string, key: string) => {
+        setTemporaryUserData((userData: UserDatatype) => {
+            return {...userData, [key]: value}
         })
     }
 
     const handelSave = () => {
-        if (temporaryUserData.name === "" || temporaryUserData.email === "" || temporaryUserData.phone === "" || temporaryUserData.bio === ""){
+        if (temporaryUserData.username === "" || 
+        temporaryUserData.email === "" || 
+        temporaryUserData.phone === "" || 
+        temporaryUserData.bio === ""){
             toast.warn("Please fill the empty field")
 
             return
@@ -158,24 +154,26 @@ function EditUser(props: EditUserType){
     return (
         <div className="edit">
             <div className="info">
-            {
-                info.map((item: {title: string, value: string}, index: number) => {
-                    return (
-                        <div className="item" key={index}>
-                            <div className="label">{item.title}</div>
-                        {
-                            item.title === "Bio" ? 
-                            <textarea rows={7} className="value" spellCheck="false" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, "bio")}></textarea> :
-                            <input type="text" className="value" spellCheck="false" defaultValue={item.value} onChange={(e) => handleChange(e.target.value, item.title.toLowerCase())} />
-                        }
-                        </div>
-                    )
-                })
-            }
+                <div className="item">
+                    <div className="label">Username</div>
+                    <input type="text" className="value" spellCheck="false" defaultValue={userData.username} onChange={(e) => handleChange(e.target.value, "username")} />
+                </div>
+                <div className="item">
+                    <div className="label">Email</div>
+                    <input type="text" className="value" spellCheck="false" defaultValue={userData.email} onChange={(e) => handleChange(e.target.value, "email")} />
+                </div>
+                <div className="item">
+                    <div className="label">Phone</div>
+                    <input type="text" className="value" spellCheck="false" defaultValue={userData.phone} onChange={(e) => handleChange(e.target.value, "phone")} />
+                </div>
+                <div className="item">
+                    <div className="label">Bio</div>
+                    <textarea rows={7} className="value" spellCheck="false" defaultValue={userData.bio} onChange={(e) => handleChange(e.target.value, "bio")}></textarea>
+                </div>
             </div>
             <div className="btns">
                 <div className="cancel" onClick={() => setEdit(false)}>Cancel</div>
-                <div className="save" onClick={() => {handelSave()}}>Save changes</div>
+                <div className="save" onClick={handelSave}>Save changes</div>
             </div>
         </div>
     )

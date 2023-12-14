@@ -1,5 +1,6 @@
 import { IconBell } from "@tabler/icons-react"
 import "../style/Header.css"
+import { useNavigate } from "react-router-dom"
 
 type HeaderPropsType = {
     setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
@@ -10,6 +11,8 @@ type HeaderPropsType = {
 export default function Header({ setIsLogin, token, setToken }: HeaderPropsType){
 
     const { name } = JSON.parse(localStorage.getItem("user")!)
+
+    const navigate = useNavigate()
 
     const onLogout = async() => {
         const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
@@ -25,6 +28,7 @@ export default function Header({ setIsLogin, token, setToken }: HeaderPropsType)
         if (data.status) {
             setIsLogin(false)
             setToken(null)
+            navigate("/")
         }
     }
 
