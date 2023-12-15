@@ -1,21 +1,20 @@
 import { IconLock, IconUserCircle } from "@tabler/icons-react"
 import "../style/Login.css"
-import { FormEvent, useRef } from "react"
+import { FormEvent, useContext, useEffect, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { AuthContext } from "../contexts/AuthContext"
 
-type LoginPropsType = {
-    isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
-    setToken: React.Dispatch<React.SetStateAction<string | null>>
-}
-
-export default function Login({ isLogin, setIsLogin, setToken }: LoginPropsType){
+export default function Login(){
 
     document.title = "StockWise | Login"
 
     const navigate = useNavigate()
 
-    if (isLogin) navigate("/dashboard")
+    const { isLogin, setIsLogin } = useContext(AuthContext)
+
+    useEffect(() => {
+        if (isLogin) navigate("/dashboard")
+    }, [isLogin, navigate])
 
     const usernameOrEmailElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
@@ -48,7 +47,7 @@ export default function Login({ isLogin, setIsLogin, setToken }: LoginPropsType)
 
         if (data.status){
             setIsLogin(true)
-            setToken(data.token)
+            localStorage.setItem("token", data.token)
 
             navigate("/dashboard")
         }

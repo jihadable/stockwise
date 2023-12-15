@@ -1,49 +1,41 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
-import { item } from "../components/itemType"
 import "../style/Edit.css"
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 import { IconPhotoEdit } from "@tabler/icons-react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
+import { ItemType } from "../contexts/AuthContext"
 
 type EditType = {
-    items: item[],
-    editItem: item,
-    setItems: React.Dispatch<React.SetStateAction<item[]>>
+    editItem: ItemType
 }
 
-export default function Edit(props: EditType){
+export default function Edit({ editItem }: EditType){
 
     document.title = "StockWise | Edit item"
 
     const navigate = useNavigate()
 
-    const items: item[] = props.items
-    const editItem: item = props.editItem
-
-    const setItems = props.setItems
-
     const [
         id,
         [name, setName],
-        [img, setImg],
+        [image, setImage],
         [category, setCategory],
         [price, setPrice],
         [quantity, setQuantity],
-        [desc, setDesc]
+        [description, setDescription]
     ] = [
         editItem?.id,
         useState(editItem?.name),
-        useState(editItem?.img),
+        useState(editItem?.image),
         useState(editItem?.category),
         useState(editItem?.price),
         useState(editItem?.quantity),
-        useState(editItem?.desc)
+        useState(editItem?.description)
     ]
 
     function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
@@ -58,7 +50,7 @@ export default function Edit(props: EditType){
       
                 reader.onload = () => {
                     const base64String = reader.result as string;
-                    setImg(base64String)
+                    setImage(base64String)
                 }
       
                 reader.readAsDataURL(file);
@@ -71,29 +63,11 @@ export default function Edit(props: EditType){
 
     function handleSave(): void {
 
-        if (name === "" || img === "" || category === "" || isNaN(price) || isNaN(quantity) || desc === ""){
+        if (name === "" || image === "" || category === "" || isNaN(price) || isNaN(quantity) || description === ""){
             toast.warn("Please fill the empty field")
             
             return
         }
-
-        const modifiedArray: item[] = items.map((obj: item) => {
-            if (obj.id === id) {
-                return {
-                    ...obj,
-                    name: name,
-                    img: img,
-                    category: category,
-                    price: price,
-                    quantity: quantity,
-                    desc: desc
-                };
-            }
-
-            return obj;
-        });
-
-        setItems(modifiedArray)
 
         toast.success("Item edited")
 
@@ -146,7 +120,7 @@ export default function Edit(props: EditType){
                     <div className="edit-header">Edit product</div>
                     <div className="edit-content">
                         <div className="img">
-                            <img src={img} alt="Image Preview" />
+                            <img src={image} alt="Image Preview" />
                         </div>
                         <div className="info">
                             <div className="item img-input">
@@ -190,7 +164,7 @@ export default function Edit(props: EditType){
                                     <span>Description</span>
                                 </div>
                                 <div className="react-quill value">
-                                    <ReactQuill theme="snow" value={desc} onChange={setDesc} className="quill-edit" />
+                                    <ReactQuill theme="snow" value={description} onChange={setDescription} className="quill-edit" />
                                 </div>
                             </div>
                             <div className="btns">

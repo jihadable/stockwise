@@ -2,28 +2,24 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import InventoryStats from "../components/InventoryStats";
 import Navbar from "../components/Navbar";
-import { item } from "../components/itemType";
 import "../style/Detail.css"
 import { IconArrowLeft } from "@tabler/icons-react";
+import { ItemType } from "../contexts/AuthContext";
 
 type DetailType = {
-    detailItem: item,
-    items: item[]
+    detailItem: ItemType
 }
 
-export default function Detail(props: DetailType){
+export default function Detail({ detailItem }: DetailType){
 
     document.title = "StockWise | Item detail"
-
-    const detailItem: item = props.detailItem
-    const items: item[] = props.items
 
     return (
         <div className="detail">
             <Navbar page="Dashboard" />
             <div className="content">
                 <Header />
-                <InventoryStats items={items} />
+                <InventoryStats />
                 <div className="detail-container">
                     <Link to="/dashboard" className="back">
                         <IconArrowLeft stroke={1.5} />
@@ -32,7 +28,7 @@ export default function Detail(props: DetailType){
                     <div className="detail-header">Item detail</div>
                     <div className="detail-content">
                         <div className="img">
-                            <img src={detailItem.img} alt="Image Preview" />
+                            <img src={detailItem.image} alt="Image Preview" />
                         </div>
                         <div className="info">
                             <div className="item">
@@ -78,7 +74,7 @@ export default function Detail(props: DetailType){
                                     <div className="circle"></div>
                                     <span>Description</span>
                                 </div>
-                                <div className="value" dangerouslySetInnerHTML={{__html: detailItem.desc}} />
+                                <div className="value" dangerouslySetInnerHTML={{__html: detailItem.description}} />
                             </div>
                         </div>
                     </div>

@@ -1,25 +1,19 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import "../style/InventoryItems.css"
-import { item } from "./itemType";
 import { Link } from "react-router-dom";
 import { IconDatabaseX, IconEdit, IconEye, IconSearch, IconSortDescending, IconTrash } from "@tabler/icons-react";
+import { AuthContext, ItemType } from "../contexts/AuthContext";
 
-type InventoryItemsProps = {
-    items: item[],
-    setItems: React.Dispatch<React.SetStateAction<item[]>>
-}
+export default function InventoryItems(){
 
-export default function InventoryItems(props: InventoryItemsProps){
+    const { items, setItems } = useContext(AuthContext)
 
-    const items = props.items
-    const setItems = props.setItems
-
-    let showItems: item[] = [...items].reverse()
+    let showItems: ItemType[] = [...(items ?? [])].reverse()
 
     // delete
     const handleDelete = (id: number):void => {
         if (confirm("Are You sure to delete this item?")){
-            setItems((items: item[]) => items.filter((object: item) => object.id !== id))
+            setItems((items) => (items ?? []).filter((object: ItemType) => object.id !== id))
         }
     }
 
@@ -35,10 +29,10 @@ export default function InventoryItems(props: InventoryItemsProps){
     const [keyword, setKeyword] = useState("")
     
     if (keyword !== ""){
-        showItems = searchItem([...items].reverse(), keyword)
+        showItems = searchItem([...(items ?? [])].reverse(), keyword)
     }
 
-    function searchItem(array: item[], keyword: string){
+    function searchItem(array: ItemType[], keyword: string){
         const filteredArray = array.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
 
         return filteredArray;
@@ -50,7 +44,7 @@ export default function InventoryItems(props: InventoryItemsProps){
     const [showSortingMenu, setShowSortingMenu] = useState(false)
     const sortingBtn = useRef<HTMLDivElement | null>(null)
 
-    function sortAlphabet(array: item[]){
+    function sortAlphabet(array: ItemType[]){
         const sortedArray = [...array];
 
         sortedArray.sort((a, b) => {
@@ -60,7 +54,7 @@ export default function InventoryItems(props: InventoryItemsProps){
         return sortedArray;
     }
 
-    function sortPriceAndQuantity(array: item[], key: keyof item) {
+    function sortPriceAndQuantity(array: ItemType[], key: keyof ItemType) {
         return array.sort((a, b) => {
             const valueA = a[key];
             const valueB = b[key];
@@ -72,7 +66,7 @@ export default function InventoryItems(props: InventoryItemsProps){
         });
     }
 
-    function sortValue(array: item[]) {
+    function sortValue(array: ItemType[]) {
         return array.sort((a, b) => {
             const valueA = a.price * a.quantity;
             const valueB = b.price * b.quantity;
@@ -165,7 +159,7 @@ export default function InventoryItems(props: InventoryItemsProps){
                     </thead>
                     <tbody>
                         {
-                            showItems.map((item: item, index: number) => {
+                            showItems.map((item: ItemType, index: number) => {
                                 return (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
@@ -175,10 +169,10 @@ export default function InventoryItems(props: InventoryItemsProps){
                                         <td>{item.quantity}</td>
                                         <td>${item.price * item.quantity}</td>
                                         <td className="actions">
-                                            <Link to={`/detail/${item.id}`} className="detail" title="Detail">
+                                            <Link to={`/detail/${item.slug}`} className="detail" title="Detail">
                                                 <IconEye stroke={1.5} />
                                             </Link>
-                                            <Link to={`/edit/${item.id}`} className="edit" title="Edit">
+                                            <Link to={`/edit/${item.slug}`} className="edit" title="Edit">
                                                 <IconEdit stroke={1.5} />
                                             </Link>
                                             <div className="delete" title="Delete" onClick={() => handleDelete(item.id)}>

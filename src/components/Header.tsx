@@ -1,18 +1,14 @@
 import { IconBell } from "@tabler/icons-react"
 import "../style/Header.css"
 import { useNavigate } from "react-router-dom"
+import { useContext } from "react"
+import { AuthContext } from "../contexts/AuthContext"
 
-type HeaderPropsType = {
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
-    token: string | null,
-    setToken: React.Dispatch<React.SetStateAction<string | null>>
-}
-
-export default function Header({ setIsLogin, token, setToken }: HeaderPropsType){
-
-    const { name } = JSON.parse(localStorage.getItem("user")!)
+export default function Header(){
 
     const navigate = useNavigate()
+
+    const { setIsLogin, token, setToken, user } = useContext(AuthContext)
 
     const onLogout = async() => {
         const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
@@ -34,7 +30,7 @@ export default function Header({ setIsLogin, token, setToken }: HeaderPropsType)
 
     return (
         <header className="header">
-            <div className="user">{name}</div>
+            <div className="user">{user?.username}</div>
             <div className="btns">
                 <div className="notif">
                     <IconBell stroke={1.5} />

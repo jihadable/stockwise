@@ -1,39 +1,24 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
-import { item } from "../components/itemType"
 import { IconPhotoPlus } from "@tabler/icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
-import { useNavigate } from "react-router-dom";
+import { ItemType } from "../contexts/AuthContext";
 
-type AddProductType = {
-    setItems: React.Dispatch<React.SetStateAction<item[]>>,
-    isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
-    token: string | null,
-    setToken: React.Dispatch<React.SetStateAction<string | null>>
-}
-
-export default function AddProduct({ setItems, isLogin, setIsLogin, token, setToken }: AddProductType){
+export default function AddProduct(){
 
     document.title = "StockWise | Add product"
 
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (!isLogin) navigate("/")
-    }, [isLogin, navigate])
-
     const [
         [name, setName],
-        [img, setImg],
+        [image, setImage],
         [category, setCategory],
         [price, setPrice],
         [quantity, setQuantity],
-        [desc, setDesc]
+        [description, setDescription]
     ] = [
         useState(""),
         useState(""),
@@ -55,7 +40,7 @@ export default function AddProduct({ setItems, isLogin, setIsLogin, token, setTo
       
                 reader.onload = () => {
                     const base64String = reader.result as string;
-                    setImg(base64String)
+                    setImage(base64String)
                 }
       
                 reader.readAsDataURL(file);
@@ -69,34 +54,19 @@ export default function AddProduct({ setItems, isLogin, setIsLogin, token, setTo
     const handleSubmit = (e: FormEvent):void => {
         e.preventDefault()
 
-        if (name === "" || img === "" || category === "" || price === "" || quantity === "" || desc === ""){
+        if (name === "" || image === "" || category === "" || price === "" || quantity === "" || description === ""){
             toast.warn("Please fill the empty field")
             return
         }
 
-        const idNow: number = JSON.parse(localStorage.getItem("idNow")!)
-
-        const newItem: item = {id: idNow ,name, img, category, price: parseInt(price), quantity: parseInt(quantity), desc}
-
-        setItems((items: item[]) => [...items, newItem])
-
-        toast.success("Item added")
-
-        setName("")
-        setImg("")
-        setCategory("")
-        setPrice("")
-        setQuantity("")
-        setDesc("")
-
-        localStorage.setItem("idNow", JSON.stringify(idNow + 1))
+        const newItem: ItemType = {id: idNow ,name, image, category, price: parseInt(price), quantity: parseInt(quantity), description}
     }
 
     return (
         <div className="add-product">
             <Navbar page="Add product" />
             <div className="content">
-                <Header setIsLogin={setIsLogin} token={token} setToken={setToken} />
+                <Header />
                 <ToastContainer
                 position="top-center"
                 autoClose={750}
@@ -111,9 +81,9 @@ export default function AddProduct({ setItems, isLogin, setIsLogin, token, setTo
                     <form onSubmit={handleSubmit}>
                         <div className="form-header">Add new product</div>
                         {
-                            img !== "" &&
+                            image !== "" &&
                             <div className="img-preview">
-                                <img src={img} alt="Image preview" />
+                                <img src={image} alt="Image preview" />
                             </div>
                         }
                         <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
@@ -126,7 +96,7 @@ export default function AddProduct({ setItems, isLogin, setIsLogin, token, setTo
                         <input type="number" id="price" name="price" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
                         <input type="number" id="quantity" name="quantity" min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                         <div className="react-quill">
-                            <ReactQuill theme="snow" value={desc} onChange={setDesc} placeholder="Product description" />
+                            <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Product description" />
                         </div>
                         <button type="submit" className="save">Save product</button>
                     </form>

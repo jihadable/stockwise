@@ -1,17 +1,10 @@
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
-import user from "../assets/user.png"
+import userImg from "../assets/user.png"
 import "../style/Account.css"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-
-type AccountPropsType = {
-    isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
-    token: string | null,
-    setToken: React.Dispatch<React.SetStateAction<string | null>>
-}
+import { AuthContext } from "../contexts/AuthContext";
 
 type UserDatatype = {
     username: string,
@@ -20,15 +13,13 @@ type UserDatatype = {
     bio: string
 }
 
-export default function Account({ isLogin, setIsLogin, token, setToken }: AccountPropsType){
+export default function Account(){
 
     document.title = "StockWise | Account"
 
-    const navigate = useNavigate()
+    const { user } = useContext(AuthContext)
 
-    useEffect(() => {
-        if (!isLogin) navigate("/")
-    }, [isLogin, navigate])
+    console.log(user)
 
     const [userData, setUserData] = useState<UserDatatype>({
         username: "User",
@@ -43,7 +34,7 @@ export default function Account({ isLogin, setIsLogin, token, setToken }: Accoun
         <div className="account">
             <Navbar page="Account" />
             <div className="content">
-                <Header setIsLogin={setIsLogin} token={token} setToken={setToken} />
+                <Header />
                 <ToastContainer
                 position="top-center"
                 autoClose={750}
@@ -56,7 +47,7 @@ export default function Account({ isLogin, setIsLogin, token, setToken }: Accoun
                 />
                 <div className={`user-info ${edit ? "edit-active" : ""}`}>
                     <div className="img">
-                        <img src={user} alt="User" />
+                        <img src={userImg} alt="User" />
                     </div>
                     {
                         !edit &&
@@ -64,11 +55,11 @@ export default function Account({ isLogin, setIsLogin, token, setToken }: Accoun
                             <div className="info">
                             <div className="item">
                                 <div className="label">Username</div>
-                                <div className="value">{userData.username}</div>
+                                <div className="value">{user?.username}</div>
                             </div>
                             <div className="item">
                                 <div className="label">Email</div>
-                                <div className="value">{userData.email}</div>
+                                <div className="value">{user?.email}</div>
                             </div>
                             <div className="item">
                                 <div className="label">Phone</div>

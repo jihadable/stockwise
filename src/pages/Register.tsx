@@ -1,22 +1,21 @@
 import "../style/Register.css"
 import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { AuthContext } from "../contexts/AuthContext";
 
-type RegisterPropsType = {
-    isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
-    setToken: React.Dispatch<React.SetStateAction<string | null>>
-}
-
-export default function Register({ isLogin, setIsLogin, setToken }: RegisterPropsType){
+export default function Register(){
     
     document.title = "StockWise | Register"
     
     const navigate = useNavigate()
+
+    const { isLogin, setIsLogin, setToken } = useContext(AuthContext)
     
-    if (isLogin) navigate("/dashboard")
+    useEffect(() => {
+        if (isLogin) navigate("/dashboard")
+    }, [isLogin, navigate])
 
     const emailElement = useRef<HTMLInputElement | null>(null)
     const usernameElement = useRef<HTMLInputElement | null>(null)

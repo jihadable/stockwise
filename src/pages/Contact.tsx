@@ -2,25 +2,10 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/Contact.css"
 import { IconMail, IconMailForward, IconMapPinFilled, IconPhone } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
-type ContactPropsType = {
-    isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
-    token: string | null,
-    setToken: React.Dispatch<React.SetStateAction<string | null>>
-}
-
-export default function Contact({ isLogin, setIsLogin, token, setToken }: ContactPropsType){
+export default function Contact(){
 
     document.title = "StockWise | Contact"
-
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (!isLogin) navigate("/")
-    }, [isLogin, navigate])
 
     const info = [
         {
@@ -41,7 +26,7 @@ export default function Contact({ isLogin, setIsLogin, token, setToken }: Contac
         <div className="contact">
             <Navbar page="Contact us" />
             <div className="content">
-                <Header setIsLogin={setIsLogin} token={token} setToken={setToken} />
+                <Header />
                 <div className="contact-container">
                     <div className="header">
                         <div>Your thoughts are important to us</div>
