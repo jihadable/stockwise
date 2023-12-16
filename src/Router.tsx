@@ -9,18 +9,14 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
-import { AuthContext, ItemType } from "./contexts/AuthContext";
 import AuthPrivatePage from "./pages/AuthPrivatePage";
 import GuestPage from "./pages/GuestPage";
-import { useContext } from "react";
 
 export default function Router(){
 
     if (!localStorage.getItem("navbar")){
         localStorage.setItem("navbar", JSON.stringify(false))
     }
-
-    const { items } = useContext(AuthContext)
 
     return (
         <BrowserRouter>
@@ -46,14 +42,9 @@ export default function Router(){
                     
                     <Route path="/contact" element={<Contact />}></Route>
 
-                    {items?.map((item: ItemType, index: number) => (
-                        <Route path={`/detail/${item.slug}`} element={<Detail detailItem={item} />} 
-                        key={index}></Route>
-                    ))}
-                    {items?.map((item: ItemType, index: number) => (
-                        <Route path={`/edit/${item.slug}`} element={<Edit editItem={item} />} 
-                        key={index}></Route>
-                    ))}
+                    <Route path="/detail/:slug" element={<Detail />}></Route>
+
+                    <Route path="/edit/:slug" element={<Edit />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

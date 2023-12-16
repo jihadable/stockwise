@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
@@ -6,11 +6,13 @@ import { IconPhotoPlus } from "@tabler/icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
-import { ItemType } from "../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function AddProduct(){
 
     document.title = "StockWise | Add product"
+
+    const { token } = useContext(AuthContext)
 
     const [
         [name, setName],
@@ -51,15 +53,40 @@ export default function AddProduct(){
         }
     }
     
-    const handleSubmit = (e: FormEvent):void => {
+    const handleSubmit = async(e: FormEvent) => {
         e.preventDefault()
 
-        if (name === "" || image === "" || category === "" || price === "" || quantity === "" || description === ""){
+        if (name === "" || category === "" || price === "" || quantity === "" || description === ""){
             toast.warn("Please fill the empty field")
             return
         }
 
-        const newItem: ItemType = {id: idNow ,name, image, category, price: parseInt(price), quantity: parseInt(quantity), description}
+        const newItem = {name, image, category, price: parseInt(price), quantity: parseInt(quantity), description}
+
+        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+
+        const response = await fetch(`${apiEndpoint}/items`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(newItem)
+        })
+
+        const data = await response.json()
+
+        if (data.status){
+            toast.success("Item added")
+
+            setName("")
+            setImage("")
+            setCategory("")
+            setPrice("")
+            setQuantity("")
+            setDescription("")
+        }
     }
 
     return (

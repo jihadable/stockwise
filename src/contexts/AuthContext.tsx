@@ -66,6 +66,8 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
 
                 const data = await response.json()
 
+                console.log(data)
+
                 if (data.message){
                     setIsLogin(null)
                     setToken(null)
@@ -89,7 +91,7 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
         }
 
         verifyToken()
-    }, [token, items])
+    }, [isLogin, token])
 
     return (
         <AuthContext.Provider value={{ isLogin, setIsLogin, token, setToken, user, setUser, items, setItems }}>

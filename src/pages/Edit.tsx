@@ -1,41 +1,49 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import "../style/Edit.css"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext, useRef } from "react"
 import { IconPhotoEdit, IconPhotoX } from "@tabler/icons-react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
-import { ItemType } from "../contexts/AuthContext"
+import { AuthContext, ItemType } from "../contexts/AuthContext"
 
-type EditType = {
-    editItem: ItemType
-}
-
-export default function Edit({ editItem }: EditType){
+export default function Edit(){
 
     document.title = "StockWise | Edit item"
+
+    const { items } = useContext(AuthContext)
+
+    const { slug } = useParams<{ slug: string }>()
+
+    const [item, setItem] = useState<ItemType | null>(null)
+
+    useEffect(() => {
+        if (items){
+            const detailItem: ItemType = items.filter(item => item.slug == slug)[0]
+    
+            setItem(detailItem)
+        }
+    }, [slug, items])
 
     const navigate = useNavigate()
 
     const [
-        id,
-        [name, setName],
-        [image, setImage],
-        [category, setCategory],
-        [price, setPrice],
-        [quantity, setQuantity],
-        [description, setDescription]
+        nameElement,
+        imageElement,
+        categoryElement,
+        priceElement,
+        quantityElement,
+        descriptionElement
     ] = [
-        editItem?.id,
-        useState(editItem?.name),
-        useState(editItem?.image),
-        useState(editItem?.category),
-        useState(editItem?.price),
-        useState(editItem?.quantity),
-        useState(editItem?.description)
+        useRef<HTMLInputElement | null>(null),
+        useRef<HTMLInputElement | null>(null),
+        useRef<HTMLInputElement | null>(null),
+        useRef<HTMLInputElement | null>(null),
+        useRef<HTMLInputElement | null>(null),
+        useRef<ReactQuill | null>(null),
     ]
 
     function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
@@ -50,7 +58,8 @@ export default function Edit({ editItem }: EditType){
       
                 reader.onload = () => {
                     const base64String = reader.result as string;
-                    setImage(base64String)
+
+                    return base64String
                 }
       
                 reader.readAsDataURL(file);
@@ -63,7 +72,23 @@ export default function Edit({ editItem }: EditType){
 
     function handleSave(): void {
 
-        if (name === "" || image === "" || category === "" || isNaN(price) || isNaN(quantity) || description === ""){
+        const [
+            name,
+            image,
+            category, 
+            price,
+            quantity,
+            description
+        ] = [
+            nameElement.current?.value,
+            imageElement.current?.value,
+            categoryElement.current?.value,
+            priceElement.current?.value,
+            quantityElement.current?.value,
+            descriptionElement.current?.value
+        ]
+
+        if (name === "" || category === "" || price === "" || parseInt(price!) < 1 || quantity === "" || parseInt(quantity!) < 1 || description === ""){
             toast.warn("Please fill the empty field")
             
             return
@@ -71,9 +96,9 @@ export default function Edit({ editItem }: EditType){
 
         toast.success("Item edited")
 
-        setTimeout(() => {
-            navigate("/dashboard")
-        }, 1500);
+        // setTimeout(() => {
+        //     navigate("/dashboard")
+        // }, 1500);
     }
 
     useEffect(() => {
@@ -120,9 +145,9 @@ export default function Edit({ editItem }: EditType){
                     <div className="edit-header">Edit product</div>
                     <div className="edit-content">
                         <div className="img">
-                            {image &&
-                            <img src={image} alt="Image Preview" />}
-                            {!image &&
+                            {/* {item?.image &&
+                            <img src={item.image} alt="Image Preview" />} */}
+                            {item?.image &&
                             <div className="no-img">
                                 <IconPhotoX stroke={1.5} />
                                 <p>No image added</p>
@@ -130,7 +155,7 @@ export default function Edit({ editItem }: EditType){
                         </div>
                         <div className="info">
                             <div className="item img-input">
-                                <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
+                                <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} ref={imageElement} />
                                 <label htmlFor="img">
                                     <IconPhotoEdit stroke={1.5} />
                                     <span>Edit image</span>
@@ -141,28 +166,28 @@ export default function Edit({ editItem }: EditType){
                                     <div className="circle"></div>
                                     <span>Name</span>
                                 </div>
-                                <input type="text" className="value" spellCheck="false" value={name} onChange={(e) => {setName(e.target.value)}} />
+                                <input type="text" className="value" spellCheck="false" defaultValue={item?.name} ref={nameElement} />
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Category</span>
                                 </div>
-                                <input type="text" className="value" spellCheck="false" value={category} onChange={(e) => {setCategory(e.target.value)}} />
+                                <input type="text" className="value" spellCheck="false" defaultValue={item?.category} ref={categoryElement} />
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Price</span>
                                 </div>
-                                <input type="number" min={0} className="value" spellCheck="false" value={isNaN(price) ? "" : price} onChange={(e) => {setPrice(parseInt(e.target.value))}} />
+                                <input type="number" min={0} className="value" spellCheck="false" defaultValue={item?.price} ref={priceElement} />
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Quantity</span>
                                 </div>
-                                <input type="number" className="value" spellCheck="false" value={isNaN(quantity) ? "" : quantity} onChange={(e) => {setQuantity(parseInt(e.target.value))}} />
+                                <input type="number" min={0} className="value" spellCheck="false" defaultValue={item?.quantity} ref={quantityElement} />
                             </div>
                             <div className="item">
                                 <div className="label">
@@ -170,12 +195,12 @@ export default function Edit({ editItem }: EditType){
                                     <span>Description</span>
                                 </div>
                                 <div className="react-quill value">
-                                    <ReactQuill theme="snow" value={description} onChange={setDescription} className="quill-edit" />
+                                    <ReactQuill theme="snow" value={item?.description} className="quill-edit" ref={descriptionElement} />
                                 </div>
                             </div>
                             <div className="btns">
                                 <Link to={"/dashboard"} className="cancel">Cancel</Link>
-                                <div className="save" onClick={() => {handleSave()}}>Save changes</div>
+                                <div className="save" onClick={handleSave}>Save changes</div>
                             </div>
                         </div>
                     </div>

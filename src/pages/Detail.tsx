@@ -1,18 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import InventoryStats from "../components/InventoryStats";
 import Navbar from "../components/Navbar";
 import "../style/Detail.css"
 import { IconArrowLeft, IconPhotoX } from "@tabler/icons-react";
-import { ItemType } from "../contexts/AuthContext";
+import { AuthContext, ItemType } from "../contexts/AuthContext";
+import { useContext, useEffect, useState } from "react";
 
-type DetailType = {
-    detailItem: ItemType
-}
-
-export default function Detail({ detailItem }: DetailType){
+export default function Detail(){
 
     document.title = "StockWise | Item detail"
+
+    const { items } = useContext(AuthContext)
+
+    const { slug } = useParams<{ slug: string }>()
+
+    const [item, setItem] = useState<ItemType | null>(null)
+
+    useEffect(() => {
+        if (items){
+            const detailItem: ItemType = items.filter(item => item.slug == slug)[0]
+    
+            setItem(detailItem)
+        }
+    }, [slug, items])
 
     return (
         <div className="detail">
@@ -43,8 +54,8 @@ export default function Detail({ detailItem }: DetailType){
                                     <span>Time Stamp</span>
                                 </div>
                                 <div className="value">
-                                    <div className="created">Created at: {detailItem.created_at}</div>
-                                    <div className="updated">Last updated at: {detailItem.updated_at}</div>
+                                    <div className="created">Created at: {item?.created_at}</div>
+                                    <div className="updated">Last updated at: {item?.updated_at}</div>
                                 </div>
                             </div>
                             <div className="item">
@@ -52,35 +63,35 @@ export default function Detail({ detailItem }: DetailType){
                                     <div className="circle"></div>
                                     <span>Name</span>
                                 </div>
-                                <div className="value">{detailItem.name}</div>
+                                <div className="value">{item?.name}</div>
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Category</span>
                                 </div>
-                                <div className="value">{detailItem.category}</div>
+                                <div className="value">{item?.category}</div>
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Price</span>
                                 </div>
-                                <div className="value">${detailItem.price}</div>
+                                <div className="value">${item?.price}</div>
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Quantity</span>
                                 </div>
-                                <div className="value">{detailItem.quantity}</div>
+                                <div className="value">{item?.quantity}</div>
                             </div>
                             <div className="item">
                                 <div className="label">
                                     <div className="circle"></div>
                                     <span>Description</span>
                                 </div>
-                                <div className="value" dangerouslySetInnerHTML={{__html: detailItem.description}} />
+                                <div className="value" dangerouslySetInnerHTML={{__html: item?.description ?? ""}} />
                             </div>
                         </div>
                     </div>
