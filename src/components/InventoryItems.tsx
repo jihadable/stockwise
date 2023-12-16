@@ -3,17 +3,36 @@ import "../style/InventoryItems.css"
 import { Link } from "react-router-dom";
 import { IconDatabaseX, IconEdit, IconEye, IconSearch, IconSortDescending, IconTrash } from "@tabler/icons-react";
 import { AuthContext, ItemType } from "../contexts/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function InventoryItems(){
 
-    const { items, setItems } = useContext(AuthContext)
+    const { items, setItems, token } = useContext(AuthContext)
 
     let showItems: ItemType[] = [...(items ?? [])].reverse()
 
     // delete
-    const handleDelete = (id: number):void => {
+    const handleDelete = async(id: number) => {
         if (confirm("Are You sure to delete this item?")){
-            setItems((items) => (items ?? []).filter((object: ItemType) => object.id !== id))
+            const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+
+            const response = await fetch(`${apiEndpoint}/items/${id}`, {
+                method: "delete",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+
+            const data = await response.json()
+
+            if (!data.status){
+                console.log("error")
+                
+                return
+            }
+
+            toast.success("Item deleted")
         }
     }
 
@@ -56,8 +75,8 @@ export default function InventoryItems(){
 
     function sortPriceAndQuantity(array: ItemType[], key: keyof ItemType) {
         return array.sort((a, b) => {
-            const valueA = a[key];
-            const valueB = b[key];
+            const valueA = a[key]!;
+            const valueB = b[key]!;
         
             if (valueA < valueB) return -1;
             if (valueA > valueB) return 1;
@@ -118,6 +137,16 @@ export default function InventoryItems(){
 
     return (
         <section className="inventory-items">
+            <ToastContainer
+            position="top-center"
+            autoClose={750}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            draggable
+            theme="colored"
+            />
             <div className="header">Inventory Items</div>
             <div className="tools">
                 <div className="left">

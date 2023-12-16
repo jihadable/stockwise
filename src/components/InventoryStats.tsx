@@ -7,7 +7,7 @@ export default function InventoryStats(){
 
     const { items } = useContext(AuthContext)
 
-    const totalProductValue = items?.length
+    const totalProductValue = items ? items.length : 0
     
     let totalStoreValue = 0
     if (items){

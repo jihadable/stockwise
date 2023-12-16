@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import InventoryStats from "../components/InventoryStats";
 import Navbar from "../components/Navbar";
 import "../style/Detail.css"
-import { IconArrowLeft } from "@tabler/icons-react";
+import { IconArrowLeft, IconPhotoX } from "@tabler/icons-react";
 import { ItemType } from "../contexts/AuthContext";
 
 type DetailType = {
@@ -28,7 +28,13 @@ export default function Detail({ detailItem }: DetailType){
                     <div className="detail-header">Item detail</div>
                     <div className="detail-content">
                         <div className="img">
-                            <img src={detailItem.image} alt="Image Preview" />
+                            {/* {detailItem.image &&
+                            <img src={detailItem.image} alt="Image Preview" />}
+                            {!detailItem.image && */}
+                            <div className="no-img">
+                                <IconPhotoX stroke={1.5} />
+                                <p>No image added</p>
+                            </div>
                         </div>
                         <div className="info">
                             <div className="item">
@@ -37,8 +43,8 @@ export default function Detail({ detailItem }: DetailType){
                                     <span>Time Stamp</span>
                                 </div>
                                 <div className="value">
-                                    <div className="created">Created at: </div>
-                                    <div className="updated">Last updated at: </div>
+                                    <div className="created">Created at: {detailItem.created_at}</div>
+                                    <div className="updated">Last updated at: {detailItem.updated_at}</div>
                                 </div>
                             </div>
                             <div className="item">

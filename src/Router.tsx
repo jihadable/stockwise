@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
-import AuthFrovider, { AuthContext, ItemType } from "./contexts/AuthContext";
+import { AuthContext, ItemType } from "./contexts/AuthContext";
 import AuthPrivatePage from "./pages/AuthPrivatePage";
 import GuestPage from "./pages/GuestPage";
 import { useContext } from "react";
@@ -24,40 +24,38 @@ export default function Router(){
 
     return (
         <BrowserRouter>
-            <AuthFrovider>
-                <Routes>
-                    <Route path="*" element={<NotFound />}></Route>
-                    <Route path="/" element={<Home />}></Route>
+            <Routes>
+                <Route path="*" element={<NotFound />}></Route>
+                <Route path="/" element={<Home />}></Route>
 
-                    <Route element={<GuestPage />}>
-                        <Route path="/login" element={<Login />}></Route>
-                        
-                        <Route path="/register" 
-                        element={
-                        <Register />
-                        }></Route>
-                    </Route>
+                <Route element={<GuestPage />}>
+                    <Route path="/login" element={<Login />}></Route>
                     
-                    <Route element={<AuthPrivatePage />}>
-                        <Route path="/dashboard" element={<Dashboard />}></Route>
+                    <Route path="/register" 
+                    element={
+                    <Register />
+                    }></Route>
+                </Route>
+                
+                <Route element={<AuthPrivatePage />}>
+                    <Route path="/dashboard" element={<Dashboard />}></Route>
 
-                        <Route path="/add-product" element={<AddProduct />}></Route>
-                        
-                        <Route path="/account" element={<Account  />}></Route>
-                        
-                        <Route path="/contact" element={<Contact />}></Route>
+                    <Route path="/add-product" element={<AddProduct />}></Route>
+                    
+                    <Route path="/account" element={<Account  />}></Route>
+                    
+                    <Route path="/contact" element={<Contact />}></Route>
 
-                        {items?.map((item: ItemType, index: number) => (
-                            <Route path={`/detail/${item.id}`} element={<Detail detailItem={item} />} 
-                            key={index}></Route>
-                        ))}
-                        {items?.map((item: ItemType, index: number) => (
-                            <Route path={`/edit/${item.id}`} element={<Edit editItem={item} />} 
-                            key={index}></Route>
-                        ))}
-                    </Route>
-                </Routes>
-            </AuthFrovider>
+                    {items?.map((item: ItemType, index: number) => (
+                        <Route path={`/detail/${item.slug}`} element={<Detail detailItem={item} />} 
+                        key={index}></Route>
+                    ))}
+                    {items?.map((item: ItemType, index: number) => (
+                        <Route path={`/edit/${item.slug}`} element={<Edit editItem={item} />} 
+                        key={index}></Route>
+                    ))}
+                </Route>
+            </Routes>
         </BrowserRouter>
     )
 }

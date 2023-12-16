@@ -19,8 +19,6 @@ export default function Account(){
 
     const { user } = useContext(AuthContext)
 
-    console.log(user)
-
     const [userData, setUserData] = useState<UserDatatype>({
         username: "User",
         email: "user@mail.com",

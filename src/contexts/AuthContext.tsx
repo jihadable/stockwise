@@ -1,10 +1,9 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export type UserType = {
     username: string, 
     email: string,
-    image: string
+    image: string | null
 }
 
 export type ItemType = {
@@ -49,8 +48,6 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
     const [user, setUser] = useState<UserType | null>(null)
     const [items, setItems] = useState<ItemType[] | null>(null)
 
-    const navigate = useNavigate()
-
     useEffect(() => {
         const verifyToken = async() => {
             const storedToken = localStorage.getItem("token")
@@ -68,7 +65,6 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
                 })
 
                 const data = await response.json()
-                console.log(data)
 
                 if (data.message){
                     setIsLogin(null)
@@ -82,8 +78,8 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
                 setToken(storedToken)
                 localStorage.setItem("token", storedToken)
 
-                setUser(data.data[0].user)
-                setItems(data.data[0].items)
+                setUser(data.user)
+                setItems(data.items)
             }
             else {
                 setIsLogin(null)
@@ -93,7 +89,7 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
         }
 
         verifyToken()
-    }, [token, navigate])
+    }, [token, items])
 
     return (
         <AuthContext.Provider value={{ isLogin, setIsLogin, token, setToken, user, setUser, items, setItems }}>

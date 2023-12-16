@@ -3,7 +3,7 @@ import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import "../style/Edit.css"
 import { useState, useEffect } from "react"
-import { IconPhotoEdit } from "@tabler/icons-react"
+import { IconPhotoEdit, IconPhotoX } from "@tabler/icons-react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill';
@@ -120,7 +120,13 @@ export default function Edit({ editItem }: EditType){
                     <div className="edit-header">Edit product</div>
                     <div className="edit-content">
                         <div className="img">
-                            <img src={image} alt="Image Preview" />
+                            {image &&
+                            <img src={image} alt="Image Preview" />}
+                            {!image &&
+                            <div className="no-img">
+                                <IconPhotoX stroke={1.5} />
+                                <p>No image added</p>
+                            </div>}
                         </div>
                         <div className="info">
                             <div className="item img-input">
