@@ -27,7 +27,8 @@ type AuthContextType = {
     user: UserType | null,
     setUser: React.Dispatch<React.SetStateAction<UserType | null>>,
     items: ItemType[] | null,
-    setItems: React.Dispatch<React.SetStateAction<ItemType[] | null>>
+    setItems: React.Dispatch<React.SetStateAction<ItemType[] | null>>,
+    verifyToken: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -38,7 +39,8 @@ export const AuthContext = createContext<AuthContextType>({
     user: null,
     setUser: () => {},
     items: null,
-    setItems: () => {}
+    setItems: () => {},
+    verifyToken: async() => {}
 })
 
 export default function AuthFrovider({ children }: { children: ReactNode }){
@@ -48,53 +50,51 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
     const [user, setUser] = useState<UserType | null>(null)
     const [items, setItems] = useState<ItemType[] | null>(null)
 
-    useEffect(() => {
-        const verifyToken = async() => {
-            const storedToken = localStorage.getItem("token")
+    const verifyToken = async() => {
+        const storedToken = localStorage.getItem("token")
 
-            if (storedToken) {
+        if (storedToken) {
 
-                const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+            const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
 
-                const response = await fetch(`${apiEndpoint}/items`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${storedToken}`
-                    }
-                })
-
-                const data = await response.json()
-
-                console.log(data)
-
-                if (data.message){
-                    setIsLogin(null)
-                    setToken(null)
-                    localStorage.removeItem("token")
-                    
-                    return
+            const response = await fetch(`${apiEndpoint}/items`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": `Bearer ${storedToken}`
                 }
-                
-                setIsLogin(true)
-                setToken(storedToken)
-                localStorage.setItem("token", storedToken)
+            })
 
-                setUser(data.user)
-                setItems(data.items)
-            }
-            else {
+            const data = await response.json()
+
+            if (data.message){
                 setIsLogin(null)
                 setToken(null)
                 localStorage.removeItem("token")
+                
+                return
             }
-        }
+            
+            setIsLogin(true)
+            setToken(storedToken)
+            localStorage.setItem("token", storedToken)
 
+            setUser(data.user)
+            setItems(data.items)
+        }
+        else {
+            setIsLogin(null)
+            setToken(null)
+            localStorage.removeItem("token")
+        }
+    }
+
+    useEffect(() => {
         verifyToken()
     }, [isLogin, token])
 
     return (
-        <AuthContext.Provider value={{ isLogin, setIsLogin, token, setToken, user, setUser, items, setItems }}>
+        <AuthContext.Provider value={{ isLogin, setIsLogin, token, setToken, user, setUser, items, setItems, verifyToken }}>
             {children}
         </AuthContext.Provider>
     )

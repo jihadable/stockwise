@@ -14,7 +14,7 @@ export default function Edit(){
 
     document.title = "StockWise | Edit item"
 
-    const { items } = useContext(AuthContext)
+    const { items, token, verifyToken } = useContext(AuthContext)
 
     const { slug } = useParams<{ slug: string }>()
 
@@ -70,7 +70,7 @@ export default function Edit(){
         }
     }
 
-    function handleSave(): void {
+    const handleSave = async() => {
 
         const [
             name,
@@ -94,11 +94,30 @@ export default function Edit(){
             return
         }
 
-        toast.success("Item edited")
+        const newItem = {name, image: image === "" ? null : image, category, price: parseInt(price!), quantity: parseInt(quantity!), description}
 
-        // setTimeout(() => {
-        //     navigate("/dashboard")
-        // }, 1500);
+        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+
+        const response = await fetch(`${apiEndpoint}/items/${item?.id}`, {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(newItem)
+        })
+
+        const data = await response.json()
+
+        if (data.status){
+            verifyToken()
+            toast.success("Item edited")
+            
+            setTimeout(() => {
+                navigate("/dashboard")
+            }, 1500);
+        }
     }
 
     useEffect(() => {

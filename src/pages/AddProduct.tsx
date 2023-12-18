@@ -12,7 +12,7 @@ export default function AddProduct(){
 
     document.title = "StockWise | Add product"
 
-    const { token } = useContext(AuthContext)
+    const { token, verifyToken } = useContext(AuthContext)
 
     const [
         [name, setName],
@@ -61,7 +61,7 @@ export default function AddProduct(){
             return
         }
 
-        const newItem = {name, image, category, price: parseInt(price), quantity: parseInt(quantity), description}
+        const newItem = {name, image: image === "" ? null : image, category, price: parseInt(price), quantity: parseInt(quantity), description}
 
         const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
 
@@ -78,6 +78,7 @@ export default function AddProduct(){
         const data = await response.json()
 
         if (data.status){
+            verifyToken()
             toast.success("Item added")
 
             setName("")
