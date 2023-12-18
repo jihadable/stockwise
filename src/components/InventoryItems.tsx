@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 export default function InventoryItems(){
 
-    const { items, setItems, token } = useContext(AuthContext)
+    const { items, setItems, token, verifyToken } = useContext(AuthContext)
 
     let showItems: ItemType[] = [...(items ?? [])].reverse()
 
@@ -26,13 +26,10 @@ export default function InventoryItems(){
 
             const data = await response.json()
 
-            if (!data.status){
-                console.log("error")
-                
-                return
+            if (data.status){
+                verifyToken()
+                toast.success("Item deleted")
             }
-
-            toast.success("Item deleted")
         }
     }
 
