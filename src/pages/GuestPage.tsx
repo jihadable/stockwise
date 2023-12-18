@@ -4,7 +4,7 @@ import { AuthContext } from "../contexts/AuthContext";
 
 export default function GuestPage(){
 
-    const { isLogin } = useContext(AuthContext)
+    const { isAuth } = useContext(AuthContext)
 
-    return (!isLogin && !localStorage.getItem("token")) ? <Outlet /> : <Navigate to={"/dashboard"} />
+    return (!isAuth && !localStorage.getItem("token")) ? <Outlet /> : <Navigate to={"/dashboard"} />
 }

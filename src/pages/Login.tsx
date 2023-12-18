@@ -1,6 +1,6 @@
 import { IconLock, IconUserCircle } from "@tabler/icons-react"
 import "../style/Login.css"
-import { FormEvent, useContext, useEffect, useRef } from "react"
+import { FormEvent, useContext, useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
 
@@ -10,11 +10,13 @@ export default function Login(){
 
     const navigate = useNavigate()
 
-    const { isLogin, setIsLogin } = useContext(AuthContext)
+    const { isAuth, setIsAuth } = useContext(AuthContext)
+
+    const [isLogin, setIsLogin] = useState<boolean | null>(null)
 
     useEffect(() => {
-        if (isLogin) navigate("/dashboard")
-    }, [isLogin, navigate])
+        if (isAuth) navigate("/dashboard")
+    }, [isAuth, navigate])
 
     const usernameOrEmailElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
@@ -35,7 +37,8 @@ export default function Login(){
         const response = await fetch(`${apiEndpoint}/login`, {
             method: "post",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
             body: JSON.stringify({
                 login: usernameOrEmail,
@@ -46,12 +49,13 @@ export default function Login(){
         const data = await response.json()
 
         if (data.status){
-            setIsLogin(true)
+            setIsAuth(true)
             localStorage.setItem("token", data.token)
 
             navigate("/dashboard")
         }
         else {
+            setIsAuth(false)
             setIsLogin(false)
         }
     }

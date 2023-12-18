@@ -4,7 +4,7 @@ import { AuthContext } from "../contexts/AuthContext";
 
 export default function AuthPrivatePage(){
 
-    const { isLogin } = useContext(AuthContext)
+    const { isAuth } = useContext(AuthContext)
 
-    return (isLogin || localStorage.getItem("token")) ? <Outlet /> : <Navigate to={"/"} />
+    return (isAuth || localStorage.getItem("token")) ? <Outlet /> : <Navigate to={"/"} />
 }

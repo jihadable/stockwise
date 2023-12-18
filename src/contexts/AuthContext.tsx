@@ -20,8 +20,8 @@ export type ItemType = {
 }
 
 type AuthContextType = {
-    isLogin: boolean | null,
-    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
+    isAuth: boolean | null,
+    setIsAuth: React.Dispatch<React.SetStateAction<boolean | null>>,
     token: string | null
     setToken: React.Dispatch<React.SetStateAction<string | null>>,
     user: UserType | null,
@@ -32,8 +32,8 @@ type AuthContextType = {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-    isLogin: null,
-    setIsLogin: () => {},
+    isAuth: null,
+    setIsAuth: () => {},
     token: null,
     setToken: () => {},
     user: null,
@@ -44,7 +44,7 @@ export const AuthContext = createContext<AuthContextType>({
 })
 
 export default function AuthFrovider({ children }: { children: ReactNode }){
-    const [isLogin, setIsLogin] = useState<boolean | null>(null)
+    const [isAuth, setIsAuth] = useState<boolean | null>(null)
     const [token, setToken] = useState<string | null>(null)
 
     const [user, setUser] = useState<UserType | null>(null)
@@ -68,14 +68,14 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
             const data = await response.json()
 
             if (data.message){
-                setIsLogin(null)
+                setIsAuth(null)
                 setToken(null)
                 localStorage.removeItem("token")
                 
                 return
             }
             
-            setIsLogin(true)
+            setIsAuth(true)
             setToken(storedToken)
             localStorage.setItem("token", storedToken)
 
@@ -83,7 +83,7 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
             setItems(data.items)
         }
         else {
-            setIsLogin(null)
+            setIsAuth(null)
             setToken(null)
             localStorage.removeItem("token")
         }
@@ -91,10 +91,10 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
 
     useEffect(() => {
         verifyToken()
-    }, [isLogin, token])
+    }, [isAuth, token])
 
     return (
-        <AuthContext.Provider value={{ isLogin, setIsLogin, token, setToken, user, setUser, items, setItems, verifyToken }}>
+        <AuthContext.Provider value={{ isAuth, setIsAuth, token, setToken, user, setUser, items, setItems, verifyToken }}>
             {children}
         </AuthContext.Provider>
     )

@@ -1,6 +1,6 @@
 import "../style/Register.css"
 import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
-import { FormEvent, useContext, useEffect, useRef } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
@@ -11,11 +11,13 @@ export default function Register(){
     
     const navigate = useNavigate()
 
-    const { isLogin, setIsLogin, setToken } = useContext(AuthContext)
+    const { isAuth, setIsAuth, setToken } = useContext(AuthContext)
+
+    const [isRegister, setIsRegister] = useState<boolean | null>(null)
     
     useEffect(() => {
-        if (isLogin) navigate("/dashboard")
-    }, [isLogin, navigate])
+        if (isAuth) navigate("/dashboard")
+    }, [isAuth, navigate])
 
     const emailElement = useRef<HTMLInputElement | null>(null)
     const usernameElement = useRef<HTMLInputElement | null>(null)
@@ -60,13 +62,14 @@ export default function Register(){
         const data = await response.json()
 
         if (data.status){
-            setIsLogin(true)
+            setIsAuth(true)
             setToken(data.token)
 
             navigate("/dashboard")
         }
         else {
-            setIsLogin(false)
+            setIsRegister(false)
+            setIsAuth(false)
         }
     }
 
@@ -102,7 +105,7 @@ export default function Register(){
                 </div>
                 <button type="submit">Register</button>
             </form>
-            {isLogin === false && <p className="login-fail">Username or email is already in use</p>}
+            {isRegister === false && <p className="login-fail">Username or email is already in use</p>}
             <p>Already have an account? <Link to={"/login"}>Login</Link></p>
         </div>
     )

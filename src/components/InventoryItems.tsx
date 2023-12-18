@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 export default function InventoryItems(){
 
-    const { items, setItems, token, verifyToken } = useContext(AuthContext)
+    const { items, token, verifyToken } = useContext(AuthContext)
 
     let showItems: ItemType[] = [...(items ?? [])].reverse()
 
@@ -36,8 +36,7 @@ export default function InventoryItems(){
     // delete all
     const handleDeleteAll = () => {
         if (confirm("Are You sure to delete all items?")){
-            setItems([])
-            localStorage.setItem("idNow", JSON.stringify(1))
+            console.log("delete all")
         }
     }
 
