@@ -61,7 +61,7 @@ export default function AddProduct(){
     const handleSubmit = async(e: FormEvent) => {
         e.preventDefault()
         
-        if (name === "" || category === "" || price === "" || quantity === "" || description === ""){
+        if (name === "" || category === "" || price === "" || parseInt(price) < 1 || quantity === "" || parseInt(quantity) < 1 || description === ""){
             toast.warn("Please fill the empty field")
 
             return

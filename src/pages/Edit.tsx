@@ -37,18 +37,22 @@ export default function Edit(){
         [image, setImage],
         categoryElement,
         priceElement,
-        quantityElement,
-        descriptionElement
+        quantityElement
     ] = [
         useRef<HTMLInputElement | null>(null),
         useState<File | string>(""),
         useRef<HTMLInputElement | null>(null),
         useRef<HTMLInputElement | null>(null),
-        useRef<HTMLInputElement | null>(null),
-        useRef<ReactQuill | null>(null),
+        useRef<HTMLInputElement | null>(null)
     ]
 
     const [imgPreview, setImgPreview] = useState("")
+
+    const [description, setDescription] = useState(item?.description)
+
+    useEffect(() => {
+        setDescription(item?.description)
+    }, [item])
 
     function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
         const file = event.target.files?.[0]
@@ -80,17 +84,21 @@ export default function Edit(){
             name,
             category, 
             price,
-            quantity,
-            description
+            quantity
         ] = [
             nameElement.current?.value,
             categoryElement.current?.value,
             priceElement.current?.value,
-            quantityElement.current?.value,
-            descriptionElement.current?.value
+            quantityElement.current?.value
         ]
 
-        if (name === "" || category === "" || price === "" || parseInt(price!) < 1 || quantity === "" || parseInt(quantity!) < 1 || description === ""){
+        if (name === "" || 
+        category === "" || 
+        price === "" || 
+        parseInt(price!) < 1 || 
+        quantity === "" || 
+        parseInt(quantity!) < 1 || 
+        description === ""){
             toast.warn("Please fill the empty field")
             
             return
@@ -116,6 +124,8 @@ export default function Edit(){
         })
 
         const data = await response.json()
+
+        console.log(data)
 
         if (data.status){
             verifyToken()
@@ -223,7 +233,7 @@ export default function Edit(){
                                     <span>Description</span>
                                 </div>
                                 <div className="react-quill value">
-                                    <ReactQuill theme="snow" value={item?.description} className="quill-edit" ref={descriptionElement} />
+                                    <ReactQuill theme="snow" value={description} onChange={setDescription} className="quill-edit" />
                                 </div>
                             </div>
                             <div className="btns">

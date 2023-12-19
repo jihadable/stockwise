@@ -19,7 +19,6 @@ export default function InventoryItems(){
             const response = await fetch(`${apiEndpoint}/items/${id}`, {
                 method: "delete",
                 headers: {
-                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 }
             })
@@ -34,9 +33,23 @@ export default function InventoryItems(){
     }
 
     // delete all
-    const handleDeleteAll = () => {
+    const handleDeleteAll = async() => {
         if (confirm("Are You sure to delete all items?")){
-            console.log("delete all")
+            const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+
+            const response = await fetch(`${apiEndpoint}/items`, {
+                method: "delete",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+
+            const data = await response.json()
+
+            if (data.status){
+                verifyToken()
+                toast.success("All items deleted")
+            }
         }
     }
 
