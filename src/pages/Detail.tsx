@@ -17,6 +17,8 @@ export default function Detail(){
 
     const [item, setItem] = useState<ItemType | null>(null)
 
+    const storageEndpoint = import.meta.env.VITE_STORAGE_ENDPOINT
+
     useEffect(() => {
         if (items){
             const detailItem: ItemType = items.filter(item => item.slug == slug)[0]
@@ -39,13 +41,13 @@ export default function Detail(){
                     <div className="detail-header">Item detail</div>
                     <div className="detail-content">
                         <div className="img">
-                            {/* {detailItem.image &&
-                            <img src={detailItem.image} alt="Image Preview" />}
-                            {!detailItem.image && */}
+                            {item?.image &&
+                            <img src={`${storageEndpoint}/${item?.image}`} alt="Image Preview" />}
+                            {!item?.image && 
                             <div className="no-img">
                                 <IconPhotoX stroke={1.5} />
                                 <p>No image added</p>
-                            </div>
+                            </div>}
                         </div>
                         <div className="info">
                             <div className="item">

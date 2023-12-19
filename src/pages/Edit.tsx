@@ -20,6 +20,8 @@ export default function Edit(){
 
     const [item, setItem] = useState<ItemType | null>(null)
 
+    const storageEndpoint = import.meta.env.VITE_STORAGE_ENDPOINT 
+
     useEffect(() => {
         if (items){
             const detailItem: ItemType = items.filter(item => item.slug == slug)[0]
@@ -164,9 +166,9 @@ export default function Edit(){
                     <div className="edit-header">Edit product</div>
                     <div className="edit-content">
                         <div className="img">
-                            {/* {item?.image &&
-                            <img src={item.image} alt="Image Preview" />} */}
                             {item?.image &&
+                            <img src={`${storageEndpoint}/${item?.image}`} alt="Image Preview" />}
+                            {!item?.image &&
                             <div className="no-img">
                                 <IconPhotoX stroke={1.5} />
                                 <p>No image added</p>

@@ -23,56 +23,67 @@ export default function AddProduct(){
         [description, setDescription]
     ] = [
         useState(""),
-        useState(""),
+        useState<File | string>(""),
         useState(""),
         useState(""),
         useState(""),
         useState("")
     ]
 
+    const [imgPreview, setImgPreview] = useState("")
+
     function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
         const file = event.target.files?.[0]
-
+        
         if (file) {
             const allowedExtensions = ['jpg', 'jpeg', 'png']
             const extension = file.name.split('.').pop()?.toLowerCase()
       
             if (extension && allowedExtensions.includes(extension)) {
+                setImage(file)
                 const reader = new FileReader();
-      
+                
                 reader.onload = () => {
                     const base64String = reader.result as string;
-                    setImage(base64String)
+                    setImgPreview(base64String)
                 }
       
                 reader.readAsDataURL(file);
             } 
             else {
                 toast.warn("File's extension is not allowed")
+
+                return
             }
         }
     }
     
     const handleSubmit = async(e: FormEvent) => {
         e.preventDefault()
-
+        
         if (name === "" || category === "" || price === "" || quantity === "" || description === ""){
             toast.warn("Please fill the empty field")
+
             return
         }
 
-        const newItem = {name, image: image === "" ? null : image, category, price: parseInt(price), quantity: parseInt(quantity), description}
+        const newItem = new FormData()
 
+        newItem.append("name", name)
+        newItem.append("image", image)
+        newItem.append("category", category)
+        newItem.append("price", price)
+        newItem.append("quantity", quantity)
+        newItem.append("description", description)
+        
         const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
 
         const response = await fetch(`${apiEndpoint}/items`, {
             method: "post",
             headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(newItem)
+            body: newItem
         })
 
         const data = await response.json()
@@ -109,9 +120,9 @@ export default function AddProduct(){
                     <form onSubmit={handleSubmit}>
                         <div className="form-header">Add new product</div>
                         {
-                            image !== "" &&
+                            imgPreview !== "" &&
                             <div className="img-preview">
-                                <img src={image} alt="Image preview" />
+                                <img src={imgPreview} alt="Image preview" />
                             </div>
                         }
                         <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />

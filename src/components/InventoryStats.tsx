@@ -24,7 +24,7 @@ export default function InventoryStats(){
         },
         {
             title: "Total store value",
-            value: `$${items ? totalProductValue : 0}`,
+            value: `$${items ? totalStoreValue : 0}`,
             svg: <IconCoin stroke={1.5} />
         },
         {

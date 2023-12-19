@@ -9,7 +9,6 @@ import { AuthContext } from "../contexts/AuthContext";
 type UserDatatype = {
     username: string,
     email: string,
-    phone: string,
     bio: string
 }
 
@@ -22,7 +21,6 @@ export default function Account(){
     const [userData, setUserData] = useState<UserDatatype>({
         username: "User",
         email: "user@mail.com",
-        phone: "081234567890",
         bio: "Lorem ipsum dolor sit amet."
     })
 
@@ -58,10 +56,6 @@ export default function Account(){
                             <div className="item">
                                 <div className="label">Email</div>
                                 <div className="value">{user?.email}</div>
-                            </div>
-                            <div className="item">
-                                <div className="label">Phone</div>
-                                <div className="value">{userData.phone}</div>
                             </div>
                             <div className="item">
                                 <div className="label">Bio</div>
@@ -100,7 +94,6 @@ function EditUser({ setEdit, userData, setUserData }: EditUserType){
     const handelSave = () => {
         if (temporaryUserData.username === "" || 
         temporaryUserData.email === "" || 
-        temporaryUserData.phone === "" || 
         temporaryUserData.bio === ""){
             toast.warn("Please fill the empty field")
 
@@ -150,10 +143,6 @@ function EditUser({ setEdit, userData, setUserData }: EditUserType){
                 <div className="item">
                     <div className="label">Email</div>
                     <input type="text" className="value" spellCheck="false" defaultValue={userData.email} onChange={(e) => handleChange(e.target.value, "email")} />
-                </div>
-                <div className="item">
-                    <div className="label">Phone</div>
-                    <input type="text" className="value" spellCheck="false" defaultValue={userData.phone} onChange={(e) => handleChange(e.target.value, "phone")} />
                 </div>
                 <div className="item">
                     <div className="label">Bio</div>
