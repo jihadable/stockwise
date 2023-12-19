@@ -93,6 +93,7 @@ export default function AddProduct(){
             toast.success("Item added")
 
             setName("")
+            setImgPreview("")
             setImage("")
             setCategory("")
             setPrice("")

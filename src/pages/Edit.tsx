@@ -34,19 +34,21 @@ export default function Edit(){
 
     const [
         nameElement,
-        imageElement,
+        [image, setImage],
         categoryElement,
         priceElement,
         quantityElement,
         descriptionElement
     ] = [
         useRef<HTMLInputElement | null>(null),
-        useRef<HTMLInputElement | null>(null),
+        useState<File | string>(""),
         useRef<HTMLInputElement | null>(null),
         useRef<HTMLInputElement | null>(null),
         useRef<HTMLInputElement | null>(null),
         useRef<ReactQuill | null>(null),
     ]
+
+    const [imgPreview, setImgPreview] = useState("")
 
     function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
         const file = event.target.files?.[0]
@@ -56,12 +58,12 @@ export default function Edit(){
             const extension = file.name.split('.').pop()?.toLowerCase()
       
             if (extension && allowedExtensions.includes(extension)) {
+                setImage(file)
                 const reader = new FileReader();
       
                 reader.onload = () => {
                     const base64String = reader.result as string;
-
-                    return base64String
+                    setImgPreview(base64String)
                 }
       
                 reader.readAsDataURL(file);
@@ -76,14 +78,12 @@ export default function Edit(){
 
         const [
             name,
-            image,
             category, 
             price,
             quantity,
             description
         ] = [
             nameElement.current?.value,
-            imageElement.current?.value,
             categoryElement.current?.value,
             priceElement.current?.value,
             quantityElement.current?.value,
@@ -96,18 +96,23 @@ export default function Edit(){
             return
         }
 
-        const newItem = {name, image: image === "" ? null : image, category, price: parseInt(price!), quantity: parseInt(quantity!), description}
+        const newItem = new FormData()
+
+        newItem.append("name", name!)
+        newItem.append("image", image!)
+        newItem.append("category", category!)
+        newItem.append("price", price!)
+        newItem.append("quantity", quantity!)
+        newItem.append("description", description! as string)
 
         const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
 
-        const response = await fetch(`${apiEndpoint}/items/${item?.id}`, {
-            method: "put",
+        const response = await fetch(`${apiEndpoint}/items/${item?.id}?_method=put`, {
+            method: "post",
             headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(newItem)
+            body: newItem
         })
 
         const data = await response.json()
@@ -166,17 +171,19 @@ export default function Edit(){
                     <div className="edit-header">Edit product</div>
                     <div className="edit-content">
                         <div className="img">
-                            {item?.image &&
+                            {(item?.image && imgPreview === "") &&
                             <img src={`${storageEndpoint}/${item?.image}`} alt="Image Preview" />}
-                            {!item?.image &&
+                            {(!item?.image && imgPreview === "") &&
                             <div className="no-img">
                                 <IconPhotoX stroke={1.5} />
                                 <p>No image added</p>
                             </div>}
+                            {imgPreview !== "" &&
+                            <img src={imgPreview} alt="Image Preview" />}
                         </div>
                         <div className="info">
                             <div className="item img-input">
-                                <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} ref={imageElement} />
+                                <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
                                 <label htmlFor="img">
                                     <IconPhotoEdit stroke={1.5} />
                                     <span>Edit image</span>
