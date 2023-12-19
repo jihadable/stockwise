@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import "../style/AddProduct.css"
 import { IconPhotoPlus } from "@tabler/icons-react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
 import { AuthContext } from "../contexts/AuthContext";
@@ -107,16 +107,6 @@ export default function AddProduct(){
             <Navbar page="Add product" />
             <div className="content">
                 <Header />
-                <ToastContainer
-                position="top-center"
-                autoClose={750}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                draggable
-                theme="colored"
-                />
                 <div className="add-new-product">
                     <form onSubmit={handleSubmit}>
                         <div className="form-header">Add new product</div>

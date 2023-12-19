@@ -1,17 +1,18 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import InventoryStats from "../components/InventoryStats";
 import Navbar from "../components/Navbar";
 import "../style/Detail.css"
-import { IconArrowLeft, IconPhotoX } from "@tabler/icons-react";
+import { IconArrowLeft, IconEdit, IconPhotoX, IconTrash } from "@tabler/icons-react";
 import { AuthContext, ItemType } from "../contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Detail(){
 
     document.title = "StockWise | Item detail"
 
-    const { items } = useContext(AuthContext)
+    const { items, token, verifyToken } = useContext(AuthContext)
 
     const { slug } = useParams<{ slug: string }>()
 
@@ -27,6 +28,29 @@ export default function Detail(){
         }
     }, [slug, items])
 
+    const navigate = useNavigate()
+
+    const handleDelete = async() => {
+        if (confirm("Are You sure to delete this item?")){
+            const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+
+            const response = await fetch(`${apiEndpoint}/items/${item?.id}`, {
+                method: "delete",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+
+            const data = await response.json()
+
+            if (data.status){
+                verifyToken()
+                toast.success("Item deleted")
+                navigate("/dashboard")
+            }
+        }
+    }
+
     return (
         <div className="detail">
             <Navbar page="Dashboard" />
@@ -39,6 +63,16 @@ export default function Detail(){
                         <span>Back to dashboard</span>
                     </Link>
                     <div className="detail-header">Item detail</div>
+                    <div className="actions">
+                        <Link to={`/edit/${slug}`} className="edit-btn">
+                            <IconEdit stroke={1.5} />
+                            <span>Edit</span>
+                        </Link>
+                        <div className="delete-btn" onClick={handleDelete}>
+                            <IconTrash stroke={1.5} />
+                            <span>Delete</span>
+                        </div>
+                    </div>
                     <div className="detail-content">
                         <div className="img">
                             {item?.image &&

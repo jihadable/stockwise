@@ -1,8 +1,9 @@
 import { IconLock, IconUserCircle } from "@tabler/icons-react"
 import "../style/Login.css"
-import { FormEvent, useContext, useEffect, useRef, useState } from "react"
+import { FormEvent, useContext, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
+import { toast } from "react-toastify"
 
 export default function Login(){
 
@@ -10,13 +11,7 @@ export default function Login(){
 
     const navigate = useNavigate()
 
-    const { isAuth, setIsAuth } = useContext(AuthContext)
-
-    const [isLogin, setIsLogin] = useState<boolean | null>(null)
-
-    useEffect(() => {
-        if (isAuth) navigate("/dashboard")
-    }, [isAuth, navigate])
+    const { setIsAuth } = useContext(AuthContext)
 
     const usernameOrEmailElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
@@ -56,7 +51,7 @@ export default function Login(){
         }
         else {
             setIsAuth(false)
-            setIsLogin(false)
+            toast.warn("Invalid username or password")
         }
     }
 
@@ -74,7 +69,6 @@ export default function Login(){
                 </div>
                 <button type="submit">Login</button>
             </form>
-            {isLogin === false && <p className="login-fail">Invalid username or password</p>}
             <p>Don't have an account? <Link to={"/register"}>Register</Link></p>
         </div>
     )

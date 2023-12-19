@@ -8,7 +8,7 @@ export default function Header(){
 
     const navigate = useNavigate()
 
-    const { setIsLogin, token, setToken, user } = useContext(AuthContext)
+    const { setIsAuth, token, setToken, user } = useContext(AuthContext)
 
     const onLogout = async() => {
         const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
@@ -22,8 +22,9 @@ export default function Header(){
         const data = await response.json()
 
         if (data.status) {
-            setIsLogin(false)
+            setIsAuth(false)
             setToken(null)
+            localStorage.removeItem("token")
             navigate("/")
         }
     }

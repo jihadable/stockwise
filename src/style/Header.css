@@ -12,6 +12,10 @@ header{
     .user{
         font-size: 2rem;
         font-weight: 900;
+        max-width: 50%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .btns{
@@ -44,5 +48,4 @@ header{
             }
         }
     }
-
 }

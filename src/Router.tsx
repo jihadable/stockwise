@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import AuthPrivatePage from "./pages/AuthPrivatePage";
 import GuestPage from "./pages/GuestPage";
+import VerifySlug from "./pages/VerifySlug";
 
 export default function Router(){
 
@@ -42,9 +43,12 @@ export default function Router(){
                     
                     <Route path="/contact" element={<Contact />}></Route>
 
-                    <Route path="/detail/:slug" element={<Detail />}></Route>
-
-                    <Route path="/edit/:slug" element={<Edit />}></Route>
+                    <Route path="/detail/:slug" element={<VerifySlug />}>
+                        <Route path="/detail/:slug" element={<Detail />}></Route>
+                    </Route>
+                    <Route path="/edit/:slug" element={<VerifySlug />}>
+                        <Route path="/edit/:slug" element={<Edit />}></Route>
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>

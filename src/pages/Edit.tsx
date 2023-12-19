@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar"
 import "../style/Edit.css"
 import { useState, useEffect, useContext, useRef } from "react"
 import { IconPhotoEdit, IconPhotoX } from "@tabler/icons-react"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill';
 import "../style/quill.snow.css"
@@ -125,8 +125,6 @@ export default function Edit(){
 
         const data = await response.json()
 
-        console.log(data)
-
         if (data.status){
             verifyToken()
             toast.success("Item edited")
@@ -167,16 +165,6 @@ export default function Edit(){
             <Navbar page="Dashboard" />
             <div className="content">
                 <Header />
-                <ToastContainer
-                position="top-center"
-                autoClose={750}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                draggable
-                theme="colored"
-                />
                 <div className="edit-container">
                     <div className="edit-header">Edit product</div>
                     <div className="edit-content">

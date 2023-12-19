@@ -1,8 +1,8 @@
 import "../style/Register.css"
 import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
-import { FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
 
 export default function Register(){
@@ -11,13 +11,7 @@ export default function Register(){
     
     const navigate = useNavigate()
 
-    const { isAuth, setIsAuth, setToken } = useContext(AuthContext)
-
-    const [isRegister, setIsRegister] = useState<boolean | null>(null)
-    
-    useEffect(() => {
-        if (isAuth) navigate("/dashboard")
-    }, [isAuth, navigate])
+    const { setIsAuth } = useContext(AuthContext)
 
     const emailElement = useRef<HTMLInputElement | null>(null)
     const usernameElement = useRef<HTMLInputElement | null>(null)
@@ -63,28 +57,18 @@ export default function Register(){
 
         if (data.status){
             setIsAuth(true)
-            setToken(data.token)
+            localStorage.setItem("token", data.token)
 
             navigate("/dashboard")
         }
         else {
-            setIsRegister(false)
             setIsAuth(false)
+            toast.warn("Username or email is already in use")
         }
     }
 
     return (
         <div className="register">
-            <ToastContainer
-            position="top-center"
-            autoClose={750}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            draggable
-            theme="colored"
-            />
             <form method="post" onSubmit={(e) => onRegister(e)}>
                 <h2>Register Stockwise</h2>
                 <div className="email">
@@ -105,7 +89,6 @@ export default function Register(){
                 </div>
                 <button type="submit">Register</button>
             </form>
-            {isRegister === false && <p className="login-fail">Username or email is already in use</p>}
             <p>Already have an account? <Link to={"/login"}>Login</Link></p>
         </div>
     )

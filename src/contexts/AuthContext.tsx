@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 export type UserType = {
     username: string, 
@@ -68,7 +69,7 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
             const data = await response.json()
 
             if (data.message){
-                setIsAuth(null)
+                setIsAuth(false)
                 setToken(null)
                 localStorage.removeItem("token")
                 
@@ -83,7 +84,7 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
             setItems(data.items)
         }
         else {
-            setIsAuth(null)
+            setIsAuth(false)
             setToken(null)
             localStorage.removeItem("token")
         }
@@ -96,6 +97,16 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
     return (
         <AuthContext.Provider value={{ isAuth, setIsAuth, token, setToken, user, setUser, items, setItems, verifyToken }}>
             {children}
+            <ToastContainer
+            position="top-center"
+            autoClose={750}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            draggable
+            theme="colored"
+            />
         </AuthContext.Provider>
     )
 }

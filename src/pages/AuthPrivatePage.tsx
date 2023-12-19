@@ -6,5 +6,7 @@ export default function AuthPrivatePage(){
 
     const { isAuth } = useContext(AuthContext)
 
-    return (isAuth || localStorage.getItem("token")) ? <Outlet /> : <Navigate to={"/"} />
+    if (isAuth === false && isAuth !== null) return <Navigate to={"/"} />
+
+    if (isAuth === true && isAuth !== null) return <Outlet />
 }

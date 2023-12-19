@@ -6,5 +6,6 @@ export default function GuestPage(){
 
     const { isAuth } = useContext(AuthContext)
 
-    return (!isAuth && !localStorage.getItem("token")) ? <Outlet /> : <Navigate to={"/dashboard"} />
+    if (isAuth === false) return <Outlet />
+    if (isAuth === true) return <Navigate to={"/dashboard"} />
 }
