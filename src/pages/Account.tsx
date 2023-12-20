@@ -1,16 +1,10 @@
 import Navbar from "../components/Navbar";
-import Header from "../components/Header";
-import userImg from "../assets/user.png"
+import Header from "../components/Header"
 import "../style/Account.css"
-import { useContext, useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import { AuthContext } from "../contexts/AuthContext";
-
-type UserDatatype = {
-    username: string,
-    email: string,
-    bio: string
-}
+import { useContext, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { AuthContext, UserType } from "../contexts/AuthContext";
+import { IconPhotoEdit, IconPhotoX } from "@tabler/icons-react";
 
 export default function Account(){
 
@@ -18,11 +12,7 @@ export default function Account(){
 
     const { user } = useContext(AuthContext)
 
-    const [userData, setUserData] = useState<UserDatatype>({
-        username: "User",
-        email: "user@mail.com",
-        bio: "Lorem ipsum dolor sit amet."
-    })
+    const storageEndpoint = import.meta.env.VITE_STORAGE_ENDPOINT
 
     const [edit, setEdit] = useState<boolean>(false)
 
@@ -31,43 +21,40 @@ export default function Account(){
             <Navbar page="Account" />
             <div className="content">
                 <Header />
-                <ToastContainer
-                position="top-center"
-                autoClose={750}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                draggable
-                theme="colored"
-                />
                 <div className={`user-info ${edit ? "edit-active" : ""}`}>
+                    {!edit &&
+                    <>
                     <div className="img">
-                        <img src={userImg} alt="User" />
+                        {user?.image &&
+                        <img src={`${storageEndpoint}/${user?.image}`} alt="Image Preview" />}
+                        {!user?.image && 
+                        <div className="no-img">
+                            <IconPhotoX stroke={1.5} />
+                            <p>No image added</p>
+                        </div>}
                     </div>
-                    {
-                        !edit &&
-                        <div className="side">
-                            <div className="info">
-                            <div className="item">
-                                <div className="label">Username</div>
-                                <div className="value">{user?.username}</div>
-                            </div>
-                            <div className="item">
-                                <div className="label">Email</div>
-                                <div className="value">{user?.email}</div>
-                            </div>
-                            <div className="item">
-                                <div className="label">Bio</div>
-                                <div className="value">{userData.bio}</div>
-                            </div>
-                            </div>
-                            <div className="edit-btn" onClick={() => setEdit(true)}>Edit profile</div>
+                    <div className="side">
+                        <div className="info">
+                        <div className="item">
+                            <div className="label">Username</div>
+                            <div className="value">{user?.username}</div>
                         </div>
+                        <div className="item">
+                            <div className="label">Email</div>
+                            <div className="value">{user?.email}</div>
+                        </div>
+                        <div className="item">
+                            <div className="label">Bio</div>
+                            <div className="value">{user?.bio ?? "-"}</div>
+                        </div>
+                        </div>
+                        <div className="edit-btn" onClick={() => setEdit(true)}>Edit profile</div>
+                    </div>
+                    </>
                     }
                     {
                         edit &&
-                        <EditUser setEdit={setEdit} userData={userData} setUserData={setUserData} />
+                        <EditUser setEdit={setEdit} user={user} storageEndpoint={storageEndpoint} />
                     }
                 </div>
             </div>
@@ -77,30 +64,51 @@ export default function Account(){
 
 type EditUserType = {
     setEdit: React.Dispatch<React.SetStateAction<boolean>>,
-    userData: UserDatatype,
-    setUserData: React.Dispatch<React.SetStateAction<UserDatatype>>
+    user: UserType | null,
+    storageEndpoint: string
 }
 
-function EditUser({ setEdit, userData, setUserData }: EditUserType){
+function EditUser({ setEdit, user, storageEndpoint }: EditUserType){
 
-    const [temporaryUserData, setTemporaryUserData] = useState<UserDatatype>({...userData})
+    const [imgPreview, setImgPreview] = useState("")
 
-    const handleChange = (value: string, key: string) => {
-        setTemporaryUserData((userData: UserDatatype) => {
-            return {...userData, [key]: value}
-        })
+    const [
+        [image, setImage],
+        bioElement
+    ] = [
+        useState<File | string>(""),
+        useRef<HTMLTextAreaElement | null>(null)
+    ]
+
+    function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
+        const file = event.target.files?.[0]
+
+        if (file) {
+            const allowedExtensions = ['jpg', 'jpeg', 'png']
+            const extension = file.name.split('.').pop()?.toLowerCase()
+      
+            if (extension && allowedExtensions.includes(extension)) {
+                setImage(file)
+                const reader = new FileReader();
+      
+                reader.onload = () => {
+                    const base64String = reader.result as string;
+                    setImgPreview(base64String)
+                }
+      
+                reader.readAsDataURL(file);
+            } 
+            else {
+                toast.warn("File's extension is not allowed")
+            }
+        }
     }
 
     const handelSave = () => {
-        if (temporaryUserData.username === "" || 
-        temporaryUserData.email === "" || 
-        temporaryUserData.bio === ""){
-            toast.warn("Please fill the empty field")
+        toast.warn("Please fill the empty field")
 
-            return
-        }
+        return
         
-        setUserData({...temporaryUserData})
         toast.success("User edited")
 
         setTimeout(() => {
@@ -134,19 +142,38 @@ function EditUser({ setEdit, userData, setUserData }: EditUserType){
     }, []);
 
     return (
+        <>
+        <div className="img">
+            {(user?.image && imgPreview === "") &&
+            <img src={`${storageEndpoint}/${user?.image}`} alt="Image Preview" />}
+            {(!user?.image && imgPreview === "") &&
+            <div className="no-img">
+                <IconPhotoX stroke={1.5} />
+                <p>No image added</p>
+            </div>}
+            {imgPreview !== "" &&
+            <img src={imgPreview} alt="Image Preview" />}
+        </div>
         <div className="edit">
             <div className="info">
                 <div className="item">
+                    <input type="file" id="edit-img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
+                    <label htmlFor="edit-img" className="label">
+                        <IconPhotoEdit stroke={1.5} />
+                        <span>Edit image</span>
+                    </label>
+                </div>
+                <div className="item">
                     <div className="label">Username</div>
-                    <input type="text" className="value" spellCheck="false" defaultValue={userData.username} onChange={(e) => handleChange(e.target.value, "username")} />
+                    <div className="value">{user?.username}</div>
                 </div>
                 <div className="item">
                     <div className="label">Email</div>
-                    <input type="text" className="value" spellCheck="false" defaultValue={userData.email} onChange={(e) => handleChange(e.target.value, "email")} />
+                    <div className="value">{user?.email}</div>
                 </div>
                 <div className="item">
                     <div className="label">Bio</div>
-                    <textarea rows={7} className="value" spellCheck="false" defaultValue={userData.bio} onChange={(e) => handleChange(e.target.value, "bio")}></textarea>
+                    <textarea rows={7} className="value" spellCheck="false" defaultValue={user?.bio ?? ""} ref={bioElement}></textarea>
                 </div>
             </div>
             <div className="btns">
@@ -154,5 +181,6 @@ function EditUser({ setEdit, userData, setUserData }: EditUserType){
                 <div className="save" onClick={handelSave}>Save changes</div>
             </div>
         </div>
+        </>
     )
 }

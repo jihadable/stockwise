@@ -4,7 +4,8 @@ import { ToastContainer } from "react-toastify";
 export type UserType = {
     username: string, 
     email: string,
-    image: string | null
+    image: string | null,
+    bio: string | null
 }
 
 export type ItemType = {
