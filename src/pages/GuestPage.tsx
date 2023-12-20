@@ -8,4 +8,5 @@ export default function GuestPage(){
 
     if (isAuth === false) return <Outlet />
     if (isAuth === true) return <Navigate to={"/dashboard"} />
+    else return null
 }

@@ -12,5 +12,7 @@ export default function VerifySlug(){
     if (items !== null){
         if (items.map(item => item.slug).includes(slug!) === false) return <NotFound />
         if (items.map(item => item.slug).includes(slug!)) return <Outlet />
+        else return null
     }
+    else return null
 }
