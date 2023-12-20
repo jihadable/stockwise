@@ -14,7 +14,7 @@ export default function Edit(){
 
     document.title = "StockWise | Edit item"
 
-    const { items, token, verifyToken } = useContext(AuthContext)
+    const { items, token, refreshData } = useContext(AuthContext)
 
     const { slug } = useParams<{ slug: string }>()
 
@@ -126,12 +126,9 @@ export default function Edit(){
         const data = await response.json()
 
         if (data.status){
-            verifyToken()
-            toast.success("Item edited")
-            
-            setTimeout(() => {
-                navigate("/dashboard")
-            }, 1500);
+            refreshData()
+            toast.success("Item updated")
+            navigate("/dashboard")
         }
     }
 

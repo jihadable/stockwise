@@ -17,12 +17,8 @@
             gap: 1rem;
             width: 50%;
 
-            &.edit-active{
-                width: 70%;
-            }
-
             .img{
-                width: 50%;
+                width: 25%;
                 height: fit-content;
                 display: flex;
                 padding: 1rem;
@@ -46,7 +42,7 @@
             }
 
             .side,.edit{
-                width: 50%;
+                width: 75%;
                 height: fit-content;
                 display: flex;
                 flex-direction: column;
@@ -61,6 +57,7 @@
                     .item{
                         display: flex;
                         flex-direction: column;
+                        color: var(--white);
     
                         .label{
                             font-size: 1.2rem;
@@ -72,14 +69,13 @@
                             color: rgb(255,255,255,.5);
                         }
 
-                        & input.value, & textarea.value{
+                        & textarea.value{
                             padding: 1rem;
                             font-size: 1rem;
                             border: none;
                             outline: none;
                             resize: none;
                             border-radius: .5rem;
-                            color: var(--white);
                             background-color: var(--btn_color);
                         }
                     }

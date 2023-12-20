@@ -12,7 +12,7 @@ export default function AddProduct(){
 
     document.title = "StockWise | Add product"
 
-    const { token, verifyToken } = useContext(AuthContext)
+    const { token, refreshData } = useContext(AuthContext)
 
     const [
         [name, setName],
@@ -89,7 +89,7 @@ export default function AddProduct(){
         const data = await response.json()
 
         if (data.status){
-            verifyToken()
+            refreshData()
             toast.success("Item added")
 
             setName("")

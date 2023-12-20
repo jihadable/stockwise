@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 export type UserType = {
     username: string, 
     email: string,
-    image: string | null,
     bio: string | null
 }
 
@@ -30,7 +29,7 @@ type AuthContextType = {
     setUser: React.Dispatch<React.SetStateAction<UserType | null>>,
     items: ItemType[] | null,
     setItems: React.Dispatch<React.SetStateAction<ItemType[] | null>>,
-    verifyToken: () => Promise<void>
+    refreshData: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -42,7 +41,7 @@ export const AuthContext = createContext<AuthContextType>({
     setUser: () => {},
     items: null,
     setItems: () => {},
-    verifyToken: async() => {}
+    refreshData: async() => {}
 })
 
 export default function AuthFrovider({ children }: { children: ReactNode }){
@@ -52,7 +51,7 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
     const [user, setUser] = useState<UserType | null>(null)
     const [items, setItems] = useState<ItemType[] | null>(null)
 
-    const verifyToken = async() => {
+    const refreshData = async() => {
         const storedToken = localStorage.getItem("token")
 
         if (storedToken) {
@@ -92,11 +91,11 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
     }
 
     useEffect(() => {
-        verifyToken()
+        refreshData()
     }, [isAuth, token])
 
     return (
-        <AuthContext.Provider value={{ isAuth, setIsAuth, token, setToken, user, setUser, items, setItems, verifyToken }}>
+        <AuthContext.Provider value={{ isAuth, setIsAuth, token, setToken, user, setUser, items, setItems, refreshData }}>
             {children}
             <ToastContainer
             position="top-center"

@@ -12,7 +12,7 @@ export default function Detail(){
 
     document.title = "StockWise | Item detail"
 
-    const { items, token, verifyToken } = useContext(AuthContext)
+    const { items, token, refreshData } = useContext(AuthContext)
 
     const { slug } = useParams<{ slug: string }>()
 
@@ -44,7 +44,7 @@ export default function Detail(){
             const data = await response.json()
 
             if (data.status){
-                verifyToken()
+                refreshData()
                 toast.success("Item deleted")
                 navigate("/dashboard")
             }

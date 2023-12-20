@@ -4,15 +4,13 @@ import "../style/Account.css"
 import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AuthContext, UserType } from "../contexts/AuthContext";
-import { IconPhotoEdit, IconPhotoX } from "@tabler/icons-react";
+import userImg from "../assets/user.png"
 
 export default function Account(){
 
     document.title = "StockWise | Account"
 
     const { user } = useContext(AuthContext)
-
-    const storageEndpoint = import.meta.env.VITE_STORAGE_ENDPOINT
 
     const [edit, setEdit] = useState<boolean>(false)
 
@@ -22,39 +20,31 @@ export default function Account(){
             <div className="content">
                 <Header />
                 <div className={`user-info ${edit ? "edit-active" : ""}`}>
-                    {!edit &&
-                    <>
                     <div className="img">
-                        {user?.image &&
-                        <img src={`${storageEndpoint}/${user?.image}`} alt="Image Preview" />}
-                        {!user?.image && 
-                        <div className="no-img">
-                            <IconPhotoX stroke={1.5} />
-                            <p>No image added</p>
-                        </div>}
+                        <img src={userImg} alt="User image" />
                     </div>
+                    {!edit &&
                     <div className="side">
                         <div className="info">
-                        <div className="item">
-                            <div className="label">Username</div>
-                            <div className="value">{user?.username}</div>
-                        </div>
-                        <div className="item">
-                            <div className="label">Email</div>
-                            <div className="value">{user?.email}</div>
-                        </div>
-                        <div className="item">
-                            <div className="label">Bio</div>
-                            <div className="value">{user?.bio ?? "-"}</div>
-                        </div>
+                            <div className="item">
+                                <div className="label">Username</div>
+                                <div className="value">{user?.username}</div>
+                            </div>
+                            <div className="item">
+                                <div className="label">Email</div>
+                                <div className="value">{user?.email}</div>
+                            </div>
+                            <div className="item">
+                                <div className="label">Bio</div>
+                                <div className="value">{user?.bio ?? "-"}</div>
+                            </div>
                         </div>
                         <div className="edit-btn" onClick={() => setEdit(true)}>Edit profile</div>
                     </div>
-                    </>
                     }
                     {
                         edit &&
-                        <EditUser setEdit={setEdit} user={user} storageEndpoint={storageEndpoint} />
+                        <EditUser setEdit={setEdit} user={user} />
                     }
                 </div>
             </div>
@@ -64,56 +54,43 @@ export default function Account(){
 
 type EditUserType = {
     setEdit: React.Dispatch<React.SetStateAction<boolean>>,
-    user: UserType | null,
-    storageEndpoint: string
+    user: UserType | null
 }
 
-function EditUser({ setEdit, user, storageEndpoint }: EditUserType){
+function EditUser({ setEdit, user }: EditUserType){
 
-    const [imgPreview, setImgPreview] = useState("")
+    const bioElement = useRef<HTMLTextAreaElement | null>(null)
 
-    const [
-        [image, setImage],
-        bioElement
-    ] = [
-        useState<File | string>(""),
-        useRef<HTMLTextAreaElement | null>(null)
-    ]
+    const { token, refreshData } = useContext(AuthContext)
 
-    function handleImgChange(event: React.ChangeEvent<HTMLInputElement>){
-        const file = event.target.files?.[0]
+    const handelSave = async() => {
 
-        if (file) {
-            const allowedExtensions = ['jpg', 'jpeg', 'png']
-            const extension = file.name.split('.').pop()?.toLowerCase()
-      
-            if (extension && allowedExtensions.includes(extension)) {
-                setImage(file)
-                const reader = new FileReader();
-      
-                reader.onload = () => {
-                    const base64String = reader.result as string;
-                    setImgPreview(base64String)
-                }
-      
-                reader.readAsDataURL(file);
-            } 
-            else {
-                toast.warn("File's extension is not allowed")
-            }
-        }
-    }
+        const bio = (bioElement.current?.value) === "" ? null : bioElement.current?.value
 
-    const handelSave = () => {
-        toast.warn("Please fill the empty field")
-
-        return
-        
-        toast.success("User edited")
-
-        setTimeout(() => {
+        if (bio === user?.bio){
             setEdit(false)
-        }, 200);
+
+            return
+        }
+        
+        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+
+        const response = await fetch(`${apiEndpoint}/users`, {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({bio})
+        })
+
+        const data = await response.json()
+
+        if (data.status){
+            refreshData()
+            toast.success("User updated")
+            setEdit(false)
+        }
     }
 
     useEffect(() => {
@@ -142,27 +119,8 @@ function EditUser({ setEdit, user, storageEndpoint }: EditUserType){
     }, []);
 
     return (
-        <>
-        <div className="img">
-            {(user?.image && imgPreview === "") &&
-            <img src={`${storageEndpoint}/${user?.image}`} alt="Image Preview" />}
-            {(!user?.image && imgPreview === "") &&
-            <div className="no-img">
-                <IconPhotoX stroke={1.5} />
-                <p>No image added</p>
-            </div>}
-            {imgPreview !== "" &&
-            <img src={imgPreview} alt="Image Preview" />}
-        </div>
         <div className="edit">
             <div className="info">
-                <div className="item">
-                    <input type="file" id="edit-img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
-                    <label htmlFor="edit-img" className="label">
-                        <IconPhotoEdit stroke={1.5} />
-                        <span>Edit image</span>
-                    </label>
-                </div>
                 <div className="item">
                     <div className="label">Username</div>
                     <div className="value">{user?.username}</div>
@@ -173,7 +131,7 @@ function EditUser({ setEdit, user, storageEndpoint }: EditUserType){
                 </div>
                 <div className="item">
                     <div className="label">Bio</div>
-                    <textarea rows={7} className="value" spellCheck="false" defaultValue={user?.bio ?? ""} ref={bioElement}></textarea>
+                    <textarea rows={7} className="value" spellCheck="false" placeholder="Bio" defaultValue={user?.bio ?? ""} ref={bioElement}></textarea>
                 </div>
             </div>
             <div className="btns">
@@ -181,6 +139,5 @@ function EditUser({ setEdit, user, storageEndpoint }: EditUserType){
                 <div className="save" onClick={handelSave}>Save changes</div>
             </div>
         </div>
-        </>
     )
 }
