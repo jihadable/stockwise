@@ -1,4 +1,3 @@
-import { IconBell } from "@tabler/icons-react"
 import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
@@ -25,9 +24,9 @@ export default function Header(){
         <header className="header">
             <div className="user">{user?.username}</div>
             <div className="btns">
-                <div className="notif">
+                {/* <div className="notif">
                     <IconBell stroke={1.5} />
-                </div>
+                </div> */}
                 <button type="button" onClick={handleLogout}>Log out</button>
             </div>
         </header>

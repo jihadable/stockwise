@@ -1,4 +1,5 @@
 import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
+import axios from "axios";
 import { FormEvent, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,14 +12,14 @@ export default function Register(){
     
     const navigate = useNavigate()
 
-    const { setIsAuth } = useContext(AuthContext)
+    const { setToken } = useContext(AuthContext)
 
     const emailElement = useRef<HTMLInputElement | null>(null)
     const usernameElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
     const confirmPasswordElement = useRef<HTMLInputElement | null>(null)
 
-    const onRegister = async(e: FormEvent) => {
+    const handleRegister = async(e: FormEvent) => {
         e.preventDefault()
 
         const [
@@ -34,50 +35,39 @@ export default function Register(){
         ]
 
         if (password !== confirmPassword){
-            toast.warn("The password confirmation does not match.")
+            toast.warn("Konfirmasi password tidak cocok")
 
             return
         }
 
-        const body = new FormData()
+        try {
+            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+    
+            const { data } = await axios.post(
+                `${usersAPIEndpoint}/register`,
+                {
+                    email, username, password
+                }
+            )
 
-        body.append("username", username as string)
-        body.append("email", email as string)
-        body.append("password", password as string)
-
-        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
-
-        const response = await fetch(`${apiEndpoint}/register`, {
-            method: "post",
-            headers: {
-                "Accept": "application/json"
-            },
-            body: body
-        })
-
-        const data = await response.json()
-
-        console.log(data)
-
-        if (data.status){
-            setIsAuth(true)
             localStorage.setItem("token", data.token)
+            setToken(localStorage.getItem("token"))
 
             navigate("/dashboard")
+        } catch(error){
+            console.log(error)
+            toast.error("Gagal melakukan registrasi")
         }
-        else {
-            setIsAuth(false)
-            toast.warn("Username or email is already in use")
-        }
+
     }
 
     return (
         <div className="register">
-            <form method="post" onSubmit={(e) => onRegister(e)}>
+            <form method="post" onSubmit={handleRegister}>
                 <h2>Register Stockwise</h2>
                 <div className="email">
                     <IconMail stroke={1.5} />
-                    <input type="text" placeholder="Email" required ref={emailElement} />
+                    <input type="email" placeholder="Email" required ref={emailElement} />
                 </div>
                 <div className="username">
                     <IconUserCircle stroke={1.5} />

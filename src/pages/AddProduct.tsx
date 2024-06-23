@@ -1,18 +1,21 @@
+import { IconPhotoPlus, IconPhotoX } from "@tabler/icons-react";
+import axios from "axios";
 import { FormEvent, useContext, useState } from "react";
-import Navbar from "../components/Navbar";
-import Header from "../components/Header";
-import "../style/AddProduct.css"
-import { IconPhotoPlus } from "@tabler/icons-react";
-import { toast } from "react-toastify";
 import ReactQuill from 'react-quill';
-import "../style/quill.snow.css"
+import { toast } from "react-toastify";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 import { AuthContext } from "../contexts/AuthContext";
+import { ProductContext } from "../contexts/ProductContext";
+import "../style/AddProduct.css";
+import "../style/quill.snow.css";
 
 export default function AddProduct(){
 
     document.title = "StockWise | Add product"
 
-    const { token, refreshData } = useContext(AuthContext)
+    const { token } = useContext(AuthContext)
+    const { getAllProducts } = useContext(ProductContext)
 
     const [
         [name, setName],
@@ -23,7 +26,7 @@ export default function AddProduct(){
         [description, setDescription]
     ] = [
         useState(""),
-        useState<File | string>(""),
+        useState<File | null>(null),
         useState(""),
         useState(""),
         useState(""),
@@ -57,48 +60,61 @@ export default function AddProduct(){
             }
         }
     }
+
+    const handleRemoveImg = () => {
+        setImage(null)
+        setImgPreview("")
+    }
     
     const handleSubmit = async(e: FormEvent) => {
         e.preventDefault()
         
-        if (name === "" || category === "" || price === "" || parseInt(price) < 1 || quantity === "" || parseInt(quantity) < 1 || description === ""){
-            toast.warn("Please fill the empty field")
+        if (description === ""){
+            toast.warn("Masih ada kolom yang belum diisi!")
 
             return
         }
 
-        const newItem = new FormData()
+        try {
+            const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
 
-        newItem.append("name", name)
-        newItem.append("image", image)
-        newItem.append("category", category)
-        newItem.append("price", price)
-        newItem.append("quantity", quantity)
-        newItem.append("description", description)
-        
-        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+            const newProduct = new FormData()
+    
+            newProduct.append("name", name)
+            if (image !== null){
+                newProduct.append("image", image as Blob)
+            }
+            newProduct.append("category", category)
+            newProduct.append("price", price)
+            newProduct.append("quantity", quantity)
+            newProduct.append("description", description)
+            
+            const { data } = await axios.post(
+                productsAPIEndpoint,
+                newProduct,
+                {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            )
 
-        const response = await fetch(`${apiEndpoint}/items`, {
-            method: "post",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-            body: newItem
-        })
+            console.log(data)
+    
+            getAllProducts()
 
-        const data = await response.json()
-
-        if (data.status){
-            refreshData()
-            toast.success("Item added")
+            toast.success("Berhasil menambahkan product baru")
 
             setName("")
             setImgPreview("")
-            setImage("")
+            setImage(null)
             setCategory("")
             setPrice("")
             setQuantity("")
             setDescription("")
+        } catch(error){
+            console.log(error)
+            toast.error("Gagal menambahkan product baru")
         }
     }
 
@@ -112,22 +128,31 @@ export default function AddProduct(){
                         <div className="form-header">Add new product</div>
                         {
                             imgPreview !== "" &&
-                            <div className="img-preview">
+                            <div className="img-preview" onClick={handleRemoveImg}>
+                                <div className="remove-img">
+                                    <IconPhotoX stroke={1.5} width={48} height={48} />
+                                </div>
                                 <img src={imgPreview} alt="Image preview" />
                             </div>
                         }
                         <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
                         <label htmlFor="img">
                             <IconPhotoPlus stroke={1.5} />
-                            <span>Choose an image file</span>
+                            <span>Choose an image file (jpg, jpeg, png)</span>
                         </label>
-                        <input type="text" id="name" name="name" placeholder="Product name" spellCheck="false" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
-                        <input type="text" id="category" name="category" placeholder="Product category" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
-                        <input type="number" id="price" name="price" min={0} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
-                        <input type="number" id="quantity" name="quantity" min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                        
+                        <input type="text" required placeholder="Product name" spellCheck="false" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
+                        
+                        <input type="text" required placeholder="Product category" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
+                        
+                        <input type="number" required min={1} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                        
+                        <input type="number" required min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                        
                         <div className="react-quill">
                             <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Product description" />
                         </div>
+                        
                         <button type="submit" className="save">Save product</button>
                     </form>
                 </div>

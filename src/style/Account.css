@@ -27,6 +27,7 @@
 
                 & img{
                     width: 100%;
+                    border-radius: 9999px;
                 }
 
                 .no-img{
@@ -69,7 +70,7 @@
                             color: rgb(255,255,255,.5);
                         }
 
-                        & textarea.value{
+                        & input.value, & textarea.value{
                             padding: 1rem;
                             font-size: 1rem;
                             border: none;
