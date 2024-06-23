@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import "../style/Navbar.css"
-import { Link } from "react-router-dom";
-import goTop from "./goTop";
 import { IconLayoutDashboard, IconLayoutSidebar, IconLayoutSidebarLeftCollapse, IconMessage, IconTextPlus, IconUserCircle } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import "../style/Navbar.css";
+import goTop from "../utils/goTop";
 
 export default function Navbar(props: {page: string}){
 

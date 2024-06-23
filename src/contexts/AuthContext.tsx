@@ -1,101 +1,89 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import axios from "axios";
+import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 export type UserType = {
     username: string, 
     email: string,
+    image: string | null,
     bio: string | null
 }
 
-export type ItemType = {
-    id: number,
+export type ProductType = {
+    user: UserType,
     name: string,
-    slug: string | "",
+    slug: string,
     category: string,
     price: number,
     quantity: number,
     image: string | null,
-    description: string,
-    created_at: string,
-    updated_at: string
+    description: string
 }
 
 type AuthContextType = {
-    isAuth: boolean | null,
-    setIsAuth: React.Dispatch<React.SetStateAction<boolean | null>>,
-    token: string | null
+    auth: () => Promise<void>,
+    token: string | null,
     setToken: React.Dispatch<React.SetStateAction<string | null>>,
+    isLogin: boolean | null,
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
     user: UserType | null,
-    setUser: React.Dispatch<React.SetStateAction<UserType | null>>,
-    items: ItemType[] | null,
-    setItems: React.Dispatch<React.SetStateAction<ItemType[] | null>>,
-    refreshData: () => Promise<void>
+    setUser: React.Dispatch<React.SetStateAction<UserType | null>>
 }
 
 export const AuthContext = createContext<AuthContextType>({
-    isAuth: null,
-    setIsAuth: () => {},
+    auth: async() => {},
     token: null,
     setToken: () => {},
+    isLogin: null,
+    setIsLogin: () => {},
     user: null,
-    setUser: () => {},
-    items: null,
-    setItems: () => {},
-    refreshData: async() => {}
+    setUser: () => {}
 })
 
 export default function AuthFrovider({ children }: { children: ReactNode }){
-    const [isAuth, setIsAuth] = useState<boolean | null>(null)
-    const [token, setToken] = useState<string | null>(null)
-
+    const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
+    const [isLogin, setIsLogin] = useState<boolean | null>(null)
     const [user, setUser] = useState<UserType | null>(null)
-    const [items, setItems] = useState<ItemType[] | null>(null)
 
-    const refreshData = async() => {
-        const storedToken = localStorage.getItem("token")
+    const auth = useCallback(async() => {
+        if (!token){
+            localStorage.removeItem("token")
 
-        if (storedToken) {
+            setToken(localStorage.getItem("token"))
+            setIsLogin(false)
+            setUser(null)
 
-            const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+            return
+        }
 
-            const response = await fetch(`${apiEndpoint}/items`, {
+        try {
+            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+
+            const { data: response } = await axios.get(usersAPIEndpoint, {
                 headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Authorization": `Bearer ${storedToken}`
+                    "Authorization" : "Bearer " + token
                 }
             })
 
-            const data = await response.json()
-
-            if (data.message){
-                setIsAuth(false)
-                setToken(null)
-                localStorage.removeItem("token")
-                
-                return
-            }
-            
-            setIsAuth(true)
-            setToken(storedToken)
-            localStorage.setItem("token", storedToken)
-
-            setUser(data.user)
-            setItems(data.items)
-        }
-        else {
-            setIsAuth(false)
-            setToken(null)
+            setIsLogin(true)
+            setUser(response.user)
+        } catch (error){
             localStorage.removeItem("token")
+
+            setToken(localStorage.getItem("token"))
+            setIsLogin(false)
+            setUser(null)
+            
+            toast.error("Session habis, silahkan login ulang")
         }
-    }
+    }, [token])
 
     useEffect(() => {
-        refreshData()
-    }, [isAuth, token])
+        auth()
+    }, [auth])
 
     return (
-        <AuthContext.Provider value={{ isAuth, setIsAuth, token, setToken, user, setUser, items, setItems, refreshData }}>
+        <AuthContext.Provider value={{ auth, token, setToken, isLogin, setIsLogin, user, setUser }}>
             {children}
             <ToastContainer
             position="top-center"
@@ -105,8 +93,7 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
             closeOnClick
             rtl={false}
             draggable
-            theme="colored"
-            />
+            theme="colored" />
         </AuthContext.Provider>
     )
 }

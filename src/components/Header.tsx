@@ -1,32 +1,24 @@
 import { IconBell } from "@tabler/icons-react"
-import "../style/Header.css"
-import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
+import "../style/Header.css"
+import goTop from "../utils/goTop"
 
 export default function Header(){
 
     const navigate = useNavigate()
 
-    const { setIsAuth, token, setToken, user } = useContext(AuthContext)
+    const { setToken, user } = useContext(AuthContext)
 
-    const onLogout = async() => {
-        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+    const handleLogout = () => {
+        localStorage.removeItem("token")
+        
+        setToken(localStorage.getItem("token"))
 
-        const response = await fetch(`${apiEndpoint}/logout`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
+        navigate("/")
 
-        const data = await response.json()
-
-        if (data.status) {
-            setIsAuth(false)
-            setToken(null)
-            localStorage.removeItem("token")
-            navigate("/")
-        }
+        goTop()
     }
 
     return (
@@ -36,7 +28,7 @@ export default function Header(){
                 <div className="notif">
                     <IconBell stroke={1.5} />
                 </div>
-                <button type="button" onClick={onLogout}>Log out</button>
+                <button type="button" onClick={handleLogout}>Log out</button>
             </div>
         </header>
     )

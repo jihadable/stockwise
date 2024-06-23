@@ -1,20 +1,23 @@
 import { IconCoin, IconShoppingCart, IconTriangleSquareCircle } from "@tabler/icons-react"
-import "../style/InventoryStats.css"
 import { useContext } from "react"
-import { AuthContext, ItemType } from "../contexts/AuthContext"
+import { ProductType } from "../contexts/AuthContext"
+import { ProductContext } from "../contexts/ProductContext"
+import "../style/InventoryStats.css"
+import getIdCurrency from "../utils/getIdCurrency"
 
-export default function InventoryStats(){
+export default function Stats(){
 
-    const { items } = useContext(AuthContext)
+    const { products } = useContext(ProductContext)
 
-    const totalProductValue = items ? items.length : 0
+    const totalProductValue = products ? products.length : 0
     
     let totalStoreValue = 0
-    if (items){
-        items.forEach((item: ItemType) => totalStoreValue += item.price * item.quantity)
+
+    if (products){
+        products.forEach((product: ProductType) => totalStoreValue += product.price * product.quantity)
     }
 
-    const totalCategory: number = [...new Set(items?.map((item: ItemType) => item.category))].length
+    const totalCategory: number = [...new Set(products?.map((product: ProductType) => product.category))].length
 
     const inventoryStats = [
         {
@@ -24,7 +27,7 @@ export default function InventoryStats(){
         },
         {
             title: "Total store value",
-            value: `$${items ? totalStoreValue : 0}`,
+            value: getIdCurrency(products ? totalStoreValue : 0),
             svg: <IconCoin stroke={1.5} />
         },
         {

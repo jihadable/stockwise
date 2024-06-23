@@ -1,12 +1,12 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import Header from "../components/Header";
-import InventoryStats from "../components/InventoryStats";
-import Navbar from "../components/Navbar";
-import "../style/Detail.css"
 import { IconArrowLeft, IconEdit, IconPhotoX, IconTrash } from "@tabler/icons-react";
-import { AuthContext, ItemType } from "../contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import InventoryStats from "../components/Stats";
+import { AuthContext, ItemType } from "../contexts/AuthContext";
+import "../style/Detail.css";
 
 export default function Detail(){
 

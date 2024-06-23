@@ -1,71 +1,56 @@
 import { IconLock, IconUserCircle } from "@tabler/icons-react"
-import "../style/Login.css"
+import axios from "axios"
 import { FormEvent, useContext, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
-import { toast } from "react-toastify"
+import "../style/Login.css"
 
 export default function Login(){
 
     document.title = "StockWise | Login"
 
     const navigate = useNavigate()
+    
+    const { setToken } = useContext(AuthContext)
 
-    const { setIsAuth } = useContext(AuthContext)
-
-    const usernameOrEmailElement = useRef<HTMLInputElement | null>(null)
+    const emailElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
 
-    const onLogin = async(e: FormEvent) => {
+    const handleLogin = async(e: FormEvent) => {
         e.preventDefault()
 
-        const [
-            usernameOrEmail, 
-            password
-        ] = [
-            usernameOrEmailElement.current?.value, 
-            passwordElement.current?.value
-        ]
-
-        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
-
-        const response = await fetch(`${apiEndpoint}/login`, {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                login: usernameOrEmail,
-                password: password
+        try {
+            const email = emailElement.current?.value
+            const password = passwordElement.current?.value
+    
+            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+    
+            const { data } = await axios.post(`${usersAPIEndpoint}/login`, {
+                email, password
             })
-        })
+    
+            console.log(data)
 
-        const data = await response.json()
-
-        if (data.status){
-            setIsAuth(true)
             localStorage.setItem("token", data.token)
+            setToken(localStorage.getItem("token"))
 
             navigate("/dashboard")
-        }
-        else {
-            setIsAuth(false)
-            toast.warn("Invalid username or password")
+        } catch(error){
+            console.log(error)
         }
     }
 
     return (
         <div className="login">
-            <form method="post" onSubmit={(e) => onLogin(e)}>
+            <form method="post" onSubmit={handleLogin}>
                 <h2>Login Stockwise</h2>
                 <div className="username-email">
                     <IconUserCircle stroke={1.5} />
-                    <input type="text" placeholder="Username or Email" required ref={usernameOrEmailElement} />
+                    <input type="text" placeholder="Email" required ref={emailElement} />
                 </div>
                 <div className="password">
                     <IconLock stroke={1.5} />
-                    <input type="password" placeholder="Password" required ref={passwordElement} />
+                    <input type="text" placeholder="Password" required ref={passwordElement} />
                 </div>
                 <button type="submit">Login</button>
             </form>

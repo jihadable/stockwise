@@ -1,17 +1,16 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import AddProduct from "./pages/AddProduct";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AuthFrovider from "./contexts/AuthContext";
+import ProductProvider from "./contexts/ProductContext";
 import Account from "./pages/Account";
+import AddProduct from "./pages/AddProduct";
 import Contact from "./pages/Contact";
+import Dashboard from "./pages/Dashboard";
 import Detail from "./pages/Detail";
 import Edit from "./pages/Edit";
-import Login from "./pages/Login";
 import Home from "./pages/Home";
-import Register from "./pages/Register";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import AuthPrivatePage from "./pages/AuthPrivatePage";
-import GuestPage from "./pages/GuestPage";
-import VerifySlug from "./pages/VerifySlug";
+import Register from "./pages/Register";
 
 export default function Router(){
 
@@ -21,36 +20,22 @@ export default function Router(){
 
     return (
         <BrowserRouter>
+            <AuthFrovider>
+            <ProductProvider>
             <Routes>
-                <Route path="*" element={<NotFound />}></Route>
                 <Route path="/" element={<Home />}></Route>
-
-                <Route element={<GuestPage />}>
-                    <Route path="/login" element={<Login />}></Route>
-                    
-                    <Route path="/register" 
-                    element={
-                    <Register />
-                    }></Route>
-                </Route>
-                
-                <Route element={<AuthPrivatePage />}>
-                    <Route path="/dashboard" element={<Dashboard />}></Route>
-
-                    <Route path="/add-product" element={<AddProduct />}></Route>
-                    
-                    <Route path="/account" element={<Account  />}></Route>
-                    
-                    <Route path="/contact" element={<Contact />}></Route>
-
-                    <Route path="/detail/:slug" element={<VerifySlug />}>
-                        <Route path="/detail/:slug" element={<Detail />}></Route>
-                    </Route>
-                    <Route path="/edit/:slug" element={<VerifySlug />}>
-                        <Route path="/edit/:slug" element={<Edit />}></Route>
-                    </Route>
-                </Route>
+                <Route path="/login" element={<Login />}></Route>
+                <Route path="/register"  element={<Register />}></Route>
+                <Route path="/dashboard" element={<Dashboard />}></Route>
+                <Route path="/add-product" element={<AddProduct />}></Route>
+                <Route path="/account" element={<Account  />}></Route>
+                <Route path="/contact" element={<Contact />}></Route>
+                <Route path="/detail/:slug" element={<Detail />}></Route>
+                <Route path="/edit/:slug" element={<Edit />}></Route>
+                <Route path="*" element={<NotFound />}></Route>
             </Routes>
+            </ProductProvider>
+            </AuthFrovider>
         </BrowserRouter>
     )
 }

@@ -1,9 +1,9 @@
-import "../style/Register.css"
 import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
 import { FormEvent, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
+import "../style/Register.css";
 
 export default function Register(){
     
@@ -39,21 +39,25 @@ export default function Register(){
             return
         }
 
+        const body = new FormData()
+
+        body.append("username", username as string)
+        body.append("email", email as string)
+        body.append("password", password as string)
+
         const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
 
         const response = await fetch(`${apiEndpoint}/register`, {
             method: "post",
             headers: {
-                "Content-Type": "application/json"
+                "Accept": "application/json"
             },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password
-            })
+            body: body
         })
 
         const data = await response.json()
+
+        console.log(data)
 
         if (data.status){
             setIsAuth(true)

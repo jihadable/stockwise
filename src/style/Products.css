@@ -1,6 +1,6 @@
 @import url("./index.css");
 
-.inventory-items{
+.products{
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
@@ -24,60 +24,6 @@
             align-items: center;
             gap: 1rem;
             color: var(--white);
-
-            .currency{
-                display: flex;
-                flex-direction: column;
-                position: relative;
-                width: fit-content;
-                font-size: .9rem;
-        
-                .currency-btn{
-                    display: flex;
-                    align-items: center;
-                    gap: 0.2rem;
-                    padding: 0.5rem;
-                    background-color: var(--btn_color);
-                    border-radius: .5rem;
-                    cursor: pointer;
-                    transition: all .2s;
-    
-                    &:hover{
-                        background-color: rgb(255,255,255,.2);
-                    }
-        
-                    & svg{
-                        width: 1.2rem;
-                        height: 1.2rem;
-                    }
-                }
-        
-                .currency-menu{
-                    position: absolute;
-                    top: 110%;
-                    max-height: 0;
-                    overflow: hidden;
-                    transition: all .2s;
-                    background-color: var(--white);
-                    backdrop-filter: blur(5px);
-                    border-radius: .5rem;
-                    color: black;
-                    
-                    &.active{
-                        max-height: 999px;
-                    }
-        
-                    .item{
-                        padding: .3rem .5rem;
-                        white-space: nowrap;
-                        cursor: pointer;
-        
-                        &:hover{
-                            background-color: rgb(0,0,0,.1);
-                        }
-                    }
-                }
-            }
 
             .sort-by{
                 display: flex;
@@ -180,7 +126,7 @@
         }
     }
 
-    .items-table{
+    .products-table{
         margin-top: 1rem;
         display: flex;
         padding-bottom: 1rem;
@@ -264,7 +210,7 @@
 }
 
 @media screen and (max-width: 480px) {
-    .inventory-items{
+    .products{
         .tools{
             flex-direction: column;
             align-items: start;
