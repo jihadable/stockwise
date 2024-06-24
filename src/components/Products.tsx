@@ -1,4 +1,4 @@
-import { IconDatabaseX, IconEdit, IconEye, IconSearch, IconSortDescending, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconEye, IconSearch, IconSortDescending, IconTrash } from "@tabler/icons-react";
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -32,9 +32,10 @@ export default function Products(){
                 
                 console.log(data)
 
-                getAllProducts()
+                await getAllProducts()
                 toast.success("Berhasil menghapus product")
             } catch(error){
+                console.log(error)
                 toast.error("Gagal menghapus product")
             }
         }
@@ -82,7 +83,7 @@ export default function Products(){
         }
 
         document.addEventListener("keyup", function(e: KeyboardEvent){
-            if (e.key === '/' && searchInput.current){
+            if (e.key === "/" && searchInput.current){
                 searchInput.current.focus()
             }
         })
@@ -117,10 +118,6 @@ export default function Products(){
                             ))
                         }
                         </div>
-                    </div>
-                    <div className="delete-all">
-                        <IconDatabaseX stroke={1.5} />
-                        <span>Delete all</span>
                     </div>
                 </div>
                 <div className="search">

@@ -39,8 +39,8 @@ export default function AddProduct(){
         const file = event.target.files?.[0]
         
         if (file) {
-            const allowedExtensions = ['jpg', 'jpeg', 'png']
-            const extension = file.name.split('.').pop()?.toLowerCase()
+            const allowedExtensions = ["jpg", "jpeg", "png"]
+            const extension = file.name.split(".").pop()?.toLowerCase()
       
             if (extension && allowedExtensions.includes(extension)) {
                 setImage(file)
@@ -54,7 +54,7 @@ export default function AddProduct(){
                 reader.readAsDataURL(file);
             } 
             else {
-                toast.warn("File's extension is not allowed")
+                toast.warn("Ekstensi file tidak diterima")
 
                 return
             }
@@ -100,9 +100,7 @@ export default function AddProduct(){
             )
 
             console.log(data)
-    
-            getAllProducts()
-
+            await getAllProducts()
             toast.success("Berhasil menambahkan product baru")
 
             setName("")
@@ -130,7 +128,8 @@ export default function AddProduct(){
                             imgPreview !== "" &&
                             <div className="img-preview" onClick={handleRemoveImg}>
                                 <div className="remove-img">
-                                    <IconPhotoX stroke={1.5} width={48} height={48} />
+                                    <IconPhotoX stroke={1.5} />
+                                    <span>Klik untuk hapus</span>
                                 </div>
                                 <img src={imgPreview} alt="Image preview" />
                             </div>

@@ -2,6 +2,7 @@ import { IconLock, IconUserCircle } from "@tabler/icons-react"
 import axios from "axios"
 import { FormEvent, useContext, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 import { AuthContext } from "../contexts/AuthContext"
 import "../style/Login.css"
 
@@ -37,6 +38,7 @@ export default function Login(){
             navigate("/dashboard")
         } catch(error){
             console.log(error)
+            toast.error("Gagal login")
         }
     }
 
