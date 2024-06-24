@@ -82,7 +82,7 @@ export default function Register(){
                 </div>
                 <button type="submit">Register</button>
             </form>
-            <p>Already have an account? <Link to={"/login"}>Login</Link></p>
+            <p>Sudah punya akun? <Link to={"/login"}>Login</Link></p>
         </div>
     )
 }

@@ -29,8 +29,6 @@ export default function Login(){
             const { data } = await axios.post(`${usersAPIEndpoint}/login`, {
                 email, password
             })
-    
-            console.log(data)
 
             localStorage.setItem("token", data.token)
             setToken(localStorage.getItem("token"))
@@ -55,7 +53,7 @@ export default function Login(){
                 </div>
                 <button type="submit">Login</button>
             </form>
-            <p>Don't have an account? <Link to={"/register"}>Register</Link></p>
+            <p>Belum punya akun? <Link to={"/register"}>Register</Link></p>
         </div>
     )
 }
