@@ -38,22 +38,21 @@ export default function Detail(){
         const storageAPIEndpoint = import.meta.env.VITE_STORAGE_API_ENDPOINT
     
         const handleDelete = async() => {
-            if (confirm("Apakah Anda yakin akan menghapus product ini?")){
+            if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
                 try {
                     const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
 
-                    const { data } = await axios.delete(`${productsAPIEndpoint}/${product?.slug}`, {
+                    await axios.delete(`${productsAPIEndpoint}/${product?.slug}`, {
                         headers: {
                             "Authorization": "Bearer " + token
                         }
                     })
 
-                    console.log(data)
                     await getAllProducts()
+                    toast.success("Berhasil menghapus produk")
                     navigate("/dashboard")
                 } catch(error){
-                    console.log(error)
-                    toast.error("Gagal menghapus product")
+                    toast.error("Gagal menghapus produk")
                 }
             }
         }

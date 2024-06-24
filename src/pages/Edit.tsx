@@ -117,7 +117,7 @@ export default function Edit(){
         
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
 
-                const { data } = await axios.post(
+                await axios.post(
                     `${productsAPIEndpoint}/${product?.slug}`,
                     newProduct,
                     {
@@ -130,13 +130,11 @@ export default function Edit(){
                     }
                 )
 
-                console.log(data)
                 await getAllProducts()
-                toast.success("Berhasil memperbarui product")
+                toast.success("Berhasil memperbarui produk")
                 navigate("/dashboard")
             } catch(error){
-                console.log(error)
-                toast.error("Gagal memperbarui product")
+                toast.error("Gagal memperbarui produk")
             }
     
         }

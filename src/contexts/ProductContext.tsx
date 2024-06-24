@@ -1,5 +1,6 @@
 import axios from "axios"
 import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import { AuthContext, UserType } from "./AuthContext"
 
 export type ProductType = {
@@ -48,7 +49,7 @@ export default function ProductProvider({ children }: { children: ReactNode }){
 
             setProducts(data.products)
         } catch(error){
-            console.log(error)
+            toast.error("Gagal membaca data produk")
         }
     }, [token, setToken])
 

@@ -17,11 +17,11 @@ export default function Products(){
 
     // delete
     const handleDelete = async(slug: string) => {
-        if (confirm("Apakah Anda yakin akan menghapus product ini?")){
+        if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
             try {
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
     
-                const { data } = await axios.delete(
+                await axios.delete(
                     `${productsAPIEndpoint}/${slug}`,
                     {
                         headers: {
@@ -29,14 +29,11 @@ export default function Products(){
                         }
                     }
                 )
-                
-                console.log(data)
 
                 await getAllProducts()
-                toast.success("Berhasil menghapus product")
+                toast.success("Berhasil menghapus produk")
             } catch(error){
-                console.log(error)
-                toast.error("Gagal menghapus product")
+                toast.error("Gagal menghapus produk")
             }
         }
     }

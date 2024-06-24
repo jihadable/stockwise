@@ -89,7 +89,7 @@ export default function AddProduct(){
             newProduct.append("quantity", quantity)
             newProduct.append("description", description)
             
-            const { data } = await axios.post(
+            await axios.post(
                 productsAPIEndpoint,
                 newProduct,
                 {
@@ -99,9 +99,8 @@ export default function AddProduct(){
                 }
             )
 
-            console.log(data)
             await getAllProducts()
-            toast.success("Berhasil menambahkan product baru")
+            toast.success("Berhasil menambahkan produk baru")
 
             setName("")
             setImgPreview("")
@@ -111,8 +110,7 @@ export default function AddProduct(){
             setQuantity("")
             setDescription("")
         } catch(error){
-            console.log(error)
-            toast.error("Gagal menambahkan product baru")
+            toast.error("Gagal menambahkan produk baru")
         }
     }
 
@@ -144,7 +142,7 @@ export default function AddProduct(){
                         
                         <input type="text" required placeholder="Kategori" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
                         
-                        <input type="number" required min={1} placeholder="Harga" value={price} onChange={(e) => setPrice(e.target.value)} />
+                        <input type="number" required min={1} placeholder="Harga (Rp)" value={price} onChange={(e) => setPrice(e.target.value)} />
                         
                         <input type="number" required min={1} placeholder="Kuantitas" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                         

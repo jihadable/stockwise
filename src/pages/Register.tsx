@@ -55,7 +55,6 @@ export default function Register(){
 
             navigate("/dashboard")
         } catch(error){
-            console.log(error)
             toast.error("Gagal melakukan registrasi")
         }
 

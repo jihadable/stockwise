@@ -85,7 +85,7 @@ function EditUser({ setEdit, user }: EditUserPropsType){
 
             const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
 
-            const { data } = await axios.post(
+            await axios.post(
                 usersAPIEndpoint,
                 { username, bio: bio === "" ? null : bio },
                 {
@@ -98,12 +98,10 @@ function EditUser({ setEdit, user }: EditUserPropsType){
                 }
             )
 
-            console.log(data)
             await auth()
             toast.success("Berhasil memperbarui data pengguna")
             setEdit(false)
         } catch(error){
-            console.log(error)
             toast.error("Gagal memperbarui data pengguna")
         }
     }
