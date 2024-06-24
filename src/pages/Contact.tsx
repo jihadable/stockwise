@@ -71,4 +71,6 @@ export default function Contact(){
             </div>
         )
     }
+
+    return null
 }

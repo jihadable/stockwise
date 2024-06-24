@@ -142,4 +142,6 @@ export default function Detail(){
             </div>
         )
     }
+
+    return null
 }

@@ -57,6 +57,8 @@ export default function Account(){
             </div>
         )
     }
+
+    return null
 }
 
 type EditUserPropsType = {
