@@ -147,7 +147,7 @@ export default function Edit(){
                 <div className="content">
                     <Header />
                     <div className="edit-container">
-                        <div className="edit-header">Edit product</div>
+                        <div className="edit-header">Edit produk</div>
                         <div className="edit-content">
                             <div className="img">
                                 {
@@ -158,7 +158,7 @@ export default function Edit(){
                                     !product?.image && imgPreview === "" &&
                                     <div className="no-img">
                                         <IconPhotoX stroke={1.5} />
-                                        <p>No image added</p>
+                                        <p>Tidak ada gambar</p>
                                     </div>
                                 }
                                 {
@@ -171,41 +171,41 @@ export default function Edit(){
                                     <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
                                     <label htmlFor="img">
                                         <IconPhotoEdit stroke={1.5} />
-                                        <span>Edit image</span>
+                                        <span>Ganti gambar</span>
                                     </label>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Name</span>
+                                        <span>Nama</span>
                                     </div>
                                     <input type="text" className="value" required spellCheck="false" defaultValue={product?.name} ref={nameElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Category</span>
+                                        <span>Kategori</span>
                                     </div>
                                     <input type="text" className="value" required spellCheck="false" defaultValue={product?.category} ref={categoryElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Price</span>
+                                        <span>Harga (Rp)</span>
                                     </div>
                                     <input type="number" min={1} className="value" required spellCheck="false" defaultValue={product?.price} ref={priceElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Quantity</span>
+                                        <span>Kuantitas</span>
                                     </div>
                                     <input type="number" min={1} className="value" required spellCheck="false" defaultValue={product?.quantity} ref={quantityElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Description</span>
+                                        <span>Deskripsi</span>
                                     </div>
                                     <div className="react-quill value">
                                         <ReactQuill theme="snow" value={description} onChange={setDescription} className="quill-edit" />
@@ -213,7 +213,7 @@ export default function Edit(){
                                 </div>
                                 <div className="btns">
                                     <Link to={"/dashboard"} className="cancel">Cancel</Link>
-                                    <div className="save" onClick={handleSave}>Save changes</div>
+                                    <div className="save" onClick={handleSave}>Simpan</div>
                                 </div>
                             </div>
                         </div>

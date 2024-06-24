@@ -39,19 +39,19 @@ export default function Contact(){
                     <Header />
                     <div className="contact-container">
                         <div className="header">
-                            <div>Your thoughts are important to us</div>
-                            <div>Feel free to drop us a message</div>
+                            <div>Ulasan Anda penting bagi kami</div>
+                            <div>Jangan ragu untuk mengirimkan pesan kepada kami</div>
                         </div>
                         <div className="form-info">
                             <form>
-                                <textarea rows={10} placeholder="Message" spellCheck="false"></textarea>
+                                <textarea rows={10} placeholder="Pesan" spellCheck="false"></textarea>
                                 <button type="button">
-                                    <span>Send</span>
+                                    <span>Submit</span>
                                     <IconMailForward stroke={1.5} />
                                 </button>
                             </form>
                             <div className="contact-info">
-                                <div className="header">Our contact information</div>
+                                <div className="header">Informasi kontak</div>
                                 <div className="info">
                                 {
                                     info.map((item, index) => {

@@ -21,17 +21,17 @@ export default function Stats(){
 
     const inventoryStats = [
         {
-            title: "Total Product",
+            title: "Total Produk",
             value: totalProductValue,
             svg: <IconShoppingCart stroke={1.5} />
         },
         {
-            title: "Total store value",
+            title: "Total value",
             value: getIdCurrency(products ? totalStoreValue : 0),
             svg: <IconCoin stroke={1.5} />
         },
         {
-            title: "All categories",
+            title: "Kategori",
             value: totalCategory,
             svg: <IconTriangleSquareCircle stroke={1.5} />
         }

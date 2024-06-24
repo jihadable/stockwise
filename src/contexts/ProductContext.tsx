@@ -27,9 +27,16 @@ export const ProductContext = createContext<ProductContextType>({
 
 export default function ProductProvider({ children }: { children: ReactNode }){
     const [products, setProducts] = useState<ProductType[] | null>(null)
-    const { token } = useContext(AuthContext)
+    const { token, setToken } = useContext(AuthContext)
 
     const getAllProducts = useCallback(async() => {
+        if (!token){
+            localStorage.removeItem("token")
+            setToken(localStorage.getItem("token"))
+
+            return
+        } 
+
         try {
             const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
 
@@ -43,7 +50,7 @@ export default function ProductProvider({ children }: { children: ReactNode }){
         } catch(error){
             console.log(error)
         }
-    }, [token])
+    }, [token, setToken])
 
     useEffect(() => {
         getAllProducts()

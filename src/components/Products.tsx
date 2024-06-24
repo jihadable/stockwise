@@ -46,7 +46,7 @@ export default function Products(){
 
     // sorting
     const [sortingValue, setSortingValue] = useState("Default")
-    const sortingItems = ["Default", "Alphabet", "Lowest price", "Lowest quantity", "Lowest value"]
+    const sortingItems = ["Default", "Abjad", "Harga termurah", "Kuantitas terendah", "Value terendah"]
     const [showSortingMenu, setShowSortingMenu] = useState(false)
     const sortingBtn = useRef<HTMLDivElement | null>(null)
 
@@ -55,16 +55,16 @@ export default function Products(){
 
         tempProducts = tempProducts.filter(product => product.name.toLowerCase().includes(keyword.toLowerCase()))
 
-        if (sortingValue === "Alphabet") {
+        if (sortingValue === "Abjad") {
             tempProducts.sort((a, b) => a.name.localeCompare(b.name))
         } 
-        else if (sortingValue === "Lowest price") {
+        else if (sortingValue === "Harga termurah") {
             tempProducts.sort((a, b) => a.price - b.price)
         } 
-        else if (sortingValue === "Lowest quantity") {
+        else if (sortingValue === "Kuantitas terendah") {
             tempProducts.sort((a, b) => a.quantity - b.quantity)
         } 
-        else if (sortingValue === "Lowest value") {
+        else if (sortingValue === "Value terendah") {
             tempProducts.sort((a, b) => (a.price * a.quantity) - (b.price * b.quantity))
         }
 
@@ -103,7 +103,7 @@ export default function Products(){
             draggable
             theme="colored"
             />
-            <div className="header">Products</div>
+            <div className="header">Inventory</div>
             <div className="tools">
                 <div className="left">
                     <div className="sort-by">
@@ -124,7 +124,7 @@ export default function Products(){
                     <label htmlFor="search">
                         <IconSearch stroke={1.5} />
                     </label>
-                    <input type="text" id="search" placeholder="Search product" spellCheck="false" value={keyword} onChange={(e) => setKeyword(e.target.value)} ref={searchInput} />
+                    <input type="text" id="search" placeholder="Cari produk" spellCheck="false" value={keyword} onChange={(e) => setKeyword(e.target.value)} ref={searchInput} />
                 </div>
             </div>
             <div className="products-table">
@@ -132,12 +132,12 @@ export default function Products(){
                     <thead className="table-header">
                         <tr>
                             <td>No</td>
-                            <td>Name</td>
-                            <td>Category</td>
-                            <td>Price</td>
-                            <td>Quantity</td>
+                            <td>Nama</td>
+                            <td>Kategori</td>
+                            <td>Harga</td>
+                            <td>Kuantitas</td>
                             <td>Value</td>
-                            <td>Actions</td>
+                            <td>Aksi</td>
                         </tr>
                     </thead>
                     <tbody>

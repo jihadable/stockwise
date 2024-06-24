@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Header from "../components/Header";
@@ -68,14 +69,39 @@ function EditUser({ setEdit, user }: EditUserPropsType){
     const usernameElement = useRef<HTMLInputElement | null>(null)
     const bioElement = useRef<HTMLTextAreaElement | null>(null)
 
-    // const { token, auth } = useContext(AuthContext)
+    const { token, auth } = useContext(AuthContext)
 
     const handelSave = async() => {
+        const username = usernameElement.current?.value
+
+        if (username === ""){
+            toast.warn("Masih ada kolom yang belum diisi!")
+
+            return
+        }
+        
         try {
-            const username = usernameElement.current?.value
             const bio = bioElement.current?.value
 
-            console.log(username, bio)
+            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+
+            const { data } = await axios.post(
+                usersAPIEndpoint,
+                { username, bio: bio === "" ? null : bio },
+                {
+                    params: {
+                        "_method": "patch"
+                    },
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            )
+
+            console.log(data)
+            await auth()
+            toast.success("Berhasil memperbarui data pengguna")
+            setEdit(false)
         } catch(error){
             console.log(error)
             toast.error("Gagal memperbarui data pengguna")
@@ -87,7 +113,7 @@ function EditUser({ setEdit, user }: EditUserPropsType){
             <div className="info">
                 <div className="item">
                     <div className="label">Username</div>
-                    <input type="text" className="value" placeholder="Username" defaultValue={user?.username} ref={usernameElement} />
+                    <input type="text" className="value" placeholder="Username" required defaultValue={user?.username} ref={usernameElement} />
                 </div>
                 <div className="item">
                     <div className="label">Email</div>

@@ -67,9 +67,9 @@ export default function Detail(){
                     <div className="detail-container">
                         <Link to="/dashboard" className="back">
                             <IconArrowLeft stroke={1.5} />
-                            <span>Back to dashboard</span>
+                            <span>Kembali ke dashboard</span>
                         </Link>
-                        <div className="detail-header">Product detail</div>
+                        <div className="detail-header">Detail produk</div>
                         <div className="actions">
                             <Link to={`/edit/${slug}`} className="edit-btn">
                                 <IconEdit stroke={1.5} />
@@ -77,7 +77,7 @@ export default function Detail(){
                             </Link>
                             <div className="delete-btn" onClick={handleDelete}>
                                 <IconTrash stroke={1.5} />
-                                <span>Delete</span>
+                                <span>Hapus</span>
                             </div>
                         </div>
                         <div className="detail-content">
@@ -104,35 +104,35 @@ export default function Detail(){
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Name</span>
+                                        <span>Nama</span>
                                     </div>
                                     <div className="value">{product?.name}</div>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Category</span>
+                                        <span>Kategori</span>
                                     </div>
                                     <div className="value">{product?.category}</div>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Price</span>
+                                        <span>Harga</span>
                                     </div>
                                     <div className="value">{getIdCurrency(product ? product.price : 0)}</div>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Quantity</span>
+                                        <span>Kuantitas</span>
                                     </div>
                                     <div className="value">{product?.quantity}</div>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Description</span>
+                                        <span>Deskripsi</span>
                                     </div>
                                     <div className="value" dangerouslySetInnerHTML={{__html: product?.description ?? ""}} />
                                 </div>

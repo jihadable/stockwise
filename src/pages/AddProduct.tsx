@@ -123,7 +123,7 @@ export default function AddProduct(){
                 <Header />
                 <div className="add-new-product">
                     <form onSubmit={handleSubmit}>
-                        <div className="form-header">Add new product</div>
+                        <div className="form-header">Tambah produk baru</div>
                         {
                             imgPreview !== "" &&
                             <div className="img-preview" onClick={handleRemoveImg}>
@@ -137,22 +137,22 @@ export default function AddProduct(){
                         <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
                         <label htmlFor="img">
                             <IconPhotoPlus stroke={1.5} />
-                            <span>Choose an image file (jpg, jpeg, png)</span>
+                            <span>Pilih gambar (jpg, jpeg, png)</span>
                         </label>
                         
-                        <input type="text" required placeholder="Product name" spellCheck="false" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" required placeholder="Nama" spellCheck="false" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
                         
-                        <input type="text" required placeholder="Product category" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
+                        <input type="text" required placeholder="Kategori" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
                         
-                        <input type="number" required min={1} placeholder="Product price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                        <input type="number" required min={1} placeholder="Harga" value={price} onChange={(e) => setPrice(e.target.value)} />
                         
-                        <input type="number" required min={1} placeholder="Product quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                        <input type="number" required min={1} placeholder="Kuantitas" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                         
                         <div className="react-quill">
-                            <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Product description" />
+                            <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Deskripsi" />
                         </div>
                         
-                        <button type="submit" className="save">Save product</button>
+                        <button type="submit" className="save">Simpan</button>
                     </form>
                 </div>
             </div>
