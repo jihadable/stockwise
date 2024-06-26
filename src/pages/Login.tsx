@@ -1,6 +1,6 @@
 import { IconLock, IconUserCircle } from "@tabler/icons-react"
 import axios from "axios"
-import { FormEvent, useContext, useRef } from "react"
+import { FormEvent, useContext, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { AuthContext } from "../contexts/AuthContext"
@@ -11,9 +11,9 @@ export default function Login(){
     document.title = "StockWise | Login"
 
     const navigate = useNavigate()
-    
-    const { setToken } = useContext(AuthContext)
+    const { setToken, setIsLogin } = useContext(AuthContext)
 
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const emailElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
 
@@ -21,6 +21,8 @@ export default function Login(){
         e.preventDefault()
 
         try {
+            setIsLoading(true)
+
             const email = emailElement.current?.value
             const password = passwordElement.current?.value
     
@@ -32,10 +34,15 @@ export default function Login(){
 
             localStorage.setItem("token", data.token)
             setToken(localStorage.getItem("token"))
+            setIsLogin(true)
 
             navigate("/dashboard")
+
+            setIsLoading(false)
         } catch(error){
+            localStorage.removeItem("token")
             toast.error("Gagal login")
+            setIsLoading(false)
         }
     }
 
@@ -49,9 +56,15 @@ export default function Login(){
                 </div>
                 <div className="password">
                     <IconLock stroke={1.5} />
-                    <input type="text" placeholder="Password" required ref={passwordElement} />
+                    <input type="password" placeholder="Password" required ref={passwordElement} />
                 </div>
-                <button type="submit">Login</button>
+                {
+                    isLoading ?
+                    <button>
+                        <div className="custom-loader"></div>
+                    </button> :
+                    <button type="submit">Login</button>
+                }
             </form>
             <p>Belum punya akun? <Link to={"/register"}>Register</Link></p>
         </div>

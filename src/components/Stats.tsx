@@ -1,7 +1,6 @@
 import { IconCoin, IconShoppingCart, IconTriangleSquareCircle } from "@tabler/icons-react"
 import { useContext } from "react"
-import { ProductType } from "../contexts/AuthContext"
-import { ProductContext } from "../contexts/ProductContext"
+import { ProductContext, ProductType } from "../contexts/ProductContext"
 import "../style/InventoryStats.css"
 import getIdCurrency from "../utils/getIdCurrency"
 

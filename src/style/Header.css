@@ -18,34 +18,19 @@ header{
         text-overflow: ellipsis;
     }
 
-    .btns{
-        display: flex;
-        gap: .5rem;
-        align-items: center;
+    & button{
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: .5rem 1rem;
+        border-radius: .5rem;
+        background-color: var(--btn_color);
+        color: var(--white);
+        font-size: 1rem;
+        transition: all .2s;
 
-        .notif{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            border-radius: .5rem;
-            cursor: pointer;
-        }
-
-        & button{
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: .5rem 1rem;
-            border-radius: .5rem;
-            background-color: var(--btn_color);
-            color: var(--white);
-            font-size: 1rem;
-            transition: all .2s;
-    
-            &:hover{
-                background-color: rgb(255, 255, 255,.2);
-            }
+        &:hover{
+            background-color: rgb(255, 255, 255,.2);
         }
     }
 }

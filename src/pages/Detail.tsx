@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import InventoryStats from "../components/Stats";
-import { AuthContext, ProductType } from "../contexts/AuthContext";
-import { ProductContext } from "../contexts/ProductContext";
+import { AuthContext } from "../contexts/AuthContext";
+import { ProductContext, ProductType } from "../contexts/ProductContext";
 import "../style/Detail.css";
 import getIdCurrency from "../utils/getIdCurrency";
 import NotFound from "./NotFound";
@@ -21,6 +21,8 @@ export default function Detail(){
     const { slug } = useParams()
 
     const [product, setProduct] = useState<ProductType | null>(null)
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     
     useEffect(() => {
         if (products !== null){
@@ -40,6 +42,8 @@ export default function Detail(){
         const handleDelete = async() => {
             if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
                 try {
+                    setIsLoading(true)
+
                     const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
 
                     await axios.delete(`${productsAPIEndpoint}/${product?.slug}`, {
@@ -51,8 +55,11 @@ export default function Detail(){
                     await getAllProducts()
                     toast.success("Berhasil menghapus produk")
                     navigate("/dashboard")
+
+                    setIsLoading(false)
                 } catch(error){
                     toast.error("Gagal menghapus produk")
+                    setIsLoading(false)
                 }
             }
         }
@@ -74,10 +81,16 @@ export default function Detail(){
                                 <IconEdit stroke={1.5} />
                                 <span>Edit</span>
                             </Link>
-                            <div className="delete-btn" onClick={handleDelete}>
-                                <IconTrash stroke={1.5} />
-                                <span>Hapus</span>
-                            </div>
+                            {
+                                isLoading ?
+                                <div className="loader">
+                                    <div className="custom-loader"></div>
+                                </div> :
+                                <div className="delete-btn" onClick={handleDelete}>
+                                    <IconTrash stroke={1.5} />
+                                    <span>Hapus</span>
+                                </div>
+                            }
                         </div>
                         <div className="detail-content">
                             <div className="img">

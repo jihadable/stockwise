@@ -6,3 +6,18 @@
     --darkGreen: #0d1f2d;
     --btn_color: rgb(255,255,255,.1);
 }
+
+.custom-loader {
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    background: 
+      radial-gradient(farthest-side,#2E8B57 94%,#0000) top/4px 4px no-repeat,
+      conic-gradient(#0000 30%,#2E8B57);
+    -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 4px),#000 0);
+    animation:s3 1s infinite linear;
+}
+
+@keyframes s3{ 
+    100%{transform: rotate(1turn)}
+}

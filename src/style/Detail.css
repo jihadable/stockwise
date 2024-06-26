@@ -60,6 +60,22 @@
                 .delete-btn{
                     background-color: var(--red);
                 }
+
+                .loader{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    padding: 0 2.18rem;
+                    border-radius: .2rem;
+                    background-color: var(--red);
+                    
+                    .custom-loader{
+                        background: 
+                        radial-gradient(farthest-side,#000 94%,#0000) top/4px 4px no-repeat,
+                        conic-gradient(#0000 30%,#000);
+                    }
+                }
             }
         
             .detail-content{

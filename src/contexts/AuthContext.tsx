@@ -1,23 +1,12 @@
 import axios from "axios";
 import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 export type UserType = {
     username: string, 
     email: string,
     image: string | null,
     bio: string | null
-}
-
-export type ProductType = {
-    user: UserType,
-    name: string,
-    slug: string,
-    category: string,
-    price: number,
-    quantity: number,
-    image: string | null,
-    description: string
 }
 
 type AuthContextType = {
@@ -73,14 +62,12 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
             setToken(localStorage.getItem("token"))
             setIsLogin(false)
             setUser(null)
-            
-            toast.error("Session habis, silahkan login ulang")
         }
     }, [token])
 
     useEffect(() => {
         auth()
-    }, [auth])
+    }, [token, auth])
 
     return (
         <AuthContext.Provider value={{ auth, token, setToken, isLogin, setIsLogin, user, setUser }}>

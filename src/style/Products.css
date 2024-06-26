@@ -178,7 +178,9 @@
                             display: flex;
                             gap: .5rem;
         
-                            & div, & a{
+                            & button, & a{
+                                border: none;
+                                outline: none;
                                 cursor: pointer;
                                 padding: 0.2rem;
                                 display: flex;
@@ -199,6 +201,21 @@
         
                                 &.delete{
                                     background-color: var(--red);
+                                }
+                            }
+
+                            .loader{
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background-color: var(--red);
+                                padding: 0.355rem;
+                                border-radius: .2rem;
+
+                                .custom-loader{
+                                    background: 
+                                    radial-gradient(farthest-side,#000 94%,#0000) top/4px 4px no-repeat,
+                                    conic-gradient(#0000 30%,#000);
                                 }
                             }
                         }

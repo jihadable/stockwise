@@ -23,7 +23,7 @@
         align-items: center;
         gap: 0.5rem;
 
-        & > h1, div{
+        & > h2, div{
             text-align: center;
         }
 

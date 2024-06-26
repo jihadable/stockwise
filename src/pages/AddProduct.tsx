@@ -18,6 +18,8 @@ export default function AddProduct(){
     const { token } = useContext(AuthContext)
     const { getAllProducts } = useContext(ProductContext)
 
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
     const [
         [name, setName],
         [image, setImage],
@@ -84,6 +86,8 @@ export default function AddProduct(){
             }
     
             try {
+                setIsLoading(true)
+
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
     
                 const newProduct = new FormData()
@@ -117,8 +121,11 @@ export default function AddProduct(){
                 setPrice("")
                 setQuantity("")
                 setDescription("")
+
+                setIsLoading(false)
             } catch(error){
                 toast.error("Gagal menambahkan produk baru")
+                setIsLoading(false)
             }
         }
     
@@ -158,7 +165,13 @@ export default function AddProduct(){
                                 <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Deskripsi" />
                             </div>
                             
-                            <button type="submit" className="save">Simpan</button>
+                            {
+                                isLoading ?
+                                <div className="loader">
+                                    <div className="custom-loader"></div>
+                                </div> :
+                                <button type="submit" className="save">Simpan</button>
+                            }
                         </form>
                     </div>
                 </div>

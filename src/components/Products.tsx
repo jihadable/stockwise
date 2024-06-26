@@ -3,8 +3,8 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { AuthContext, ProductType } from "../contexts/AuthContext";
-import { ProductContext } from "../contexts/ProductContext";
+import { AuthContext } from "../contexts/AuthContext";
+import { ProductContext, ProductType } from "../contexts/ProductContext";
 import "../style/Products.css";
 import getIdCurrency from "../utils/getIdCurrency";
 
@@ -13,12 +13,18 @@ export default function Products(){
     const { token } = useContext(AuthContext)
     const { getAllProducts, products } = useContext(ProductContext)
 
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [selectedSlugToDetele, setSelectedSlugToDetele] = useState<string>("")
+
     const [filteredProducts, setFilteredProducts] = useState<ProductType[] | null>(products)
 
     // delete
     const handleDelete = async(slug: string) => {
         if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
             try {
+                setIsLoading(true)
+                setSelectedSlugToDetele(slug)
+
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
     
                 await axios.delete(
@@ -32,8 +38,11 @@ export default function Products(){
 
                 await getAllProducts()
                 toast.success("Berhasil menghapus produk")
+
+                setIsLoading(false)
             } catch(error){
                 toast.error("Gagal menghapus produk")
+                setIsLoading(false)
             }
         }
     }
@@ -155,9 +164,15 @@ export default function Products(){
                                     <Link to={`/edit/${product.slug}`} className="edit" title="Edit">
                                         <IconEdit stroke={1.5} />
                                     </Link>
-                                    <div className="delete" title="Delete" onClick={() => handleDelete(product.slug)}>
-                                        <IconTrash stroke={1.5} />
-                                    </div>
+                                    {
+                                        isLoading && selectedSlugToDetele === product.slug ?
+                                        <div className="loader">
+                                            <div className="custom-loader"></div>
+                                        </div> :
+                                        <button type="button" className="delete" title="Delete" onClick={() => handleDelete(product.slug)}>
+                                            <IconTrash stroke={1.5} />
+                                        </button>
+                                    }
                                 </td>
                             </tr>
                         ))

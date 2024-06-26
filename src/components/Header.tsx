@@ -23,12 +23,7 @@ export default function Header(){
     return (
         <header className="header">
             <div className="user">{user?.username}</div>
-            <div className="btns">
-                {/* <div className="notif">
-                    <IconBell stroke={1.5} />
-                </div> */}
-                <button type="button" onClick={handleLogout}>Log out</button>
-            </div>
+            <button type="button" onClick={handleLogout}>Log out</button>
         </header>
     )
 }

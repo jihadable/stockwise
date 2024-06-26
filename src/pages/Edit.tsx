@@ -7,8 +7,8 @@ import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
-import { AuthContext, ProductType } from "../contexts/AuthContext"
-import { ProductContext } from "../contexts/ProductContext"
+import { AuthContext } from "../contexts/AuthContext"
+import { ProductContext, ProductType } from "../contexts/ProductContext"
 import "../style/Edit.css"
 import "../style/quill.snow.css"
 import NotFound from "./NotFound"
@@ -22,6 +22,8 @@ export default function Edit(){
     const { slug } = useParams()
 
     const [product, setProduct] = useState<ProductType | null>(null)
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     
     useEffect(() => {
         if (products !== null){
@@ -92,6 +94,8 @@ export default function Edit(){
             }
 
             try {
+                setIsLoading(true)
+
                 const [
                     name,
                     category, 
@@ -133,8 +137,11 @@ export default function Edit(){
                 await getAllProducts()
                 toast.success("Berhasil memperbarui produk")
                 navigate("/dashboard")
+
+                setIsLoading(false)
             } catch(error){
                 toast.error("Gagal memperbarui produk")
+                setIsLoading(false)
             }
     
         }
@@ -211,7 +218,13 @@ export default function Edit(){
                                 </div>
                                 <div className="btns">
                                     <Link to={"/dashboard"} className="cancel">Cancel</Link>
-                                    <div className="save" onClick={handleSave}>Simpan</div>
+                                    {
+                                        isLoading ?
+                                        <div className="loader">
+                                            <div className="custom-loader"></div>
+                                        </div> :
+                                        <button type="button" className="save" onClick={handleSave}>Simpan</button>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,6 @@
 import { IconLock, IconMail, IconUserCircle } from "@tabler/icons-react";
 import axios from "axios";
-import { FormEvent, useContext, useRef } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
@@ -12,8 +12,9 @@ export default function Register(){
     
     const navigate = useNavigate()
 
-    const { setToken } = useContext(AuthContext)
+    const { setToken, setIsLogin } = useContext(AuthContext)
 
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const emailElement = useRef<HTMLInputElement | null>(null)
     const usernameElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
@@ -41,6 +42,8 @@ export default function Register(){
         }
 
         try {
+            setIsLoading(true)
+
             const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
     
             const { data } = await axios.post(
@@ -52,10 +55,14 @@ export default function Register(){
 
             localStorage.setItem("token", data.token)
             setToken(localStorage.getItem("token"))
+            setIsLogin(true)
 
             navigate("/dashboard")
+            setIsLoading(false)
         } catch(error){
+            localStorage.removeItem("token")
             toast.error("Gagal melakukan registrasi")
+            setIsLoading(false)
         }
 
     }
@@ -80,7 +87,13 @@ export default function Register(){
                     <IconLock stroke={1.5} />
                     <input type="password" placeholder="Confirm password" required ref={confirmPasswordElement} />
                 </div>
-                <button type="submit">Register</button>
+                {
+                    isLoading ?
+                    <button>
+                        <div className="custom-loader"></div>
+                    </button> :
+                    <button type="submit">Register</button>
+                }
             </form>
             <p>Sudah punya akun? <Link to={"/login"}>Login</Link></p>
         </div>

@@ -50,16 +50,6 @@
                         background-color: rgb(0,0,0,.5);
                         backdrop-filter: blur(2px);
                     }
-                    
-                    /* &:hover{
-                        .remove-img{
-
-
-                            & svg, & span{
-                                display: block;
-                            }
-                        }
-                    } */
 
 
                     & img{
@@ -102,6 +92,14 @@
                     &:hover{
                         background-color: rgb(255,255,255,.2);
                     }
+                }
+
+                .loader{
+                    width: fit-content;
+                    padding: 1rem;
+                    border-radius: .5rem;
+                    background-color: var(--btn_color);
+                    padding: 0.5rem 2.35rem;
                 }
             }
         }
