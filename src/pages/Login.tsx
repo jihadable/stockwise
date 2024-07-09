@@ -11,7 +11,7 @@ export default function Login(){
     document.title = "StockWise | Login"
 
     const navigate = useNavigate()
-    const { setToken, setIsLogin } = useContext(AuthContext)
+    const { setIsLogin, setUser } = useContext(AuthContext)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const emailElement = useRef<HTMLInputElement | null>(null)
@@ -33,8 +33,8 @@ export default function Login(){
             })
 
             localStorage.setItem("token", data.token)
-            setToken(localStorage.getItem("token"))
             setIsLogin(true)
+            setUser(data.user)
 
             navigate("/dashboard")
 

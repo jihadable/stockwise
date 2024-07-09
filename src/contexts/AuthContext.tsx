@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 
 export type UserType = {
@@ -10,9 +10,6 @@ export type UserType = {
 }
 
 type AuthContextType = {
-    auth: () => Promise<void>,
-    token: string | null,
-    setToken: React.Dispatch<React.SetStateAction<string | null>>,
     isLogin: boolean | null,
     setIsLogin: React.Dispatch<React.SetStateAction<boolean | null>>,
     user: UserType | null,
@@ -20,9 +17,6 @@ type AuthContextType = {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-    auth: async() => {},
-    token: null,
-    setToken: () => {},
     isLogin: null,
     setIsLogin: () => {},
     user: null,
@@ -30,47 +24,46 @@ export const AuthContext = createContext<AuthContextType>({
 })
 
 export default function AuthFrovider({ children }: { children: ReactNode }){
-    const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
     const [isLogin, setIsLogin] = useState<boolean | null>(null)
     const [user, setUser] = useState<UserType | null>(null)
 
-    const auth = useCallback(async() => {
-        if (!token){
-            localStorage.removeItem("token")
-
-            setToken(localStorage.getItem("token"))
-            setIsLogin(false)
-            setUser(null)
-
-            return
-        }
-
-        try {
-            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
-
-            const { data: response } = await axios.get(usersAPIEndpoint, {
-                headers: {
-                    "Authorization" : "Bearer " + token
-                }
-            })
-
-            setIsLogin(true)
-            setUser(response.user)
-        } catch (error){
-            localStorage.removeItem("token")
-
-            setToken(localStorage.getItem("token"))
-            setIsLogin(false)
-            setUser(null)
-        }
-    }, [token])
-
     useEffect(() => {
+        const auth = async() => {
+            const token = localStorage.getItem("token")
+    
+            if (!token){
+                localStorage.removeItem("token")
+    
+                setIsLogin(false)
+                setUser(null)
+    
+                return
+            }
+    
+            try {
+                const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+    
+                const { data: response } = await axios.get(usersAPIEndpoint, {
+                    headers: {
+                        "Authorization" : "Bearer " + token
+                    }
+                })
+    
+                setIsLogin(true)
+                setUser(response.user)
+            } catch (error){
+                localStorage.removeItem("token")
+    
+                setIsLogin(false)
+                setUser(null)
+            }
+        }
+
         auth()
-    }, [token, auth])
+    }, [])
 
     return (
-        <AuthContext.Provider value={{ auth, token, setToken, isLogin, setIsLogin, user, setUser }}>
+        <AuthContext.Provider value={{ isLogin, setIsLogin, user, setUser }}>
             {children}
             <ToastContainer
             position="top-center"

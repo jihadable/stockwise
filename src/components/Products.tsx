@@ -3,15 +3,13 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { AuthContext } from "../contexts/AuthContext";
 import { ProductContext, ProductType } from "../contexts/ProductContext";
 import "../style/Products.css";
 import getIdCurrency from "../utils/getIdCurrency";
 
 export default function Products(){
 
-    const { token } = useContext(AuthContext)
-    const { getAllProducts, products } = useContext(ProductContext)
+    const { products, setProducts } = useContext(ProductContext)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [selectedSlugToDetele, setSelectedSlugToDetele] = useState<string>("")
@@ -26,6 +24,7 @@ export default function Products(){
                 setSelectedSlugToDetele(slug)
 
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                const token = localStorage.getItem("token")
     
                 await axios.delete(
                     `${productsAPIEndpoint}/${slug}`,
@@ -36,7 +35,9 @@ export default function Products(){
                     }
                 )
 
-                await getAllProducts()
+                if (products){
+                    setProducts(products.filter(product => product.slug !== slug))
+                }
                 toast.success("Berhasil menghapus produk")
 
                 setIsLoading(false)

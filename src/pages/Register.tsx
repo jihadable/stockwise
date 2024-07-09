@@ -12,7 +12,7 @@ export default function Register(){
     
     const navigate = useNavigate()
 
-    const { setToken, setIsLogin } = useContext(AuthContext)
+    const { setIsLogin, setUser } = useContext(AuthContext)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const emailElement = useRef<HTMLInputElement | null>(null)
@@ -46,16 +46,13 @@ export default function Register(){
 
             const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
     
-            const { data } = await axios.post(
-                `${usersAPIEndpoint}/register`,
-                {
-                    email, username, password
-                }
+            const { data } = await axios.post(`${usersAPIEndpoint}/register`,
+                { email, username, password }
             )
 
             localStorage.setItem("token", data.token)
-            setToken(localStorage.getItem("token"))
             setIsLogin(true)
+            setUser(data.user)
 
             navigate("/dashboard")
             setIsLoading(false)

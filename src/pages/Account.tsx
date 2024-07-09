@@ -68,13 +68,13 @@ type EditUserPropsType = {
 
 function EditUser({ setEdit, user }: EditUserPropsType){
 
+    const { setUser } = useContext(AuthContext)
+
     const usernameElement = useRef<HTMLInputElement | null>(null)
     const bioElement = useRef<HTMLTextAreaElement | null>(null)
 
-    const { token, auth } = useContext(AuthContext)
-
     const handelSave = async() => {
-        const username = usernameElement.current?.value
+        const username = usernameElement.current?.value as string
 
         if (username === ""){
             toast.warn("Masih ada kolom yang belum diisi!")
@@ -83,9 +83,10 @@ function EditUser({ setEdit, user }: EditUserPropsType){
         }
         
         try {
-            const bio = bioElement.current?.value
+            const bio = bioElement.current?.value as string
 
             const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+            const token = localStorage.getItem("token")
 
             await axios.post(
                 usersAPIEndpoint,
@@ -100,7 +101,9 @@ function EditUser({ setEdit, user }: EditUserPropsType){
                 }
             )
 
-            await auth()
+            if (user){
+                setUser({...user, username, bio})
+            }
             toast.success("Berhasil memperbarui data pengguna")
             setEdit(false)
         } catch(error){

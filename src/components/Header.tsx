@@ -8,12 +8,12 @@ export default function Header(){
 
     const navigate = useNavigate()
 
-    const { setToken, user } = useContext(AuthContext)
+    const { setIsLogin, user, setUser } = useContext(AuthContext)
 
     const handleLogout = () => {
         localStorage.removeItem("token")
-        
-        setToken(localStorage.getItem("token"))
+        setIsLogin(false)
+        setUser(null)
 
         navigate("/")
 

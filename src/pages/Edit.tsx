@@ -15,8 +15,8 @@ import NotFound from "./NotFound"
 
 export default function Edit(){
 
-    const { token, isLogin } = useContext(AuthContext)
-    const { getAllProducts, products } = useContext(ProductContext)
+    const { isLogin } = useContext(AuthContext)
+    const { products, setProducts } = useContext(ProductContext)
 
     const navigate = useNavigate()
     const { slug } = useParams()
@@ -120,8 +120,9 @@ export default function Edit(){
                 newProduct.append("description", description as string)
         
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                const token = localStorage.getItem("token")
 
-                await axios.post(
+                const { data } = await axios.post(
                     `${productsAPIEndpoint}/${product?.slug}`,
                     newProduct,
                     {
@@ -134,7 +135,9 @@ export default function Edit(){
                     }
                 )
 
-                await getAllProducts()
+                if (products){
+                    setProducts(products.map(p => p.slug === product?.slug ? data.product : p))
+                }
                 toast.success("Berhasil memperbarui produk")
                 navigate("/dashboard")
 

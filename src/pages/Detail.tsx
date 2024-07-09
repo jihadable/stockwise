@@ -14,8 +14,8 @@ import NotFound from "./NotFound";
 
 export default function Detail(){
 
-    const { token, isLogin } = useContext(AuthContext)
-    const { getAllProducts, products } = useContext(ProductContext)
+    const { isLogin } = useContext(AuthContext)
+    const { products, setProducts } = useContext(ProductContext)
 
     const navigate = useNavigate()
     const { slug } = useParams()
@@ -45,6 +45,7 @@ export default function Detail(){
                     setIsLoading(true)
 
                     const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                    const token = localStorage.getItem("token")
 
                     await axios.delete(`${productsAPIEndpoint}/${product?.slug}`, {
                         headers: {
@@ -52,7 +53,9 @@ export default function Detail(){
                         }
                     })
 
-                    await getAllProducts()
+                    if (products){
+                        setProducts(products.filter(product => product.slug !== slug))
+                    }
                     toast.success("Berhasil menghapus produk")
                     navigate("/dashboard")
 

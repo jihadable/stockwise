@@ -15,8 +15,7 @@ export default function AddProduct(){
 
     const { isLogin } = useContext(AuthContext)
 
-    const { token } = useContext(AuthContext)
-    const { getAllProducts } = useContext(ProductContext)
+    const { products, setProducts } = useContext(ProductContext)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -52,19 +51,25 @@ export default function AddProduct(){
                 const allowedExtensions = ["jpg", "jpeg", "png"]
                 const extension = file.name.split(".").pop()?.toLowerCase()
           
-                if (extension && allowedExtensions.includes(extension)) {
+                if (extension && allowedExtensions.includes(extension)){
+                    if (file.size > 2 * 1024 * 1024){
+                        toast.warn("Ukuran gambar tidak boleh melebihi 2MB")
+
+                        return
+                    }
+
                     setImage(file)
-                    const reader = new FileReader();
+                    const reader = new FileReader()
                     
                     reader.onload = () => {
-                        const base64String = reader.result as string;
+                        const base64String = reader.result as string
                         setImgPreview(base64String)
                     }
           
-                    reader.readAsDataURL(file);
+                    reader.readAsDataURL(file)
                 } 
                 else {
-                    toast.warn("Ekstensi file tidak diterima")
+                    toast.warn("Ekstensi gambar tidak diterima")
     
                     return
                 }
@@ -89,6 +94,7 @@ export default function AddProduct(){
                 setIsLoading(true)
 
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                const token = localStorage.getItem("token")
     
                 const newProduct = new FormData()
         
@@ -101,7 +107,7 @@ export default function AddProduct(){
                 newProduct.append("quantity", quantity)
                 newProduct.append("description", description)
                 
-                await axios.post(
+                const { data } = await axios.post(
                     productsAPIEndpoint,
                     newProduct,
                     {
@@ -111,7 +117,10 @@ export default function AddProduct(){
                     }
                 )
     
-                await getAllProducts()
+                if (products){
+                    setProducts([...products, data.product])
+                }
+
                 toast.success("Berhasil menambahkan produk baru")
     
                 setName("")
