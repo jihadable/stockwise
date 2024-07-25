@@ -59,14 +59,9 @@ export default function AddProduct(){
                     }
 
                     setImage(file)
-                    const reader = new FileReader()
                     
-                    reader.onload = () => {
-                        const base64String = reader.result as string
-                        setImgPreview(base64String)
-                    }
-          
-                    reader.readAsDataURL(file)
+                    const blobUrl = URL.createObjectURL(file)
+                    setImgPreview(blobUrl)
                 } 
                 else {
                     toast.warn("Ekstensi gambar tidak diterima")
