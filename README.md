@@ -1,4 +1,4 @@
-# StockWise - Frontend
+# Stockwise - Frontend
 
 StockWise adalah sistem manajemen inventaris berbasis web yang memudahkan pengguna untuk melihat dan mengelola produk dalam inventaris.
 
