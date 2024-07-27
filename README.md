@@ -1,8 +1,10 @@
-# StockWise 📄 
+# StockWise - Frontend
 
-Stockwise is a web-based inventory management system. This website displays the products present in the user's inventory. It includes CRUD features and detailed views for each product. The website uses web's localStorage as the data storage.
+StockWise adalah sistem manajemen inventaris berbasis web yang memudahkan pengguna untuk melihat dan mengelola produk dalam inventaris.
 
 👉 [Live Demo](https://stockwise-2110.netlify.app/)
+<br/>
+👉 [Backend Github](https://github.com/jihadable/stockwise-be/)
 
 ## Tech Stack
 » Vanilla CSS
