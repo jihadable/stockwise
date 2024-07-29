@@ -66,7 +66,7 @@ export default function Register(){
 
     return (
         <div className="register">
-            <form method="post" onSubmit={handleRegister}>
+            <form onSubmit={handleRegister}>
                 <h2>Register Stockwise</h2>
                 <div className="email">
                     <IconMail stroke={1.5} />

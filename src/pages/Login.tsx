@@ -48,7 +48,7 @@ export default function Login(){
 
     return (
         <div className="login">
-            <form method="post" onSubmit={handleLogin}>
+            <form onSubmit={handleLogin}>
                 <h2>Login Stockwise</h2>
                 <div className="username-email">
                     <IconUserCircle stroke={1.5} />
