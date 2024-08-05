@@ -1,4 +1,4 @@
-import { IconPhotoPlus, IconPhotoX } from "@tabler/icons-react";
+import { IconPhotoPlus } from "@tabler/icons-react";
 import axios from "axios";
 import { FormEvent, useContext, useState } from "react";
 import ReactQuill from 'react-quill';
@@ -37,103 +37,96 @@ export default function AddProduct(){
 
     const [imgPreview, setImgPreview] = useState("")
 
+    const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        
+        if (file) {
+            const allowedExtensions = ["jpg", "jpeg", "png"]
+            const extension = file.name.split(".").pop()?.toLowerCase()
+      
+            if (extension && allowedExtensions.includes(extension)){
+                if (file.size > 2 * 1024 * 1024){
+                    toast.warn("Ukuran gambar tidak boleh melebihi 2MB")
+
+                    return
+                }
+
+                setImage(file)
+                
+                const blobUrl = URL.createObjectURL(file)
+                setImgPreview(blobUrl)
+            } 
+            else {
+                toast.warn("Ekstensi gambar tidak diterima")
+
+                return
+            }
+        }
+    }
+    
+    const handleSubmit = async(e: FormEvent) => {
+        e.preventDefault()
+        
+        if (description === ""){
+            toast.warn("Masih ada kolom yang belum diisi!")
+
+            return
+        }
+
+        try {
+            setIsLoading(true)
+
+            const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+            const token = localStorage.getItem("token")
+
+            const newProduct = new FormData()
+    
+            newProduct.append("name", name)
+            if (image !== null){
+                newProduct.append("image", image as Blob)
+            }
+            newProduct.append("category", category)
+            newProduct.append("price", price)
+            newProduct.append("quantity", quantity)
+            newProduct.append("description", description)
+            
+            const { data } = await axios.post(
+                productsAPIEndpoint,
+                newProduct,
+                {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            )
+
+            if (products){
+                setProducts([data.product, ...products])
+            }
+
+            toast.success("Berhasil menambahkan produk baru")
+
+            setName("")
+            setImgPreview("")
+            setImage(null)
+            setCategory("")
+            setPrice("")
+            setQuantity("")
+            setDescription("")
+
+            setIsLoading(false)
+        } catch(error){
+            toast.error("Gagal menambahkan produk baru")
+            setIsLoading(false)
+        }
+    }
+
     if (isLogin === false){
         return <NotFound />
     }
 
     if (isLogin === true){
         document.title = "StockWise | Add product"
-
-        const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const file = event.target.files?.[0]
-
-            console.log(file)
-            
-            if (file) {
-                const allowedExtensions = ["jpg", "jpeg", "png"]
-                const extension = file.name.split(".").pop()?.toLowerCase()
-          
-                if (extension && allowedExtensions.includes(extension)){
-                    if (file.size > 2 * 1024 * 1024){
-                        toast.warn("Ukuran gambar tidak boleh melebihi 2MB")
-
-                        return
-                    }
-
-                    setImage(file)
-                    
-                    const blobUrl = URL.createObjectURL(file)
-                    setImgPreview(blobUrl)
-                } 
-                else {
-                    toast.warn("Ekstensi gambar tidak diterima")
-    
-                    return
-                }
-            }
-        }
-    
-        const handleRemoveImg = () => {
-            setImage(null)
-            setImgPreview("")
-        }
-        
-        const handleSubmit = async(e: FormEvent) => {
-            e.preventDefault()
-            
-            if (description === ""){
-                toast.warn("Masih ada kolom yang belum diisi!")
-    
-                return
-            }
-    
-            try {
-                setIsLoading(true)
-
-                const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
-                const token = localStorage.getItem("token")
-    
-                const newProduct = new FormData()
-        
-                newProduct.append("name", name)
-                if (image !== null){
-                    newProduct.append("image", image as Blob)
-                }
-                newProduct.append("category", category)
-                newProduct.append("price", price)
-                newProduct.append("quantity", quantity)
-                newProduct.append("description", description)
-                
-                const { data } = await axios.post(
-                    productsAPIEndpoint,
-                    newProduct,
-                    {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    }
-                )
-    
-                if (products){
-                    setProducts([...products, data.product])
-                }
-
-                toast.success("Berhasil menambahkan produk baru")
-    
-                setName("")
-                setImgPreview("")
-                setImage(null)
-                setCategory("")
-                setPrice("")
-                setQuantity("")
-                setDescription("")
-
-                setIsLoading(false)
-            } catch(error){
-                toast.error("Gagal menambahkan produk baru")
-                setIsLoading(false)
-            }
-        }
     
         return (
             <div className="add-product">
@@ -145,11 +138,7 @@ export default function AddProduct(){
                             <div className="form-header">Tambah produk baru</div>
                             {
                                 imgPreview !== "" &&
-                                <div className="img-preview" onClick={handleRemoveImg}>
-                                    <div className="remove-img">
-                                        <IconPhotoX stroke={1.5} />
-                                        <span>Klik untuk hapus</span>
-                                    </div>
+                                <div className="img-preview">
                                     <img src={imgPreview} alt="Image preview" />
                                 </div>
                             }

@@ -52,6 +52,94 @@ export default function Edit(){
     useEffect(() => {
         setDescription(product?.description)
     }, [product])
+
+    const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+
+        if (file) {
+            const allowedExtensions = ["jpg", "jpeg", "png"]
+            const extension = file.name.split(".").pop()?.toLowerCase()
+      
+            if (extension && allowedExtensions.includes(extension)) {
+                setImage(file)
+                const reader = new FileReader();
+      
+                reader.onload = () => {
+                    const base64String = reader.result as string;
+                    setImgPreview(base64String)
+                }
+      
+                reader.readAsDataURL(file);
+            } 
+            else {
+                toast.warn("Ekstensi file tidak diterima")
+            }
+        }
+    }
+
+    const handleSave = async() => {
+        if (description === ""){
+            toast.warn("Masih ada kolom yang belum diisi!")
+            
+            return
+        }
+
+        try {
+            setIsLoading(true)
+
+            const [
+                name,
+                category, 
+                price,
+                quantity
+            ] = [
+                nameElement.current?.value,
+                categoryElement.current?.value,
+                priceElement.current?.value,
+                quantityElement.current?.value
+            ]
+            
+            const newProduct = new FormData()
+    
+            newProduct.append("name", name as string)
+            if (image){
+                newProduct.append("image", image as Blob)
+            }
+            newProduct.append("category", category as string)
+            newProduct.append("price", price as string)
+            newProduct.append("quantity", quantity as string)
+            newProduct.append("description", description as string)
+    
+            const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+            const token = localStorage.getItem("token")
+
+            const { data } = await axios.post(
+                `${productsAPIEndpoint}/${product?.slug}`,
+                newProduct,
+                {
+                    params: {
+                        "_method": "patch"
+                    },
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            )
+
+            if (products){
+                setProducts(products.map(p => p.slug === product?.slug ? data.product : p))
+            }
+            toast.success("Berhasil memperbarui produk")
+            navigate("/dashboard")
+
+            setIsLoading(false)
+        } catch(error){
+            toast.error("Gagal memperbarui produk")
+            setIsLoading(false)
+        }
+    }
+
+    const imagesAPIEndpoint = import.meta.env.VITE_IMAGES_API_ENDPOINT
     
     if (isLogin === false || (products !== null && product === undefined)){
         return <NotFound />
@@ -59,95 +147,6 @@ export default function Edit(){
 
     if (isLogin === true && products !== null && product !== undefined){
         document.title = "StockWise | Edit product"
-    
-        const storageAPIEndpoint = import.meta.env.VITE_STORAGE_API_ENDPOINT 
-    
-        const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const file = event.target.files?.[0]
-    
-            if (file) {
-                const allowedExtensions = ["jpg", "jpeg", "png"]
-                const extension = file.name.split(".").pop()?.toLowerCase()
-          
-                if (extension && allowedExtensions.includes(extension)) {
-                    setImage(file)
-                    const reader = new FileReader();
-          
-                    reader.onload = () => {
-                        const base64String = reader.result as string;
-                        setImgPreview(base64String)
-                    }
-          
-                    reader.readAsDataURL(file);
-                } 
-                else {
-                    toast.warn("Ekstensi file tidak diterima")
-                }
-            }
-        }
-    
-        const handleSave = async() => {
-            if (description === ""){
-                toast.warn("Masih ada kolom yang belum diisi!")
-                
-                return
-            }
-
-            try {
-                setIsLoading(true)
-
-                const [
-                    name,
-                    category, 
-                    price,
-                    quantity
-                ] = [
-                    nameElement.current?.value,
-                    categoryElement.current?.value,
-                    priceElement.current?.value,
-                    quantityElement.current?.value
-                ]
-                
-                const newProduct = new FormData()
-        
-                newProduct.append("name", name as string)
-                if (image){
-                    newProduct.append("image", image as Blob)
-                }
-                newProduct.append("category", category as string)
-                newProduct.append("price", price as string)
-                newProduct.append("quantity", quantity as string)
-                newProduct.append("description", description as string)
-        
-                const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
-                const token = localStorage.getItem("token")
-
-                const { data } = await axios.post(
-                    `${productsAPIEndpoint}/${product?.slug}`,
-                    newProduct,
-                    {
-                        params: {
-                            "_method": "patch"
-                        },
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    }
-                )
-
-                if (products){
-                    setProducts(products.map(p => p.slug === product?.slug ? data.product : p))
-                }
-                toast.success("Berhasil memperbarui produk")
-                navigate("/dashboard")
-
-                setIsLoading(false)
-            } catch(error){
-                toast.error("Gagal memperbarui produk")
-                setIsLoading(false)
-            }
-    
-        }
     
         return (
             <div className="edit">
@@ -160,7 +159,7 @@ export default function Edit(){
                             <div className="img">
                                 {
                                     product?.image && imgPreview === "" &&
-                                    <img src={`${storageAPIEndpoint}/${product?.image}`} alt="Image Preview" />
+                                    <img src={`${imagesAPIEndpoint}/${product.image}`} alt="Image Preview" />
                                 }
                                 {
                                     !product?.image && imgPreview === "" &&

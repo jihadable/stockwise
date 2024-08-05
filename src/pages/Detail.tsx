@@ -30,42 +30,42 @@ export default function Detail(){
         }
     }, [slug, products])
 
+    const handleDelete = async() => {
+        if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
+            try {
+                setIsLoading(true)
+
+                const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                const token = localStorage.getItem("token")
+
+                await axios.delete(`${productsAPIEndpoint}/${product?.slug}`, {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                })
+
+                if (products){
+                    setProducts(products.filter(product => product.slug !== slug))
+                }
+                toast.success("Berhasil menghapus produk")
+                navigate("/dashboard")
+
+                setIsLoading(false)
+            } catch(error){
+                toast.error("Gagal menghapus produk")
+                setIsLoading(false)
+            }
+        }
+    }
+
+    const imagesAPIEndpoint = import.meta.env.VITE_IMAGES_API_ENDPOINT
+
     if (isLogin === false || (products !== null && product === undefined)){
         return <NotFound />
     }
 
     if (isLogin === true && products !== null && product !== undefined){
-        document.title = "StockWise | Product detail"
-
-        const storageAPIEndpoint = import.meta.env.VITE_STORAGE_API_ENDPOINT
-    
-        const handleDelete = async() => {
-            if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
-                try {
-                    setIsLoading(true)
-
-                    const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
-                    const token = localStorage.getItem("token")
-
-                    await axios.delete(`${productsAPIEndpoint}/${product?.slug}`, {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    })
-
-                    if (products){
-                        setProducts(products.filter(product => product.slug !== slug))
-                    }
-                    toast.success("Berhasil menghapus produk")
-                    navigate("/dashboard")
-
-                    setIsLoading(false)
-                } catch(error){
-                    toast.error("Gagal menghapus produk")
-                    setIsLoading(false)
-                }
-            }
-        }
+        document.title = "StockWise | Detail produk"
     
         return (
             <div className="detail">
@@ -98,7 +98,7 @@ export default function Detail(){
                         <div className="detail-content">
                             <div className="img">
                                 {product?.image &&
-                                <img src={`${storageAPIEndpoint}/${product?.image}`} alt="Image Preview" />}
+                                <img src={`${imagesAPIEndpoint}/${product.image}`} alt="Image Preview" />}
                                 {!product?.image && 
                                 <div className="no-img">
                                     <IconPhotoX stroke={1.5} />
