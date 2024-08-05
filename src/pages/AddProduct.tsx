@@ -46,6 +46,8 @@ export default function AddProduct(){
 
         const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             const file = event.target.files?.[0]
+
+            console.log(file)
             
             if (file) {
                 const allowedExtensions = ["jpg", "jpeg", "png"]
