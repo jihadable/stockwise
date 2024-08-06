@@ -12,7 +12,6 @@ export default function Products(){
     const { products, setProducts } = useContext(ProductContext)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [selectedSlugToDetele, setSelectedSlugToDetele] = useState<string>("")
 
     const [filteredProducts, setFilteredProducts] = useState<ProductType[] | null>(products)
 
@@ -21,7 +20,6 @@ export default function Products(){
         if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
             try {
                 setIsLoading(true)
-                setSelectedSlugToDetele(slug)
 
                 const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
                 const token = localStorage.getItem("token")
@@ -166,7 +164,7 @@ export default function Products(){
                                         <IconEdit stroke={1.5} />
                                     </Link>
                                     {
-                                        isLoading && selectedSlugToDetele === product.slug ?
+                                        isLoading ?
                                         <div className="loader">
                                             <div className="custom-loader"></div>
                                         </div> :
