@@ -26,9 +26,9 @@ export default function Login(){
             const email = emailElement.current?.value
             const password = passwordElement.current?.value
     
-            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+            // const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
     
-            const { data } = await axios.post(`${usersAPIEndpoint}/login`, {
+            const { data } = await axios.post(`https://stockwise-be-v2.vercel.app/api/users/login`, {
                 email, password
             })
 
