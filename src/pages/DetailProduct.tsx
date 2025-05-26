@@ -8,14 +8,14 @@ import Navbar from "../components/Navbar";
 import InventoryStats from "../components/Stats";
 import { AuthContext } from "../contexts/AuthContext";
 import { ProductContext, ProductType } from "../contexts/ProductContext";
-import "../style/Detail.css";
+import "../style/DetailProduct.css";
 import getIdCurrency from "../utils/getIdCurrency";
 import NotFound from "./NotFound";
 import { DateParser } from "../utils/dateParser";
 import Loader from "../components/Loader";
 import { LoaderContext } from "../contexts/LoaderContext";
 
-export default function Detail(){
+export default function DetailProduct(){
 
     const { isLogin } = useContext(AuthContext)
     const { setProducts } = useContext(ProductContext)

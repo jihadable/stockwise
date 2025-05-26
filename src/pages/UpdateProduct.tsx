@@ -9,13 +9,13 @@ import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import { AuthContext } from "../contexts/AuthContext"
 import { ProductContext, ProductType } from "../contexts/ProductContext"
-import "../style/Edit.css"
+import "../style/UpdateProduct.css"
 import "../style/quill.snow.css"
 import NotFound from "./NotFound"
 import { LoaderContext } from "../contexts/LoaderContext"
 import Loader from "../components/Loader"
 
-export default function Edit(){
+export default function UpdateProduct(){
 
     const { isLogin } = useContext(AuthContext)
     const { setProducts } = useContext(ProductContext)

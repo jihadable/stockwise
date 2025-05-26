@@ -5,14 +5,14 @@ import Account from "./pages/Account";
 import AddProduct from "./pages/AddProduct";
 import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
-import Detail from "./pages/Detail";
-import Edit from "./pages/Edit";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
 import LoaderProvider from "./contexts/LoaderContext";
 import { ToastContainer } from "react-toastify";
+import DetailProduct from "./pages/DetailProduct";
+import UpdateProduct from "./pages/UpdateProduct";
 
 export default function Router(){
 
@@ -43,8 +43,8 @@ export default function Router(){
                 <Route path="/add-product" element={<AddProduct />}></Route>
                 <Route path="/account" element={<Account  />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
-                <Route path="/detail-product/:id" element={<Detail />}></Route>
-                <Route path="/update-product/:id" element={<Edit />}></Route>
+                <Route path="/detail-product/:id" element={<DetailProduct />}></Route>
+                <Route path="/update-product/:id" element={<UpdateProduct />}></Route>
                 <Route path="*" element={<NotFound />}></Route>
             </Routes>
             </LoaderProvider>
