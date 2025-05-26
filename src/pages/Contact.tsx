@@ -33,42 +33,38 @@ export default function Contact(){
         ]
     
         return (
-            <div className="contact">
+            <section className="contact">
                 <Navbar page="Contact us" />
-                <div className="content">
+                <article className="content">
                     <Header />
-                    <div className="contact-container">
+                    <article className="contact-container">
                         <div className="header">
-                            <div>Ulasan Anda penting bagi kami</div>
-                            <div>Jangan ragu untuk mengirimkan pesan kepada kami</div>
+                            <p>Your feedback is important to us</p>
+                            <p>Do not hesitate to let us know</p>
                         </div>
                         <div className="form-info">
                             <form>
-                                <textarea rows={10} placeholder="Pesan" spellCheck="false"></textarea>
+                                <textarea rows={10} placeholder="Message" spellCheck="false"></textarea>
                                 <button type="button">
                                     <span>Submit</span>
                                     <IconMailForward stroke={1.5} />
                                 </button>
                             </form>
                             <div className="contact-info">
-                                <div className="header">Informasi kontak</div>
+                                <p className="header">Contact information</p>
                                 <div className="info">
-                                {
-                                    info.map((item, index) => {
-                                        return (
-                                            <div className="item" key={index}>
-                                                {item.svg}
-                                                <span>{item.value}</span>
-                                            </div>
-                                        )
-                                    })
-                                }
+                                {info.map((item, index) => (
+                                    <div className="item" key={index}>
+                                        {item.svg}
+                                        <span>{item.value}</span>
+                                    </div>
+                                ))}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </article>
+                </article>
+            </section>
         )
     }
 

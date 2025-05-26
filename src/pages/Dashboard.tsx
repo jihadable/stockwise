@@ -19,14 +19,14 @@ export default function Dashboard(){
         document.title = "StockWise | Dashboard"
     
         return (
-            <div className="dashboard">
+            <section className="dashboard">
                 <Navbar page="Dashboard" />
-                <div className="content">
+                <article className="content">
                     <Header />
                     <Stats />
                     <Products />
-                </div>
-            </div>
+                </article>
+            </section>
         )
     }
 

@@ -6,6 +6,8 @@ import Navbar from "../components/Navbar";
 import { AuthContext, UserType } from "../contexts/AuthContext";
 import "../style/Account.css";
 import NotFound from "./NotFound";
+import Loader from "../components/Loader";
+import { LoaderContext } from "../contexts/LoaderContext";
 
 export default function Account(){
 
@@ -21,40 +23,38 @@ export default function Account(){
         document.title = "StockWise | Account"
     
         return (
-            <div className="account">
+            <section className="account">
                 <Navbar page="Account" />
-                <div className="content">
+                <article className="content">
                     <Header />
-                    <div className={`user-info ${edit ? "edit-active" : ""}`}>
+                    <article className={`user-info ${edit ? "edit-active" : ""}`}>
                         <div className="img">
                             <img src={`${import.meta.env.VITE_AVATAR_GENERATOR}&name=${user?.username}`} alt="User image" />
                         </div>
                         {!edit &&
-                        <div className="side">
+                        <article className="side">
                             <div className="info">
                                 <div className="item">
                                     <div className="label">Username</div>
-                                    <div className="value">{user?.username}</div>
+                                    <p className="value">{user?.username}</p>
                                 </div>
                                 <div className="item">
                                     <div className="label">Email</div>
-                                    <div className="value">{user?.email}</div>
+                                    <p className="value">{user?.email}</p>
                                 </div>
                                 <div className="item">
                                     <div className="label">Bio</div>
-                                    <div className="value">{user?.bio ?? "-"}</div>
+                                    <p className="value">{user?.bio ?? "-"}</p>
                                 </div>
                             </div>
-                            <div className="edit-btn" onClick={() => setEdit(true)}>Edit profile</div>
-                        </div>
+                            <div className="edit-btn" onClick={() => setEdit(true)}>Update profile</div>
+                        </article>
                         }
-                        {
-                            edit &&
-                            <EditUser setEdit={setEdit} user={user} />
-                        }
-                    </div>
-                </div>
-            </div>
+                        {edit &&
+                        <EditUser setEdit={setEdit} user={user} />}
+                    </article>
+                </article>
+            </section>
         )
     }
 
@@ -73,64 +73,73 @@ function EditUser({ setEdit, user }: EditUserPropsType){
     const usernameElement = useRef<HTMLInputElement | null>(null)
     const bioElement = useRef<HTMLTextAreaElement | null>(null)
 
-    const handelSave = async() => {
-        const username = usernameElement.current?.value as string
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
 
-        if (username === ""){
-            toast.warn("Masih ada kolom yang belum diisi!")
-
-            return
-        }
-        
+    const handelSave = async(event: React.MouseEvent<HTMLButtonElement>) => {
         try {
+            const username = usernameElement.current?.value as string
+
+            if (username === ""){
+                toast.warn("Please fill out all the columns")
+
+                return
+            }
+            
+            const target = event.target as HTMLButtonElement
+            setIsLoading(true)
+            setLoadingElementWidth(target.clientWidth)
+            setLoadingElementHeight(target.clientHeight)
+
             const bio = bioElement.current?.value as string
 
-            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+            const requestBody = {
+                username,
+                bio: bio === "" ? null : bio
+            }
+            const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
             const token = localStorage.getItem("token")
 
-            await axios.post(
-                usersAPIEndpoint,
-                { username, bio: bio === "" ? null : bio },
-                {
-                    params: {
-                        "_method": "patch"
-                    },
-                    headers: {
-                        "Authorization": "Bearer " + token
-                    }
+            await axios.put(`${APIEndpoint}/api/users`, requestBody, {
+                headers: {
+                    "Authorization": "Bearer " + token
                 }
-            )
+            })
 
             if (user){
                 setUser({...user, username, bio})
             }
-            toast.success("Berhasil memperbarui data pengguna")
+            toast.success("Successfully updated user data")
             setEdit(false)
+            setIsLoading(false)
         } catch(error){
-            toast.error("Gagal memperbarui data pengguna")
+            setIsLoading(false)
+            toast.error("Failed to update user data")
         }
     }
 
     return (
-        <div className="edit">
-            <div className="info">
+        <section className="edit">
+            <article className="info">
                 <div className="item">
                     <div className="label">Username</div>
                     <input type="text" className="value" placeholder="Username" required defaultValue={user?.username} ref={usernameElement} />
                 </div>
                 <div className="item">
                     <div className="label">Email</div>
-                    <div className="value">{user?.email}</div>
+                    <p className="value">{user?.email}</p>
                 </div>
                 <div className="item">
                     <div className="label">Bio</div>
                     <textarea rows={7} className="value" spellCheck="false" placeholder="Bio" defaultValue={user?.bio ?? ""} ref={bioElement}></textarea>
                 </div>
-            </div>
-            <div className="btns">
-                <div className="cancel" onClick={() => setEdit(false)}>Cancel</div>
-                <div className="save" onClick={handelSave}>Save changes</div>
-            </div>
-        </div>
+            </article>
+            <article className="btns">
+                <button type="button" className="cancel" onClick={() => setEdit(false)}>Cancel</button>
+                {isLoading ?
+                <Loader /> :
+                <button type="button" className="save" onClick={handelSave}>Save changes</button>}
+            </article>
+        </section>
     )
 }

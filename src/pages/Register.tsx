@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
 import "../style/Register.css";
+import Loader from "../components/Loader";
+import { LoaderContext } from "../contexts/LoaderContext";
 
 export default function Register(){
     
@@ -15,13 +17,14 @@ export default function Register(){
     const { setIsLogin, setUser } = useContext(AuthContext)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
     const emailElement = useRef<HTMLInputElement | null>(null)
     const usernameElement = useRef<HTMLInputElement | null>(null)
     const passwordElement = useRef<HTMLInputElement | null>(null)
     const confirmPasswordElement = useRef<HTMLInputElement | null>(null)
 
-    const handleRegister = async(e: FormEvent) => {
-        e.preventDefault()
+    const handleRegister = async(event: FormEvent) => {
+        event.preventDefault()
 
         const [
             email, 
@@ -36,29 +39,30 @@ export default function Register(){
         ]
 
         if (password !== confirmPassword){
-            toast.warn("Konfirmasi password tidak cocok")
+            toast.warn("Password confirmation doesn't match")
 
             return
         }
 
         try {
+            const target = event.target as HTMLFormElement
             setIsLoading(true)
+            setLoadingElementWidth(target.querySelector('button[type="submit"]')?.clientWidth)
+            setLoadingElementHeight(target.querySelector('button[type="submit"]')?.clientHeight)
 
-            const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
-    
-            const { data } = await axios.post(`${usersAPIEndpoint}/register`,
-                { email, username, password }
-            )
+            const requestBody = { email, username, password }
+            const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
+            const { data } = await axios.post(`${APIEndpoint}/api/users/register`, requestBody)
 
-            localStorage.setItem("token", data.token)
+            localStorage.setItem("token", data.data.token)
             setIsLogin(true)
-            setUser(data.user)
+            setUser(data.data.user)
 
             navigate("/dashboard")
             setIsLoading(false)
         } catch(error){
             localStorage.removeItem("token")
-            toast.error("Gagal melakukan registrasi")
+            toast.error("Failed to register")
             setIsLoading(false)
         }
 
@@ -84,15 +88,11 @@ export default function Register(){
                     <IconLock stroke={1.5} />
                     <input type="password" placeholder="Confirm password" required ref={confirmPasswordElement} />
                 </div>
-                {
-                    isLoading ?
-                    <button>
-                        <div className="custom-loader"></div>
-                    </button> :
-                    <button type="submit">Register</button>
-                }
+                {isLoading ?
+                <Loader /> :
+                <button type="submit">Register</button>}
             </form>
-            <p>Sudah punya akun? <Link to={"/login"}>Login</Link></p>
+            <p>Already have an account? <Link to={"/login"}>Login</Link></p>
         </div>
     )
 }

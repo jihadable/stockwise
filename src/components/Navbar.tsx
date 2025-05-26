@@ -49,20 +49,16 @@ export default function Navbar(props: {page: string}){
                 </span>
             </div>
             <div className="links">
-            {
-                links.map((link, index) => {
-                    return (
-                        <Link to={link.path} onClick={goTop} key={index} className={`${page === link.title ? "page" : ""}`}>
-                            <div className="link-svg">
-                                {link.svg}
-                            </div>
-                            <span>
-                                <p>{link.title}</p>
-                            </span>
-                        </Link>
-                    )
-                })
-            }
+            {links.map((link, index) => (
+                <Link to={link.path} onClick={goTop} key={index} className={`${page === link.title ? "page" : ""}`}>
+                    <div className="link-svg">
+                        {link.svg}
+                    </div>
+                    <span>
+                        <p>{link.title}</p>
+                    </span>
+                </Link>
+            ))}
             </div>
         </nav>
     )

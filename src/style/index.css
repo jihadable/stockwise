@@ -7,6 +7,22 @@
     --btn_color: rgb(255,255,255,.1);
 }
 
+button{
+    font-size: 1rem;
+    border: none;
+    outline: none;
+}
+
+.loader{
+    border-radius: .5rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem 0;
+    background-color: var(--btn_color);
+}
+
 .custom-loader {
     width: 19px;
     height: 19px;

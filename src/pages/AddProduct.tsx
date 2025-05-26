@@ -10,6 +10,8 @@ import { ProductContext } from "../contexts/ProductContext";
 import "../style/AddProduct.css";
 import "../style/quill.snow.css";
 import NotFound from "./NotFound";
+import Loader from "../components/Loader";
+import { LoaderContext } from "../contexts/LoaderContext";
 
 export default function AddProduct(){
 
@@ -18,6 +20,7 @@ export default function AddProduct(){
     const { products, setProducts } = useContext(ProductContext)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
 
     const [
         [name, setName],
@@ -52,19 +55,18 @@ export default function AddProduct(){
                 const extension = file.name.split(".").pop()?.toLowerCase()
           
                 if (extension && allowedExtensions.includes(extension)){
-                    if (file.size > 2 * 1024 * 1024){
-                        toast.warn("Ukuran gambar tidak boleh melebihi 2MB")
+                    if (file.size > 1024 * 1024){
+                        toast.warn("Image size can not larger than 1MB")
 
                         return
                     }
 
-                    setImage(file)
-                    
-                    const blobUrl = URL.createObjectURL(file)
-                    setImgPreview(blobUrl)
+                    setImage(file)          
+                    const imgPreviewURL = URL.createObjectURL(file)
+                    setImgPreview(imgPreviewURL)
                 } 
                 else {
-                    toast.warn("Ekstensi gambar tidak diterima")
+                    toast.warn("Unsupported image extension")
     
                     return
                 }
@@ -76,19 +78,22 @@ export default function AddProduct(){
             setImgPreview("")
         }
         
-        const handleSubmit = async(e: FormEvent) => {
-            e.preventDefault()
+        const handleSubmit = async(event: FormEvent) => {
+            event.preventDefault()
             
             if (description === ""){
-                toast.warn("Masih ada kolom yang belum diisi!")
+                toast.warn("Please fill out all the columns")
     
                 return
             }
     
             try {
+                const target = event.target as HTMLFormElement
                 setIsLoading(true)
+                setLoadingElementWidth(target.querySelector("button.save")?.clientWidth)
+                setLoadingElementHeight(target.querySelector("button.save")?.clientHeight)
 
-                const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
                 const token = localStorage.getItem("token")
     
                 const newProduct = new FormData()
@@ -102,21 +107,17 @@ export default function AddProduct(){
                 newProduct.append("quantity", quantity)
                 newProduct.append("description", description)
                 
-                const { data } = await axios.post(
-                    productsAPIEndpoint,
-                    newProduct,
-                    {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
+                const { data } = await axios.post(`${APIEndpoint}/api/products`, newProduct, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
                     }
-                )
+                })
     
                 if (products){
-                    setProducts([...products, data.product])
+                    setProducts([...products, data.data.product])
                 }
 
-                toast.success("Berhasil menambahkan produk baru")
+                toast.success("Successfully added product")
     
                 setName("")
                 setImgPreview("")
@@ -128,58 +129,51 @@ export default function AddProduct(){
 
                 setIsLoading(false)
             } catch(error){
-                toast.error("Gagal menambahkan produk baru")
+                toast.error("Failed to add product")
                 setIsLoading(false)
             }
         }
     
         return (
-            <div className="add-product">
+            <section className="add-product">
                 <Navbar page="Add product" />
-                <div className="content">
+                <article className="content">
                     <Header />
                     <div className="add-new-product">
                         <form onSubmit={handleSubmit}>
-                            <div className="form-header">Tambah produk baru</div>
-                            {
-                                imgPreview !== "" &&
-                                <div className="img-preview" onClick={handleRemoveImg}>
-                                    <div className="remove-img">
-                                        <IconPhotoX stroke={1.5} />
-                                        <span>Klik untuk hapus</span>
-                                    </div>
-                                    <img src={imgPreview} alt="Image preview" />
+                            <div className="form-header">Add product</div>
+                            {imgPreview !== "" &&
+                            <div className="img-preview" onClick={handleRemoveImg}>
+                                <div className="remove-img">
+                                    <IconPhotoX stroke={1.5} />
+                                    <p>Click to delete</p>
                                 </div>
-                            }
+                                <img src={imgPreview} alt="Image preview" />
+                            </div>}
                             <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
                             <label htmlFor="img">
                                 <IconPhotoPlus stroke={1.5} />
-                                <span>Pilih gambar (jpg, jpeg, png)</span>
+                                <p>Choose image (jpg, jpeg, png)</p>
                             </label>
                             
-                            <input type="text" required placeholder="Nama" spellCheck="false" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
+                            <input type="text" required placeholder="Name" spellCheck="false" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
                             
-                            <input type="text" required placeholder="Kategori" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
+                            <input type="text" required placeholder="Category" spellCheck="false" autoComplete="off" value={category} onChange={(e) => setCategory(e.target.value)} />
                             
-                            <input type="number" required min={1} placeholder="Harga (Rp)" value={price} onChange={(e) => setPrice(e.target.value)} />
+                            <input type="number" required min={1} placeholder="Price (Rp)" value={price} onChange={(e) => setPrice(e.target.value)} />
                             
-                            <input type="number" required min={1} placeholder="Kuantitas" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                            <input type="number" required min={1} placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                             
                             <div className="react-quill">
-                                <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Deskripsi" />
+                                <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Description" />
                             </div>
-                            
-                            {
-                                isLoading ?
-                                <div className="loader">
-                                    <div className="custom-loader"></div>
-                                </div> :
-                                <button type="submit" className="save">Simpan</button>
-                            }
+                            {isLoading ?
+                            <Loader /> :
+                            <button type="submit" className="save">Save</button>}
                         </form>
                     </div>
-                </div>
-            </div>
+                </article>
+            </section>
         )
     }
 

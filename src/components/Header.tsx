@@ -22,7 +22,7 @@ export default function Header(){
 
     return (
         <header className="header">
-            <div className="user">{user?.username}</div>
+            <p className="user">{user?.username}</p>
             <button type="button" onClick={handleLogout}>Log out</button>
         </header>
     )

@@ -50,7 +50,7 @@
             padding: 0.5rem;
             border-radius: .5rem;
             border: none;
-            background-color: rgb(255,255,255,.1);
+            background-color: var(--btn_color);
             color: var(--green);
             cursor: pointer;
             transition: all .2s;

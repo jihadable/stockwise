@@ -17,23 +17,19 @@ export default function Home(){
                 <h1>Stockwise</h1>
             </div>
             <div className="home-content">
-                <h2>Solusi Manajemen Inventaris</h2>
-                <div>Sistem inventory untuk mengontrol dan mengelola produk di gudang secara real time dan terintegrasi untuk memudahkan pengembangan bisnis Anda.</div>
+                <h2>Inventory Management Solution</h2>
+                <div>Monitor and manage warehouse products in real time and in an integrated manner, making it easier to grow your business</div>
                 <div className="btns">
-                {
-                    isLogin === true &&
-                    <Link to={"/dashboard"}>Dashboard</Link>
-                }
-                {
-                    isLogin === false &&
-                    <>
-                    <Link to={"/register"}>Register</Link>
-                    <Link to={"/login"}>Login</Link>
-                    </>
-                }
+                {isLogin === true &&
+                <Link to={"/dashboard"}>Dashboard</Link>}
+                {isLogin === false &&
+                <>
+                <Link to={"/register"}>Register</Link>
+                <Link to={"/login"}>Login</Link>
+                </>}
                 </div>
             </div>
-            <p className="footer">Copyright ©️ 2024 | Umar Jihad</p>
+            <p className="footer">Copyright ©️ 2025 | Umar Jihad</p>
         </div>
     )
 }

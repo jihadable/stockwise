@@ -20,7 +20,7 @@ export default function Stats(){
 
     const inventoryStats = [
         {
-            title: "Total Produk",
+            title: "Total Products",
             value: totalProductValue,
             svg: <IconShoppingCart stroke={1.5} />
         },
@@ -30,7 +30,7 @@ export default function Stats(){
             svg: <IconCoin stroke={1.5} />
         },
         {
-            title: "Kategori",
+            title: "Categories",
             value: totalCategory,
             svg: <IconTriangleSquareCircle stroke={1.5} />
         }
@@ -38,19 +38,15 @@ export default function Stats(){
 
     return (
         <section className="inventory-stats">
-        {
-            inventoryStats.map((item, index) => {
-                return (
-                    <div className="item" key={index}>
-                        {item.svg}
-                        <div className="info">
-                            <div className="title">{item.title}</div>
-                            <div className="value">{item.value}</div>
-                        </div>
-                    </div>
-                )
-            })
-        }
+        {inventoryStats.map((item, index) => (
+            <div className="item" key={index}>
+                {item.svg}
+                <div className="info">
+                    <p className="title">{item.title}</p>
+                    <p className="value">{item.value}</p>
+                </div>
+            </div>
+        ))}
         </section>
     )
 }

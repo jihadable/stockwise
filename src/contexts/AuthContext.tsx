@@ -1,6 +1,5 @@
 import axios from "axios";
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
 
 export type UserType = {
     username: string, 
@@ -41,16 +40,16 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
             }
     
             try {
-                const usersAPIEndpoint = import.meta.env.VITE_USERS_API_ENDPOINT
+                const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
     
-                const { data: response } = await axios.get(usersAPIEndpoint, {
+                const { data } = await axios.get(`${APIEndpoint}/api/users`, {
                     headers: {
                         "Authorization" : "Bearer " + token
                     }
                 })
     
                 setIsLogin(true)
-                setUser(response.user)
+                setUser(data.data.user)
             } catch (error){
                 localStorage.removeItem("token")
     
@@ -65,15 +64,6 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
     return (
         <AuthContext.Provider value={{ isLogin, setIsLogin, user, setUser }}>
             {children}
-            <ToastContainer
-            position="top-center"
-            autoClose={750}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            draggable
-            theme="colored" />
         </AuthContext.Provider>
     )
 }

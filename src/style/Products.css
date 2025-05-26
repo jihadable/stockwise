@@ -182,13 +182,13 @@
                                 border: none;
                                 outline: none;
                                 cursor: pointer;
-                                padding: 0.2rem;
+                                padding: 0.25rem;
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
                                 width: fit-content;
                                 height: fit-content;
-                                border-radius: .2rem;
+                                border-radius: .25rem;
                                 color: black;
         
                                 &.detail{
@@ -205,12 +205,8 @@
                             }
 
                             .loader{
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
                                 background-color: var(--red);
-                                padding: 0.355rem;
-                                border-radius: .2rem;
+                                border-radius: .25rem;
 
                                 .custom-loader{
                                     background: 

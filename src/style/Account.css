@@ -86,7 +86,17 @@
                     display: flex;
                     gap: 1rem;
 
-                    & div{
+                    .loader{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: var(--btn_color);
+                        padding: .5rem 3.85rem;
+                        border-radius: .5rem;
+                        width: fit-content;
+                    }
+
+                    & button{
                         width: fit-content;
                         padding: .5rem 1rem;
                         text-align: center;

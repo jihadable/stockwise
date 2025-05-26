@@ -3,14 +3,16 @@ import { ReactNode, createContext, useContext, useEffect, useState } from "react
 import { AuthContext, UserType } from "./AuthContext"
 
 export type ProductType = {
+    id: string,
     user: UserType,
     name: string,
-    slug: string,
     category: string,
     price: number,
     quantity: number,
     image: string | null,
-    description: string
+    description: string,
+    created_at: string,
+    updated_at: string
 }
 
 type ProductContextType = {
@@ -34,16 +36,16 @@ export default function ProductProvider({ children }: { children: ReactNode }){
             } 
     
             try {
-                const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
                 const token = localStorage.getItem("token")
     
-                const { data } = await axios.get(productsAPIEndpoint, {
+                const { data } = await axios.get(`${APIEndpoint}/api/products`, {
                     headers: {
                         "Authorization": "Bearer " + token
                     }
                 })
     
-                setProducts(data.products)
+                setProducts(data.data.products)
             } catch(error){
                 console.log(error)
             }

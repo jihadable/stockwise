@@ -145,10 +145,7 @@
                         }
 
                         .loader{
-                            padding: 0.5rem 2.35rem;
-                            border-radius: .5rem;
                             background-color: var(--btn_color);
-                            cursor: pointer;   
                         }
                     }
                 }

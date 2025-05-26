@@ -12,24 +12,41 @@ import { ProductContext, ProductType } from "../contexts/ProductContext"
 import "../style/Edit.css"
 import "../style/quill.snow.css"
 import NotFound from "./NotFound"
+import { LoaderContext } from "../contexts/LoaderContext"
+import Loader from "../components/Loader"
 
 export default function Edit(){
 
     const { isLogin } = useContext(AuthContext)
-    const { products, setProducts } = useContext(ProductContext)
+    const { setProducts } = useContext(ProductContext)
 
     const navigate = useNavigate()
-    const { slug } = useParams()
+    const { id } = useParams()
 
     const [product, setProduct] = useState<ProductType | null>(null)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
     
     useEffect(() => {
-        if (products !== null){
-            setProduct(products.filter(product => product.slug === slug)[0])
+        const getProductById = async() => {
+            try {
+                const token = localStorage.getItem("token")
+                const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
+
+                const { data } = await axios.get(`${APIEndpoint}/api/products/${id}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                setProduct(data.data.product)
+            } catch(error){
+                console.log(error)
+            }
         }
-    }, [slug, products])
+
+        getProductById()
+    }, [id])
 
     const [
         nameElement,
@@ -53,14 +70,12 @@ export default function Edit(){
         setDescription(product?.description)
     }, [product])
     
-    if (isLogin === false || (products !== null && product === undefined)){
+    if (isLogin === false || product === undefined){
         return <NotFound />
     }
 
-    if (isLogin === true && products !== null && product !== undefined){
-        document.title = "StockWise | Edit product"
-    
-        const storageAPIEndpoint = import.meta.env.VITE_STORAGE_API_ENDPOINT 
+    if (isLogin === true && product !== undefined){
+        document.title = "StockWise | Update product" 
     
         const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             const file = event.target.files?.[0]
@@ -70,31 +85,34 @@ export default function Edit(){
                 const extension = file.name.split(".").pop()?.toLowerCase()
           
                 if (extension && allowedExtensions.includes(extension)) {
-                    setImage(file)
-                    const reader = new FileReader();
-          
-                    reader.onload = () => {
-                        const base64String = reader.result as string;
-                        setImgPreview(base64String)
+                    if (file.size > 1024 * 1024){
+                        toast.warn("Image size can not larger than 1MB")
+
+                        return
                     }
-          
-                    reader.readAsDataURL(file);
+
+                    setImage(file)
+                    const imgPreviewURL = URL.createObjectURL(file)
+                    setImgPreview(imgPreviewURL)
                 } 
                 else {
-                    toast.warn("Ekstensi file tidak diterima")
+                    toast.warn("Unsupported image extension")
                 }
             }
         }
     
-        const handleSave = async() => {
-            if (description === ""){
-                toast.warn("Masih ada kolom yang belum diisi!")
-                
-                return
-            }
-
+        const handleSave = async(event: React.MouseEvent<HTMLButtonElement>) => {
             try {
+                if (description === ""){
+                    toast.warn("Please fill out all the columns")
+                    
+                    return
+                }
+                
+                const target = event.target as HTMLButtonElement
                 setIsLoading(true)
+                setLoadingElementWidth(target.clientWidth)
+                setLoadingElementHeight(target.clientHeight)
 
                 const [
                     name,
@@ -108,112 +126,99 @@ export default function Edit(){
                     quantityElement.current?.value
                 ]
                 
-                const newProduct = new FormData()
+                const requestBody = new FormData()
         
-                newProduct.append("name", name as string)
+                requestBody.append("name", name as string)
                 if (image){
-                    newProduct.append("image", image as Blob)
+                    requestBody.append("image", image as Blob)
                 }
-                newProduct.append("category", category as string)
-                newProduct.append("price", price as string)
-                newProduct.append("quantity", quantity as string)
-                newProduct.append("description", description as string)
+                requestBody.append("category", category as string)
+                requestBody.append("price", price as string)
+                requestBody.append("quantity", quantity as string)
+                requestBody.append("description", description as string)
         
-                const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
                 const token = localStorage.getItem("token")
 
-                const { data } = await axios.post(
-                    `${productsAPIEndpoint}/${product?.slug}`,
-                    newProduct,
-                    {
-                        params: {
-                            "_method": "patch"
-                        },
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
+                const { data } = await axios.put(`${APIEndpoint}/api/products/${id}`, requestBody, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
                     }
-                )
+                })
 
-                if (products){
-                    setProducts(products.map(p => p.slug === product?.slug ? data.product : p))
-                }
-                toast.success("Berhasil memperbarui produk")
+                setProducts(products => (
+                    products ? products.map(p => p.id === product?.id ? data.data.product : p) : null
+                ))
+                toast.success("Successfully updated product")
                 navigate("/dashboard")
 
                 setIsLoading(false)
             } catch(error){
-                toast.error("Gagal memperbarui produk")
+                toast.error("Failed to update product")
                 setIsLoading(false)
             }
     
         }
     
         return (
-            <div className="edit">
+            <section className="edit">
                 <Navbar page="Dashboard" />
-                <div className="content">
+                <article className="content">
                     <Header />
-                    <div className="edit-container">
-                        <div className="edit-header">Edit produk</div>
-                        <div className="edit-content">
+                    <article className="edit-container">
+                        <p className="edit-header">Update produk</p>
+                        <article className="edit-content">
                             <div className="img">
-                                {
-                                    product?.image && imgPreview === "" &&
-                                    <img src={`${storageAPIEndpoint}/${product?.image}`} alt="Image Preview" />
-                                }
-                                {
-                                    !product?.image && imgPreview === "" &&
-                                    <div className="no-img">
-                                        <IconPhotoX stroke={1.5} />
-                                        <p>Tidak ada gambar</p>
-                                    </div>
-                                }
-                                {
-                                    imgPreview !== "" &&
-                                    <img src={imgPreview} alt="Image Preview" />
-                                }
+                                {product?.image && imgPreview === "" &&
+                                <img src={`${import.meta.env.VITE_IMAGE_API_ENDPOINT}/${product?.image}`} alt="Image Preview" />}
+                                {!product?.image && imgPreview === "" &&
+                                <div className="no-img">
+                                    <IconPhotoX stroke={1.5} />
+                                    <p>No image added</p>
+                                </div>}
+                                {imgPreview !== "" &&
+                                <img src={imgPreview} alt="Image Preview" />}
                             </div>
-                            <div className="info">
+                            <article className="info">
                                 <div className="item img-input">
                                     <input type="file" id="img" accept=".jpg, .jpeg, .png" onChange={handleImgChange} />
                                     <label htmlFor="img">
                                         <IconPhotoEdit stroke={1.5} />
-                                        <span>Ganti gambar</span>
+                                        <span>Update image</span>
                                     </label>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Nama</span>
+                                        <span>Name</span>
                                     </div>
                                     <input type="text" className="value" required spellCheck="false" defaultValue={product?.name} ref={nameElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Kategori</span>
+                                        <span>Category</span>
                                     </div>
                                     <input type="text" className="value" required spellCheck="false" defaultValue={product?.category} ref={categoryElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Harga (Rp)</span>
+                                        <span>Price (Rp)</span>
                                     </div>
                                     <input type="number" min={1} className="value" required spellCheck="false" defaultValue={product?.price} ref={priceElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Kuantitas</span>
+                                        <span>Quantity</span>
                                     </div>
                                     <input type="number" min={1} className="value" required spellCheck="false" defaultValue={product?.quantity} ref={quantityElement} />
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Deskripsi</span>
+                                        <span>Description</span>
                                     </div>
                                     <div className="react-quill value">
                                         <ReactQuill theme="snow" value={description} onChange={setDescription} className="quill-edit" />
@@ -221,19 +226,15 @@ export default function Edit(){
                                 </div>
                                 <div className="btns">
                                     <Link to={"/dashboard"} className="cancel">Cancel</Link>
-                                    {
-                                        isLoading ?
-                                        <div className="loader">
-                                            <div className="custom-loader"></div>
-                                        </div> :
-                                        <button type="button" className="save" onClick={handleSave}>Simpan</button>
-                                    }
+                                    {isLoading ?
+                                    <Loader /> :
+                                    <button type="button" className="save" onClick={handleSave}>Save changes</button>}
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            </article>
+                        </article>
+                    </article>
+                </article>
+            </section>
         )
     }
 

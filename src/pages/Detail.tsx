@@ -11,94 +11,109 @@ import { ProductContext, ProductType } from "../contexts/ProductContext";
 import "../style/Detail.css";
 import getIdCurrency from "../utils/getIdCurrency";
 import NotFound from "./NotFound";
+import { DateParser } from "../utils/dateParser";
+import Loader from "../components/Loader";
+import { LoaderContext } from "../contexts/LoaderContext";
 
 export default function Detail(){
 
     const { isLogin } = useContext(AuthContext)
-    const { products, setProducts } = useContext(ProductContext)
+    const { setProducts } = useContext(ProductContext)
 
     const navigate = useNavigate()
-    const { slug } = useParams()
+    const { id } = useParams()
 
     const [product, setProduct] = useState<ProductType | null>(null)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
     
     useEffect(() => {
-        if (products !== null){
-            setProduct(products.filter(product => product.slug === slug)[0])
-        }
-    }, [slug, products])
+        const getProductById = async() => {
+            try {
+                const token = localStorage.getItem("token")
+                const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
 
-    if (isLogin === false || (products !== null && product === undefined)){
+                const { data } = await axios.get(`${APIEndpoint}/api/products/${id}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                setProduct(data.data.product)
+            } catch(error){
+                console.log(error)
+            }
+        }
+
+        getProductById()
+    }, [id])
+
+    if (isLogin === false || product === undefined){
         return <NotFound />
     }
 
-    if (isLogin === true && products !== null && product !== undefined){
+    if (isLogin === true && product !== undefined){
         document.title = "StockWise | Product detail"
-
-        const storageAPIEndpoint = import.meta.env.VITE_STORAGE_API_ENDPOINT
     
-        const handleDelete = async() => {
+        const handleDelete = async(event: React.MouseEvent<HTMLButtonElement>) => {
             if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
                 try {
+                    const target = event.currentTarget as HTMLButtonElement
                     setIsLoading(true)
+                    setLoadingElementWidth(target.clientWidth)
+                    setLoadingElementHeight(target.clientHeight)
 
-                    const productsAPIEndpoint = import.meta.env.VITE_PRODUCTS_API_ENDPOINT
+                    const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
                     const token = localStorage.getItem("token")
 
-                    await axios.delete(`${productsAPIEndpoint}/${product?.slug}`, {
+                    await axios.delete(`${APIEndpoint}/api/products/${id}`, {
                         headers: {
-                            "Authorization": "Bearer " + token
+                            "Authorization": `Bearer ${token}`
                         }
                     })
 
-                    if (products){
-                        setProducts(products.filter(product => product.slug !== slug))
-                    }
-                    toast.success("Berhasil menghapus produk")
+                    setProducts(products => (
+                        products ? products.filter(product => product.id !== id) : null
+                    ))
+                    toast.success("Successfully deleted product")
                     navigate("/dashboard")
 
                     setIsLoading(false)
                 } catch(error){
-                    toast.error("Gagal menghapus produk")
+                    toast.error("Failed to delete product")
                     setIsLoading(false)
                 }
             }
         }
     
         return (
-            <div className="detail">
+            <section className="detail">
                 <Navbar page="Dashboard" />
-                <div className="content">
+                <article className="content">
                     <Header />
                     <InventoryStats />
-                    <div className="detail-container">
+                    <article className="detail-container">
                         <Link to="/dashboard" className="back">
                             <IconArrowLeft stroke={1.5} />
-                            <span>Kembali ke dashboard</span>
+                            <span>Back to dashboard</span>
                         </Link>
-                        <div className="detail-header">Detail produk</div>
+                        <p className="detail-header">Detail product</p>
                         <div className="actions">
-                            <Link to={`/edit/${slug}`} className="edit-btn">
+                            <Link to={`/update-product/${id}`} className="edit-btn">
                                 <IconEdit stroke={1.5} />
-                                <span>Edit</span>
+                                <span>Update</span>
                             </Link>
-                            {
-                                isLoading ?
-                                <div className="loader">
-                                    <div className="custom-loader"></div>
-                                </div> :
-                                <div className="delete-btn" onClick={handleDelete}>
-                                    <IconTrash stroke={1.5} />
-                                    <span>Hapus</span>
-                                </div>
-                            }
+                            {isLoading ?
+                            <Loader /> :
+                            <button type="button" className="delete-btn" onClick={handleDelete}>
+                                <IconTrash stroke={1.5} />
+                                <span>Delete</span>
+                            </button>}
                         </div>
-                        <div className="detail-content">
+                        <article className="detail-content">
                             <div className="img">
                                 {product?.image &&
-                                <img src={`${storageAPIEndpoint}/${product?.image}`} alt="Image Preview" />}
+                                <img src={`${import.meta.env.VITE_IMAGE_API_ENDPOINT}/${product?.image}`} alt="Image Preview" />}
                                 {!product?.image && 
                                 <div className="no-img">
                                     <IconPhotoX stroke={1.5} />
@@ -106,56 +121,56 @@ export default function Detail(){
                                 </div>}
                             </div>
                             <div className="info">
-                                {/* <div className="item">
+                                <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Time Stamp</span>
+                                        <span>Timestamp</span>
                                     </div>
                                     <div className="value">
-                                        <div className="created">Created at: {item?.created_at}</div>
-                                        <div className="updated">Last updated at: {item?.updated_at}</div>
+                                        <p className="created">Created at: {DateParser(product?.created_at)}</p>
+                                        <p className="updated">Updated at: {DateParser(product?.updated_at)}</p>
                                     </div>
-                                </div> */}
-                                <div className="item">
-                                    <div className="label">
-                                        <div className="circle"></div>
-                                        <span>Nama</span>
-                                    </div>
-                                    <div className="value">{product?.name}</div>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Kategori</span>
+                                        <span>Name</span>
                                     </div>
-                                    <div className="value">{product?.category}</div>
+                                    <p className="value">{product?.name}</p>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Harga</span>
+                                        <span>Category</span>
                                     </div>
-                                    <div className="value">{getIdCurrency(product ? product.price : 0)}</div>
+                                    <p className="value">{product?.category}</p>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Kuantitas</span>
+                                        <span>Price</span>
                                     </div>
-                                    <div className="value">{product?.quantity}</div>
+                                    <p className="value">{getIdCurrency(product ? product.price : 0)}</p>
                                 </div>
                                 <div className="item">
                                     <div className="label">
                                         <div className="circle"></div>
-                                        <span>Deskripsi</span>
+                                        <span>Quantity</span>
                                     </div>
-                                    <div className="value" dangerouslySetInnerHTML={{__html: product?.description ?? ""}} />
+                                    <p className="value">{product?.quantity}</p>
+                                </div>
+                                <div className="item">
+                                    <div className="label">
+                                        <div className="circle"></div>
+                                        <span>Description</span>
+                                    </div>
+                                    <p className="value" dangerouslySetInnerHTML={{__html: product?.description ?? ""}} />
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </article>
+                    </article>
+                </article>
+            </section>
         )
     }
 

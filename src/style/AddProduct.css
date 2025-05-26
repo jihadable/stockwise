@@ -95,11 +95,7 @@
                 }
 
                 .loader{
-                    width: fit-content;
-                    padding: 1rem;
-                    border-radius: .5rem;
                     background-color: var(--btn_color);
-                    padding: 0.5rem 2.35rem;
                 }
             }
         }
