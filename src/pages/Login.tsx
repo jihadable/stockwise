@@ -3,10 +3,10 @@ import axios from "axios"
 import { FormEvent, useContext, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import { AuthContext } from "../contexts/AuthContext"
-import "../style/Login.css"
 import Loader from "../components/Loader"
+import { AuthContext } from "../contexts/AuthContext"
 import { LoaderContext } from "../contexts/LoaderContext"
+import "../style/Login.css"
 
 export default function Login(){
 
@@ -36,7 +36,7 @@ export default function Login(){
             const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
             const { data } = await axios.post(`${APIEndpoint}/api/users/login`, requestBody)
 
-            localStorage.setItem("token", data.data.token)
+            localStorage.setItem("jwt", data.data.jwt)
             setIsLogin(true)
             setUser(data.data.user)
 
@@ -44,8 +44,8 @@ export default function Login(){
 
             setIsLoading(false)
         } catch(error){
-            localStorage.removeItem("token")
-            toast.error("Failed to login")
+            localStorage.removeItem("jwt")
+            toast.error("Incorrect email or password")
             setIsLoading(false)
         }
     }

@@ -3,10 +3,10 @@ import axios from "axios";
 import { FormEvent, useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { AuthContext } from "../contexts/AuthContext";
-import "../style/Register.css";
 import Loader from "../components/Loader";
+import { AuthContext } from "../contexts/AuthContext";
 import { LoaderContext } from "../contexts/LoaderContext";
+import "../style/Register.css";
 
 export default function Register(){
     
@@ -54,15 +54,15 @@ export default function Register(){
             const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
             const { data } = await axios.post(`${APIEndpoint}/api/users/register`, requestBody)
 
-            localStorage.setItem("token", data.data.token)
+            localStorage.setItem("jwt", data.data.jwt)
             setIsLogin(true)
             setUser(data.data.user)
 
             navigate("/dashboard")
             setIsLoading(false)
         } catch(error){
-            localStorage.removeItem("token")
-            toast.error("Failed to register")
+            localStorage.removeItem("jwt")
+            toast.error("Fail to register")
             setIsLoading(false)
         }
 

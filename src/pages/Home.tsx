@@ -29,7 +29,7 @@ export default function Home(){
                 </>}
                 </div>
             </div>
-            <p className="footer">Copyright ©️ 2025 | Umar Jihad</p>
+            <p className="footer">Copyright ©️ 2026 | Umar Jihad</p>
         </div>
     )
 }

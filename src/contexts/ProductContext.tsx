@@ -37,11 +37,11 @@ export default function ProductProvider({ children }: { children: ReactNode }){
     
             try {
                 const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
-                const token = localStorage.getItem("token")
+                const jwt = localStorage.getItem("jwt")
     
                 const { data } = await axios.get(`${APIEndpoint}/api/products`, {
                     headers: {
-                        "Authorization": "Bearer " + token
+                        "Authorization": "Bearer " + jwt
                     }
                 })
     

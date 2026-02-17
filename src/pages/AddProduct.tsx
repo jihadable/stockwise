@@ -4,14 +4,14 @@ import { FormEvent, useContext, useState } from "react";
 import ReactQuill from 'react-quill';
 import { toast } from "react-toastify";
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import { AuthContext } from "../contexts/AuthContext";
+import { LoaderContext } from "../contexts/LoaderContext";
 import { ProductContext } from "../contexts/ProductContext";
 import "../style/AddProduct.css";
 import "../style/quill.snow.css";
 import NotFound from "./NotFound";
-import Loader from "../components/Loader";
-import { LoaderContext } from "../contexts/LoaderContext";
 
 export default function AddProduct(){
 
@@ -94,7 +94,7 @@ export default function AddProduct(){
                 setLoadingElementHeight(target.querySelector("button.save")?.clientHeight)
 
                 const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
-                const token = localStorage.getItem("token")
+                const jwt = localStorage.getItem("jwt")
     
                 const newProduct = new FormData()
         
@@ -109,7 +109,7 @@ export default function AddProduct(){
                 
                 const { data } = await axios.post(`${APIEndpoint}/api/products`, newProduct, {
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${jwt}`
                     }
                 })
     
@@ -129,7 +129,7 @@ export default function AddProduct(){
 
                 setIsLoading(false)
             } catch(error){
-                toast.error("Failed to add product")
+                toast.error("Fail to add product")
                 setIsLoading(false)
             }
         }

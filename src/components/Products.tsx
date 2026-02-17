@@ -3,10 +3,10 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { LoaderContext } from "../contexts/LoaderContext";
 import { ProductContext, ProductType } from "../contexts/ProductContext";
 import "../style/Products.css";
 import getIdCurrency from "../utils/getIdCurrency";
-import { LoaderContext } from "../contexts/LoaderContext";
 import Loader from "./Loader";
 
 export default function Products(){
@@ -21,7 +21,7 @@ export default function Products(){
 
     // delete
     const handleDelete = async(event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-        if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
+        if (confirm("Are you sure to delete this item?")){
             try {
                 const target = event.currentTarget as HTMLButtonElement
                 setIsLoading(true)
@@ -30,11 +30,11 @@ export default function Products(){
                 setSelectedProductToDetele(id)
 
                 const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
-                const token = localStorage.getItem("token")
+                const jwt = localStorage.getItem("jwt")
     
                 await axios.delete(`${APIEndpoint}/api/products/${id}`, {
                     headers: {
-                        "Authorization": "Bearer " + token
+                        "Authorization": "Bearer " + jwt
                     }
                 })
 

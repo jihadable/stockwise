@@ -28,10 +28,10 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
 
     useEffect(() => {
         const auth = async() => {
-            const token = localStorage.getItem("token")
+            const jwt = localStorage.getItem("jwt")
     
-            if (!token){
-                localStorage.removeItem("token")
+            if (!jwt){
+                localStorage.removeItem("jwt")
     
                 setIsLogin(false)
                 setUser(null)
@@ -44,14 +44,14 @@ export default function AuthFrovider({ children }: { children: ReactNode }){
     
                 const { data } = await axios.get(`${APIEndpoint}/api/users`, {
                     headers: {
-                        "Authorization" : "Bearer " + token
+                        "Authorization" : "Bearer " + jwt
                     }
                 })
     
                 setIsLogin(true)
                 setUser(data.data.user)
             } catch (error){
-                localStorage.removeItem("token")
+                localStorage.removeItem("jwt")
     
                 setIsLogin(false)
                 setUser(null)

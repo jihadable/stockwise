@@ -11,7 +11,7 @@ export default function Header(){
     const { setIsLogin, user, setUser } = useContext(AuthContext)
 
     const handleLogout = () => {
-        localStorage.removeItem("token")
+        localStorage.removeItem("jwt")
         setIsLogin(false)
         setUser(null)
 

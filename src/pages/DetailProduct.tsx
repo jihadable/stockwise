@@ -4,16 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import InventoryStats from "../components/Stats";
 import { AuthContext } from "../contexts/AuthContext";
+import { LoaderContext } from "../contexts/LoaderContext";
 import { ProductContext, ProductType } from "../contexts/ProductContext";
 import "../style/DetailProduct.css";
+import { DateParser } from "../utils/dateParser";
 import getIdCurrency from "../utils/getIdCurrency";
 import NotFound from "./NotFound";
-import { DateParser } from "../utils/dateParser";
-import Loader from "../components/Loader";
-import { LoaderContext } from "../contexts/LoaderContext";
 
 export default function DetailProduct(){
 
@@ -31,12 +31,12 @@ export default function DetailProduct(){
     useEffect(() => {
         const getProductById = async() => {
             try {
-                const token = localStorage.getItem("token")
+                const jwt = localStorage.getItem("jwt")
                 const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
 
                 const { data } = await axios.get(`${APIEndpoint}/api/products/${id}`, {
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${jwt}`
                     }
                 })
                 setProduct(data.data.product)
@@ -56,7 +56,7 @@ export default function DetailProduct(){
         document.title = "StockWise | Product detail"
     
         const handleDelete = async(event: React.MouseEvent<HTMLButtonElement>) => {
-            if (confirm("Apakah Anda yakin akan menghapus produk ini?")){
+            if (confirm("Are you sure to delete this item?")){
                 try {
                     const target = event.currentTarget as HTMLButtonElement
                     setIsLoading(true)
@@ -64,11 +64,11 @@ export default function DetailProduct(){
                     setLoadingElementHeight(target.clientHeight)
 
                     const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
-                    const token = localStorage.getItem("token")
+                    const jwt = localStorage.getItem("jwt")
 
                     await axios.delete(`${APIEndpoint}/api/products/${id}`, {
                         headers: {
-                            "Authorization": `Bearer ${token}`
+                            "Authorization": `Bearer ${jwt}`
                         }
                     })
 

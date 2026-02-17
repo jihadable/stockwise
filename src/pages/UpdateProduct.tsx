@@ -4,16 +4,15 @@ import { useContext, useEffect, useRef, useState } from "react"
 import ReactQuill from 'react-quill'
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css'
 import Header from "../components/Header"
+import Loader from "../components/Loader"
 import Navbar from "../components/Navbar"
 import { AuthContext } from "../contexts/AuthContext"
+import { LoaderContext } from "../contexts/LoaderContext"
 import { ProductContext, ProductType } from "../contexts/ProductContext"
 import "../style/UpdateProduct.css"
 import "../style/quill.snow.css"
 import NotFound from "./NotFound"
-import { LoaderContext } from "../contexts/LoaderContext"
-import Loader from "../components/Loader"
 
 export default function UpdateProduct(){
 
@@ -31,12 +30,12 @@ export default function UpdateProduct(){
     useEffect(() => {
         const getProductById = async() => {
             try {
-                const token = localStorage.getItem("token")
+                const jwt = localStorage.getItem("jwt")
                 const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
 
                 const { data } = await axios.get(`${APIEndpoint}/api/products/${id}`, {
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${jwt}`
                     }
                 })
                 setProduct(data.data.product)
@@ -138,11 +137,11 @@ export default function UpdateProduct(){
                 requestBody.append("description", description as string)
         
                 const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
-                const token = localStorage.getItem("token")
+                const jwt = localStorage.getItem("jwt")
 
                 const { data } = await axios.put(`${APIEndpoint}/api/products/${id}`, requestBody, {
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${jwt}`
                     }
                 })
 
@@ -154,7 +153,7 @@ export default function UpdateProduct(){
 
                 setIsLoading(false)
             } catch(error){
-                toast.error("Failed to update product")
+                toast.error("Fail to update product")
                 setIsLoading(false)
             }
     

@@ -2,12 +2,12 @@ import axios from "axios";
 import { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import { AuthContext, UserType } from "../contexts/AuthContext";
+import { LoaderContext } from "../contexts/LoaderContext";
 import "../style/Account.css";
 import NotFound from "./NotFound";
-import Loader from "../components/Loader";
-import { LoaderContext } from "../contexts/LoaderContext";
 
 export default function Account(){
 
@@ -98,11 +98,11 @@ function EditUser({ setEdit, user }: EditUserPropsType){
                 bio: bio === "" ? null : bio
             }
             const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
-            const token = localStorage.getItem("token")
+            const jwt = localStorage.getItem("jwt")
 
             await axios.put(`${APIEndpoint}/api/users`, requestBody, {
                 headers: {
-                    "Authorization": "Bearer " + token
+                    "Authorization": "Bearer " + jwt
                 }
             })
 
@@ -114,7 +114,7 @@ function EditUser({ setEdit, user }: EditUserPropsType){
             setIsLoading(false)
         } catch(error){
             setIsLoading(false)
-            toast.error("Failed to update user data")
+            toast.error("Fail to update user data")
         }
     }
 
