@@ -24,17 +24,19 @@ export default function Account(){
             setLoadingElementHeight(target.clientHeight)
             setIsLoading(true)
 
-            // const jwt = localStorage.getItem("jwt")
-            // const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
-            // await axios.post(`${APIEndpoint}/email-verifications/send-email-verification`, null, {
-            //     headers: {
-            //         "Authorization": "Bearer " + jwt
-            //     }
-            // })
+            const jwt = localStorage.getItem("jwt")
+            const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
+            await axios.post(`${APIEndpoint}/api/email-verifications/send-email-verification`, null, {
+                headers: {
+                    "Authorization": "Bearer " + jwt
+                }
+            })
 
-            // setIsLoading(false)
+            setIsLoading(false)
+            toast.success("Email verification sent!")
         } catch(error){
             console.log(error)
+            toast.error("Fail to send email verification")
         }
     }
 
@@ -62,12 +64,14 @@ export default function Account(){
                                     <p className="value">{user?.username}</p>
                                 </div>
                                 <div className="item">
+                                    {user?.is_email_verified ? 
+                                    <div className="label">Email</div> :
                                     <div className="label" style={{ display: "flex", gap: ".5rem", alignItems: "center" }}>
                                         <span>Email</span>
                                         {isLoading ? 
                                         <Loader /> :
                                         <button type="button" className="verify-email-btn" onClick={handleSendEmailVerification}>Send email verification</button>}
-                                    </div>
+                                    </div>}
                                     <p className="value">{user?.email}</p>
                                 </div>
                                 <div className="item">
