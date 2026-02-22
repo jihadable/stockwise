@@ -5,7 +5,8 @@ export type UserType = {
     username: string, 
     email: string,
     image: string | null,
-    bio: string | null
+    bio: string | null,
+    is_email_verified: boolean
 }
 
 type AuthContextType = {

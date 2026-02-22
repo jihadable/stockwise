@@ -64,6 +64,22 @@
                             font-size: 1.2rem;
                             font-weight: 700;
                             color: #fff;
+
+                            .verify-email-btn{
+                                width: fit-content;
+                                padding: .5rem 1rem;
+                                text-align: center;
+                                cursor: pointer;
+                                border-radius: .5rem;
+                                background-color: var(--btn_color);
+                                color: var(--white);
+                                transition: all .2s;
+                                white-space: nowrap;
+
+                                &:hover{
+                                    background-color: rgb(255,255,255,.2);
+                                }
+                            }
                         }
     
                         .value{

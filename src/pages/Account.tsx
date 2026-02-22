@@ -13,7 +13,30 @@ export default function Account(){
 
     const { isLogin, user } = useContext(AuthContext)
 
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
     const [edit, setEdit] = useState<boolean>(false)
+
+    const handleSendEmailVerification = async(event: React.MouseEvent<HTMLButtonElement>) => {
+        try {
+            const target = event.target as HTMLButtonElement
+            setLoadingElementWidth(target.clientWidth)
+            setLoadingElementHeight(target.clientHeight)
+            setIsLoading(true)
+
+            // const jwt = localStorage.getItem("jwt")
+            // const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
+            // await axios.post(`${APIEndpoint}/email-verifications/send-email-verification`, null, {
+            //     headers: {
+            //         "Authorization": "Bearer " + jwt
+            //     }
+            // })
+
+            // setIsLoading(false)
+        } catch(error){
+            console.log(error)
+        }
+    }
 
     if (isLogin === false){
         return <NotFound />
@@ -39,7 +62,12 @@ export default function Account(){
                                     <p className="value">{user?.username}</p>
                                 </div>
                                 <div className="item">
-                                    <div className="label">Email</div>
+                                    <div className="label" style={{ display: "flex", gap: ".5rem", alignItems: "center" }}>
+                                        <span>Email</span>
+                                        {isLoading ? 
+                                        <Loader /> :
+                                        <button type="button" className="verify-email-btn" onClick={handleSendEmailVerification}>Send email verification</button>}
+                                    </div>
                                     <p className="value">{user?.email}</p>
                                 </div>
                                 <div className="item">
@@ -109,6 +137,7 @@ function EditUser({ setEdit, user }: EditUserPropsType){
             if (user){
                 setUser({...user, username, bio})
             }
+
             toast.success("Successfully updated user data")
             setEdit(false)
             setIsLoading(false)
