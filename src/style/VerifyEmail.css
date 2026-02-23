@@ -34,6 +34,10 @@
         }
     }
 
+    .text{
+        text-align: center;
+    }
+
     .link{
         display: flex;
         align-items: center;
@@ -78,6 +82,10 @@
         & svg{
             color: var(--green);
         }
+    }
+
+    .text{
+        text-align: center;
     }
 
     .link{

@@ -1,14 +1,16 @@
 import { IconArrowLeft, IconCheck, IconX } from "@tabler/icons-react"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import logo from "../assets/icon.png"
+import { AuthContext } from "../contexts/AuthContext"
 import "../style/VerifyEmail.css"
 import NotFound from "./NotFound"
 
 export default function VerifyEmail(){
     const { token } = useParams()
-    const [status, setStatus] = useState<string>("loading")
+    const [status, setStatus] = useState<string>("success")
+    const { isLogin, user, setUser } = useContext(AuthContext)
 
     if (!token){
         return <NotFound />
@@ -22,6 +24,10 @@ export default function VerifyEmail(){
                     token
                 })
 
+                if (isLogin === true && user){
+                    setUser({...user, is_email_verified: true})
+                }
+                
                 setStatus("success")
             } catch(error){
                 setStatus("error")

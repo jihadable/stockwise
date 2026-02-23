@@ -37,6 +37,7 @@ export default function Account(){
         } catch(error){
             console.log(error)
             toast.error("Fail to send email verification")
+            setIsLoading(false)
         }
     }
 
