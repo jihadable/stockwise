@@ -43,6 +43,7 @@ export default function Router(){
                 <Route path="/dashboard" element={<Dashboard />}></Route>
                 <Route path="/add-product" element={<AddProduct />}></Route>
                 <Route path="/account" element={<Account />}></Route>
+                <Route path="/reset-password/:token" element></Route>
                 <Route path="/verify-email/:token" element={<VerifyEmail />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
                 <Route path="/detail-product/:id" element={<DetailProduct />}></Route>
