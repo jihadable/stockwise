@@ -1,4 +1,4 @@
-import { IconLock, IconUserCircle } from "@tabler/icons-react"
+import { IconLock, IconMail } from "@tabler/icons-react"
 import axios from "axios"
 import { FormEvent, useContext, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
@@ -55,7 +55,7 @@ export default function Login(){
             <form onSubmit={handleLogin}>
                 <h2>Login to Stockwise</h2>
                 <div className="username-email">
-                    <IconUserCircle stroke={1.5} />
+                    <IconMail stroke={1.5} />
                     <input type="text" placeholder="Email" required ref={emailElement} />
                 </div>
                 <div className="password">
@@ -66,6 +66,7 @@ export default function Login(){
                 <Loader /> :
                 <button type="submit">Login</button>}
             </form>
+            <Link to={"/forget-password"}>Forget password?</Link>
             <p>Do not have account yet? <Link to={"/register"}>Register</Link></p>
         </div>
     )

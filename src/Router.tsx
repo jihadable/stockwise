@@ -8,10 +8,12 @@ import AddProduct from "./pages/AddProduct";
 import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
 import DetailProduct from "./pages/DetailProduct";
+import ForgetPassword from "./pages/ForgetPassword";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
 import UpdateProduct from "./pages/UpdateProduct";
 import VerifyEmail from "./pages/VerifyEmail";
 
@@ -43,7 +45,8 @@ export default function Router(){
                 <Route path="/dashboard" element={<Dashboard />}></Route>
                 <Route path="/add-product" element={<AddProduct />}></Route>
                 <Route path="/account" element={<Account />}></Route>
-                <Route path="/reset-password/:token" element></Route>
+                <Route path="/forget-password" element={<ForgetPassword />}></Route>
+                <Route path="/reset-password/:token" element={<ResetPassword />}></Route>
                 <Route path="/verify-email/:token" element={<VerifyEmail />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
                 <Route path="/detail-product/:id" element={<DetailProduct />}></Route>
