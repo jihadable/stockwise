@@ -42,7 +42,7 @@
                 }
             }
 
-            .side,.edit{
+            .side,.edit,.change-password{
                 width: 75%;
                 height: fit-content;
                 display: flex;
@@ -95,6 +95,19 @@
                             border-radius: .5rem;
                             background-color: var(--btn_color);
                         }
+                    }
+
+                    .change-password-btn{
+                        display: flex;
+                        align-items: center;
+                        padding: .5rem 1rem;
+                        background-color: var(--btn_color);
+                        color: var(--white);
+                        transition: all .2s;
+                        width: fit-content;
+                        border-radius: .5rem;
+                        cursor: pointer;
+                        border: 1px solid var(--red);
                     }
                 }
 
@@ -174,7 +187,7 @@
                     width: 100%;
                 }
 
-                .side,.edit{
+                .side,.edit,.change-password{
                     width: 100%;
                     gap: 1rem;
                 }

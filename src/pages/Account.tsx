@@ -15,7 +15,8 @@ export default function Account(){
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
-    const [edit, setEdit] = useState<boolean>(false)
+    const [isShowUpdateProfileForm, setIsShowUpdateProfileForm] = useState<boolean>(false)
+    const [isShowUpdatePasswordForm, setIsShowUpdatePasswordForm] = useState<boolean>(false)
 
     const handleSendEmailVerification = async(event: React.MouseEvent<HTMLButtonElement>) => {
         try {
@@ -53,11 +54,11 @@ export default function Account(){
                 <Navbar page="Account" />
                 <article className="content">
                     <Header />
-                    <article className={`user-info ${edit ? "edit-active" : ""}`}>
+                    <article className={`user-info ${isShowUpdateProfileForm ? "edit-active" : ""}`}>
                         <div className="img">
                             <img src={`${import.meta.env.VITE_AVATAR_GENERATOR}&name=${user?.username}`} alt="User image" />
                         </div>
-                        {!edit &&
+                        {!isShowUpdateProfileForm && !isShowUpdatePasswordForm &&
                         <article className="side">
                             <div className="info">
                                 <div className="item">
@@ -75,16 +76,18 @@ export default function Account(){
                                     </div>}
                                     <p className="value">{user?.email}</p>
                                 </div>
+                                <button className="change-password-btn" onClick={() => setIsShowUpdatePasswordForm(true)}>Change password</button>
                                 <div className="item">
                                     <div className="label">Bio</div>
                                     <p className="value">{user?.bio ?? "-"}</p>
                                 </div>
                             </div>
-                            <div className="edit-btn" onClick={() => setEdit(true)}>Update profile</div>
-                        </article>
-                        }
-                        {edit &&
-                        <EditUser setEdit={setEdit} user={user} />}
+                            <div className="edit-btn" onClick={() => setIsShowUpdateProfileForm(true)}>Update profile</div>
+                        </article>}
+                        {isShowUpdateProfileForm &&
+                        <UpdateProfileForm setIsShowUpdateProfileForm={setIsShowUpdateProfileForm} user={user} />}
+                        {isShowUpdatePasswordForm &&
+                        <UpdatePasswordFrom setIsShowUpdatePasswordForm={setIsShowUpdatePasswordForm} user={user} />}
                     </article>
                 </article>
             </section>
@@ -94,12 +97,12 @@ export default function Account(){
     return null
 }
 
-type EditUserPropsType = {
-    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
+type UpdateProfileFormPropsType = {
+    setIsShowUpdateProfileForm: React.Dispatch<React.SetStateAction<boolean>>,
     user: UserType | null
 }
 
-function EditUser({ setEdit, user }: EditUserPropsType){
+function UpdateProfileForm({ setIsShowUpdateProfileForm, user }: UpdateProfileFormPropsType){
 
     const { setUser } = useContext(AuthContext)
 
@@ -144,9 +147,10 @@ function EditUser({ setEdit, user }: EditUserPropsType){
             }
 
             toast.success("Successfully updated user data")
-            setEdit(false)
+            setIsShowUpdateProfileForm(false)
             setIsLoading(false)
         } catch(error){
+            setIsShowUpdateProfileForm(false)
             setIsLoading(false)
             toast.error("Fail to update user data")
         }
@@ -169,10 +173,113 @@ function EditUser({ setEdit, user }: EditUserPropsType){
                 </div>
             </article>
             <article className="btns">
-                <button type="button" className="cancel" onClick={() => setEdit(false)}>Cancel</button>
+                <button type="button" className="cancel" onClick={() => setIsShowUpdateProfileForm(false)}>Cancel</button>
                 {isLoading ?
                 <Loader /> :
                 <button type="button" className="save" onClick={handelSave}>Save changes</button>}
+            </article>
+        </section>
+    )
+}
+
+type UpdatePasswordFormPropsType = {
+    setIsShowUpdatePasswordForm: React.Dispatch<React.SetStateAction<boolean>>,
+    user: UserType | null
+}
+
+function UpdatePasswordFrom({ setIsShowUpdatePasswordForm, user }: UpdatePasswordFormPropsType){
+    const [
+        oldPasswordElement,
+        newPasswordElement,
+        newPasswordConfirmationElement
+    ] = [
+        useRef<HTMLInputElement | null>(null),
+        useRef<HTMLInputElement | null>(null),
+        useRef<HTMLInputElement | null>(null)
+    ]
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { setLoadingElementWidth, setLoadingElementHeight } = useContext(LoaderContext)
+
+    const handleUpdatePassword = async(event: React.MouseEvent<HTMLButtonElement>) => {
+        try {
+            const oldPassword = oldPasswordElement.current?.value
+            const newPassword = newPasswordElement.current?.value
+            const newPasswordConfirmation = newPasswordConfirmationElement.current?.value
+
+            if (oldPassword == newPassword){
+                toast.warn("New password can not be same as old password")
+
+                return
+            }
+
+            if (newPassword != newPasswordConfirmation){
+                toast.warn("New password confirmation does not match")
+
+                return
+            }
+
+            const target = event.target as HTMLButtonElement
+            setIsLoading(true)
+            setLoadingElementWidth(target.clientWidth)
+            setLoadingElementHeight(target.clientHeight)
+
+            const requestBody = {
+                old_password: oldPasswordElement.current?.value,
+                new_password: newPasswordElement.current?.value
+            }
+
+            const jwt = localStorage.getItem("jwt")
+            const APIEndpoint = import.meta.env.VITE_API_ENDPOINT
+            await axios.post(`${APIEndpoint}/api/users/change-password`, requestBody, {
+                headers: {
+                    "Authorization": "Bearer " + jwt
+                }
+            })
+
+            toast.success("Password changed successfully")
+            setIsLoading(false)
+            setIsShowUpdatePasswordForm(false)
+        } catch(error){
+            toast.error("Fail to change password")
+            setIsLoading(false)
+            setIsShowUpdatePasswordForm(false)
+            console.log(error)
+        }
+    }
+    
+    return (
+        <section className="change-password">
+            <article className="info">
+                <div className="item">
+                    <div className="label">Username</div>
+                    <p className="value">{user?.username}</p>
+                </div>
+                <div className="item">
+                    <div className="label">Email</div>
+                    <p className="value">{user?.email}</p>
+                </div>
+                <div className="item">
+                    <div className="label">Old password</div>
+                    <input type="password" className="value" required ref={oldPasswordElement} />
+                </div>
+                <div className="item">
+                    <div className="label">New password</div>
+                    <input type="password" className="value" required ref={newPasswordElement} />
+                </div>
+                <div className="item">
+                    <div className="label">New password (again)</div>
+                    <input type="password" className="value" required ref={newPasswordConfirmationElement} />
+                </div>
+                <div className="item">
+                    <div className="label">Bio</div>
+                    <p className="value">{user?.bio ?? "-"}</p>
+                </div>
+            </article>
+            <article className="btns">
+                <button type="button" className="cancel" onClick={() => setIsShowUpdatePasswordForm(false)}>Cancel</button>
+                {isLoading ?
+                <Loader /> :
+                <button type="button" className="save" onClick={handleUpdatePassword}>Change password</button>}
             </article>
         </section>
     )
